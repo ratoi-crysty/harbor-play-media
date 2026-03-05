@@ -1,3 +1,4 @@
+import { InvitationModel } from '@harbor-play-media/common';
 import {
   Column,
   CreateDateColumn,
@@ -6,10 +7,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../user/user.entity';
+import { UserEntity } from '../user';
 
 @Entity('invitations')
-export class Invitation {
+export class InvitationEntity implements InvitationModel {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -22,9 +23,9 @@ export class Invitation {
   @Column({ default: false })
   used!: boolean;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => UserEntity)
   @JoinColumn({ name: 'createdById' })
-  createdBy!: User;
+  createdBy!: UserEntity;
 
   @Column()
   createdById!: number;

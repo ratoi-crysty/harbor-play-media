@@ -1,4 +1,4 @@
-import { UserResponse, UserRole, UserStatus } from '@harbor-play-media/common';
+import { UserModel, UserResponse, UserRole, UserStatus } from '@harbor-play-media/common';
 import {
   Column,
   CreateDateColumn,
@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity('users')
-export class User {
+export class UserEntity implements UserModel {
   @PrimaryGeneratedColumn()
   id!: number;
 

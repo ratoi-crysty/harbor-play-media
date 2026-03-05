@@ -13,12 +13,11 @@ export class AuthModule {
   static forRoot(config?: Partial<AuthModuleConfig>): DynamicModule {
     const authConfig: Required<AuthModuleConfig> = {
       registrationMode: config?.registrationMode ?? RegistrationMode.OPEN,
-      inviteTokenExpiryDays: config?.inviteTokenExpiryDays ?? 7,
     };
 
     return {
       module: AuthModule,
-      imports: [UserModule, InvitationModule.forRoot({inviteTokenExpiryDays: authConfig.inviteTokenExpiryDays})],
+      imports: [UserModule, InvitationModule],
       controllers: [AuthController],
       providers: [
         {

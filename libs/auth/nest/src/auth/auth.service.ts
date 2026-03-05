@@ -15,7 +15,7 @@ import {
   UserRole,
   UserStatus,
 } from '@harbor-play-media/common';
-import { User, UserService } from '../user';
+import { UserEntity, UserService } from '../user';
 import { AUTH_CONFIG, AuthModuleConfig } from './auth.config';
 import { InvitationService } from '../invitation';
 
@@ -31,7 +31,7 @@ export class AuthService {
   ) {}
 
   async register(email: string, password: string, name: string, inviteToken?: string): Promise<AuthResponse> {
-    const existing: User | null = await this.userService.findByEmail(email);
+    const existing: UserEntity | null = await this.userService.findByEmail(email);
 
     if (existing) {
       throw new ConflictException('Email already registered');
@@ -68,7 +68,7 @@ export class AuthService {
     }
 
     const hashedPassword: string = await bcrypt.hash(password, SALT_ROUNDS);
-    const user: User = await this.userService.create({
+    const user: UserEntity = await this.userService.create({
       email,
       name,
       hashedPassword,
@@ -86,7 +86,7 @@ export class AuthService {
   }
 
   async login(email: string, password: string): Promise<AuthResponse> {
-    const user: User | null = await this.userService.findByEmail(email);
+    const user: UserEntity | null = await this.userService.findByEmail(email);
 
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
@@ -110,7 +110,7 @@ export class AuthService {
   }
 
   async getUser(userId: number): Promise<UserResponse> {
-    const user: User | null = await this.userService.findById(userId);
+    const user: UserEntity | null = await this.userService.findById(userId);
 
     if (!user) {
       throw new UnauthorizedException('User not found');

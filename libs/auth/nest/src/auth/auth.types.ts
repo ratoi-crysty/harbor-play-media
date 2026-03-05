@@ -1,6 +1,6 @@
 import 'express-session';
 import { Request } from 'express';
-import { User } from '../user';
+import { UserEntity } from '../user';
 
 declare module 'express-session' {
   interface SessionData {
@@ -9,5 +9,5 @@ declare module 'express-session' {
 }
 
 export interface AuthRequest extends Request {
-  user?: User;
+  user?: UserEntity;
 }

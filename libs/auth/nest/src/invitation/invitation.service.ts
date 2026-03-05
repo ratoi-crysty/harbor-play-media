@@ -2,28 +2,28 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomBytes } from 'crypto';
 import { MoreThan, Repository } from 'typeorm';
-import { User } from '../user/user.entity';
-import { Invitation } from './invitation.entity';
+import { UserEntity } from '../user';
+import { InvitationEntity } from './invitation.entity';
 
 export interface CreateInvitationOptions {
   email: string;
-  createdBy: User;
+  createdBy: UserEntity;
   expiryDays: number;
 }
 
 @Injectable()
 export class InvitationService {
   constructor(
-    @InjectRepository(Invitation)
-    private readonly invitationRepository: Repository<Invitation>
+    @InjectRepository(InvitationEntity)
+    private readonly invitationRepository: Repository<InvitationEntity>
   ) {}
 
-  async create(options: CreateInvitationOptions): Promise<Invitation> {
+  async create(options: CreateInvitationOptions): Promise<InvitationEntity> {
     const token: string = randomBytes(32).toString('hex');
     const expiresAt: Date = new Date();
     expiresAt.setDate(expiresAt.getDate() + options.expiryDays);
 
-    const invitation: Invitation = this.invitationRepository.create({
+    const invitation: InvitationEntity = this.invitationRepository.create({
       token,
       email: options.email.toLowerCase(),
       createdBy: options.createdBy,
@@ -34,7 +34,7 @@ export class InvitationService {
     return this.invitationRepository.save(invitation);
   }
 
-  async findByToken(token: string): Promise<Invitation | null> {
+  async findByToken(token: string): Promise<InvitationEntity | null> {
     return this.invitationRepository.findOne({
       where: { token },
       relations: ['createdBy'],
@@ -44,7 +44,7 @@ export class InvitationService {
   async findValidByTokenAndEmail(
     token: string,
     email: string
-  ): Promise<Invitation | null> {
+  ): Promise<InvitationEntity | null> {
     return this.invitationRepository.findOne({
       where: {
         token,
@@ -59,14 +59,14 @@ export class InvitationService {
     await this.invitationRepository.update(id, { used: true });
   }
 
-  async findAll(): Promise<Invitation[]> {
+  async findAll(): Promise<InvitationEntity[]> {
     return this.invitationRepository.find({
       relations: ['createdBy'],
       order: { createdAt: 'DESC' },
     });
   }
 
-  async findById(id: number): Promise<Invitation | null> {
+  async findById(id: number): Promise<InvitationEntity | null> {
     return this.invitationRepository.findOne({
       where: { id },
       relations: ['createdBy'],
@@ -78,7 +78,7 @@ export class InvitationService {
     return (result.affected ?? 0) > 0;
   }
 
-  async findByEmail(email: string): Promise<Invitation | null> {
+  async findByEmail(email: string): Promise<InvitationEntity | null> {
     return this.invitationRepository.findOne({
       where: { email: email.toLowerCase(), used: false },
       relations: ['createdBy'],

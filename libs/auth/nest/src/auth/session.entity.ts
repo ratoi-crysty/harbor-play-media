@@ -1,8 +1,9 @@
+import { SessionModel } from '@harbor-play-media/common';
 import { ISession } from 'connect-typeorm';
 import { Column, DeleteDateColumn, Entity, Index, PrimaryColumn } from 'typeorm';
 
 @Entity('sessions')
-export class Session implements ISession {
+export class SessionEntity implements ISession, SessionModel {
   @PrimaryColumn('varchar', { length: 255 })
   id!: string;
 

@@ -1,31 +1,13 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Invitation } from './invitation.entity';
-import { InvitationController } from './invitation.controller';
+import { InvitationEntity } from './invitation.entity';
 import { InvitationService } from './invitation.service';
-import { UserModule } from '../user/user.module';
-import { Provider } from '@nestjs/common/interfaces/modules/provider.interface';
-import { INVITATION_CONFIG, InvitationConfig } from './invitation.config';
-
-const baseProviders: Provider[] = [InvitationService];
+import { UserModule } from '../user';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Invitation]), UserModule],
-  controllers: [InvitationController],
-  providers: baseProviders,
+  imports: [TypeOrmModule.forFeature([InvitationEntity]), UserModule],
+  providers:  [InvitationService],
   exports: [InvitationService],
 })
 export class InvitationModule {
-  static forRoot(config: InvitationConfig): DynamicModule {
-    return {
-      module: InvitationModule,
-      providers: [
-        ...baseProviders,
-        {
-          provide: INVITATION_CONFIG,
-          useValue: config,
-        },
-      ],
-    };
-  }
 }

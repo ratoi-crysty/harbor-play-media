@@ -6,7 +6,7 @@ import {
   SetMetadata,
   UnauthorizedException,
 } from '@nestjs/common';
-import { User, UserService } from '../user';
+import { UserEntity, UserService } from '../user';
 import { AuthRequest } from './auth.types';
 import { UserRole } from '@harbor-play-media/common';
 import { Reflector } from '@nestjs/core';
@@ -35,9 +35,7 @@ export class AuthGuard implements CanActivate {
     return this.reflector.getAllAndOverride<T>(key, [context.getHandler(), context.getClass()]);
   }
 
-  protected isAllowed(user: User, roles: UserRole[]): boolean {
-    console.log('Is allowed', { user, roles });
-
+  protected isAllowed(user: UserEntity, roles: UserRole[]): boolean {
     const userRoles: UserRole[] = [];
 
     switch (user.role) {
@@ -67,7 +65,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Not authenticated');
     }
 
-    const user: User | null = await this.userService.findById(userId);
+    const user: UserEntity | null = await this.userService.findById(userId);
 
     if (!user) {
       throw new UnauthorizedException('User not found');

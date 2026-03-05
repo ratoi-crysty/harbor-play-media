@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRole, UserStatus } from '@harbor-play-media/common';
 import { Repository } from 'typeorm';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 
 export interface CreateUserOptions {
   email: string;
@@ -15,19 +15,19 @@ export interface CreateUserOptions {
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>
   ) {}
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<UserEntity | null> {
     return this.userRepository.findOne({ where: { email } });
   }
 
-  async findById(id: number): Promise<User | null> {
+  async findById(id: number): Promise<UserEntity | null> {
     return this.userRepository.findOne({ where: { id } });
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<UserEntity[]> {
     return this.userRepository.find({
       order: { createdAt: 'DESC' },
     });
@@ -41,8 +41,8 @@ export class UserService {
     return this.userRepository.count({ where: { role } });
   }
 
-  async create(options: CreateUserOptions): Promise<User> {
-    const user: User = this.userRepository.create({
+  async create(options: CreateUserOptions): Promise<UserEntity> {
+    const user: UserEntity = this.userRepository.create({
       email: options.email,
       name: options.name,
       password: options.hashedPassword,
@@ -52,12 +52,12 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-  async updateRole(id: number, role: UserRole): Promise<User | null> {
+  async updateRole(id: number, role: UserRole): Promise<UserEntity | null> {
     await this.userRepository.update(id, { role });
     return this.findById(id);
   }
 
-  async updateStatus(id: number, status: UserStatus): Promise<User | null> {
+  async updateStatus(id: number, status: UserStatus): Promise<UserEntity | null> {
     await this.userRepository.update(id, { status });
     return this.findById(id);
   }

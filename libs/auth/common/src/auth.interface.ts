@@ -1,4 +1,5 @@
-import { RegistrationMode, UserRole, UserStatus } from './user.enum';
+import { RegistrationMode } from './user.enum';
+import { UserModel } from './user.model';
 
 export interface LoginRequest {
   email: string;
@@ -10,13 +11,7 @@ export interface RegisterRequest extends LoginRequest {
   inviteToken?: string;
 }
 
-export interface UserResponse extends Omit<RegisterRequest, 'password' | 'inviteToken'> {
-  id: number;
-  email: string;
-  name: string;
-  role: UserRole;
-  status: UserStatus;
-}
+export type UserResponse = UserModel;
 
 export interface AuthResponse {
   user: UserResponse;

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RegistrationMode } from '@harbor-play-media/common';
-import { AuthModule, User, Session, Invitation, UserManagementModule } from '@harbor-play-media/nest';
+import { AuthModule, UserEntity, SessionEntity, InvitationEntity, UserManagementModule } from '@harbor-play-media/nest';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -18,14 +18,15 @@ function getRegistrationMode(): RegistrationMode {
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
       database: 'data/database.sqlite',
-      entities: [User, Session, Invitation],
+      entities: [UserEntity, SessionEntity, InvitationEntity],
       synchronize: true,
     }),
     AuthModule.forRoot({
       registrationMode: getRegistrationMode(),
+    }),
+    UserManagementModule.forRoot({
       inviteTokenExpiryDays: Number(process.env['INVITE_TOKEN_EXPIRY_DAYS'] ?? '7'),
     }),
-    UserManagementModule,
   ],
   controllers: [AppController],
   providers: [AppService],

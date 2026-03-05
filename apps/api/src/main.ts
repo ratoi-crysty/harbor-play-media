@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import session from 'express-session';
 import { DataSource } from 'typeorm';
 import { ISession, TypeormStore } from 'connect-typeorm';
-import { Session } from '@harbor-play-media/nest';
+import { SessionEntity } from '@harbor-play-media/nest';
 import { AppModule } from './app/app.module';
 
 async function bootstrap(): Promise<void> {
@@ -22,7 +22,7 @@ async function bootstrap(): Promise<void> {
   );
 
   const dataSource: DataSource = app.get(DataSource);
-  const sessionRepository = dataSource.getRepository<ISession>(Session);
+  const sessionRepository = dataSource.getRepository<ISession>(SessionEntity);
 
   app.use(
     session({
