@@ -1,5 +1,5 @@
-import { RegistrationMode } from './user.enum';
-import { UserModel } from './user.model';
+import { RegistrationMode } from '../models/user.enum';
+import { UserModel } from '../models/user.model';
 
 export interface LoginRequest {
   email: string;

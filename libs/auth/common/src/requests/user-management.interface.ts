@@ -1,4 +1,4 @@
-import { UserRole, UserStatus } from './user.enum';
+import { UserRole, UserStatus } from '../models/user.enum';
 
 export interface UserListItem {
   id: number;
