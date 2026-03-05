@@ -14,11 +14,10 @@ import {
   UserResponse,
   UserRole,
   UserStatus,
-} from '@task-manager/shared-api';
-import { UserService } from '../user/user.service';
-import { User } from '../user/user.entity';
+} from '@harbor-play-media/common';
+import { User, UserService } from '../user';
 import { AUTH_CONFIG, AuthModuleConfig } from './auth.config';
-import { InvitationService } from '../invitation/invitation.service';
+import { InvitationService } from '../invitation';
 
 const SALT_ROUNDS = 10;
 

@@ -4,9 +4,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { UserListItem, UserRole, UserStatus } from '@task-manager/shared-api';
-import { UserService } from '../user/user.service';
-import { User } from '../user/user.entity';
+import { UserListItem, UserRole, UserStatus } from '@harbor-play-media/common';
+import { UserService, User } from '../user';
 
 @Injectable()
 export class UserManagementService {

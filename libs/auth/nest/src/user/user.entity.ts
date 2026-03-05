@@ -1,4 +1,4 @@
-import { UserResponse, UserRole, UserStatus } from '@task-manager/shared-api';
+import { UserResponse, UserRole, UserStatus } from '@harbor-play-media/common';
 import {
   Column,
   CreateDateColumn,

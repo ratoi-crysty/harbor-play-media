@@ -6,10 +6,9 @@ import {
   SetMetadata,
   UnauthorizedException,
 } from '@nestjs/common';
-import { User } from '../user/user.entity';
-import { UserService } from '../user/user.service';
+import { User, UserService } from '../user';
 import { AuthRequest } from './auth.types';
-import { UserRole } from '@task-manager/shared-api';
+import { UserRole } from '@harbor-play-media/common';
 import { Reflector } from '@nestjs/core';
 
 enum MetadataKey {

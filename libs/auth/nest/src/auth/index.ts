@@ -7,5 +7,4 @@ export * from './auth.module';
 export * from './auth.service';
 export * from './auth.types';
 export * from './current-user.decorator';
-export * from './session.d';
 export * from './session.entity';

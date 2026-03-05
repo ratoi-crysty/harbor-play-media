@@ -9,13 +9,12 @@ import {
   ParseIntPipe,
   Post,
 } from '@nestjs/common';
-import { InvitationListResponse, InvitationResponse, UserRole } from '@task-manager/shared-api';
-import { CurrentUser } from '../auth/current-user.decorator';
-import { User } from '../user/user.entity';
+import { InvitationListResponse, InvitationResponse, UserRole } from '@harbor-play-media/common';
+import { CurrentUser, Roles } from '../auth';
+import { User } from '../user';
 import { CreateInvitationDto } from './dto/create-invitation.dto';
 import { Invitation } from './invitation.entity';
 import { InvitationService } from './invitation.service';
-import { Roles } from '../auth/auth.guard';
 import { INVITATION_CONFIG, InvitationConfig } from './invitation.config';
 
 @Controller('invitations')

@@ -1,13 +1,9 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { RegistrationMode } from '@harbor-play-media/common';
+import { AuthModule, User, Session, Invitation, UserManagementModule } from '@harbor-play-media/nest';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { User } from './user/user.entity';
-import { Session } from './auth/session.entity';
-import { Invitation } from './invitation/invitation.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
-import { UserManagementModule } from './user-management/user-management.module';
 
 function getRegistrationMode(): RegistrationMode {
   const mode: string = process.env['REGISTRATION_MODE'] ?? 'open';
@@ -25,7 +21,6 @@ function getRegistrationMode(): RegistrationMode {
       entities: [User, Session, Invitation],
       synchronize: true,
     }),
-    UserModule,
     AuthModule.forRoot({
       registrationMode: getRegistrationMode(),
       inviteTokenExpiryDays: Number(process.env['INVITE_TOKEN_EXPIRY_DAYS'] ?? '7'),

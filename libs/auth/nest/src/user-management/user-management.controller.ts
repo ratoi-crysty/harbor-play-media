@@ -1,10 +1,9 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
-import { UserListItem, UserListResponse, UserRole } from '@task-manager/shared-api';
-import { CurrentUser } from '../auth/current-user.decorator';
-import { User } from '../user/user.entity';
+import { UserListItem, UserListResponse, UserRole } from '@harbor-play-media/common';
+import { CurrentUser, Roles } from '../auth';
+import { User } from '../user';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { UserManagementService } from './user-management.service';
-import { Roles } from '../auth/auth.guard';
 
 @Controller('users')
 export class UserManagementController {

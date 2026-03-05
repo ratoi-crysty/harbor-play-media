@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRole, UserStatus } from '@task-manager/shared-api';
+import { UserRole, UserStatus } from '@harbor-play-media/common';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 
