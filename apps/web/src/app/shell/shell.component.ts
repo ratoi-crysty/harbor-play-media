@@ -11,6 +11,8 @@ import { SidebarComponent, PageHeaderComponent, NavItem } from '@harbor-play-med
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShellComponent {
+  protected readonly STORAGE_KEY = 'shell.sidebar-open';
+
   protected readonly navItems: NavItem[] = [
     { label: 'Library', icon: 'video_library', route: '/' },
     { label: 'Browse', icon: 'explore', route: '/browse' },
@@ -19,16 +21,14 @@ export class ShellComponent {
   ];
 
   // Start open on desktop, closed on mobile/tablet
-  protected readonly sidebarOpen = signal<boolean>(
-    typeof window !== 'undefined' && window.innerWidth >= 1024
-  );
+  protected readonly sidebarOpen = signal<boolean>(this.getDefaultSideOpenValue());
 
   protected toggleSidebar(): void {
-    this.sidebarOpen.update((v: boolean) => !v);
+    this.updateSidebar(!this.sidebarOpen());
   }
 
   protected closeSidebar(): void {
-    this.sidebarOpen.set(false);
+    this.updateSidebar(false);
   }
 
   protected onNavItemClick(): void {
@@ -36,5 +36,24 @@ export class ShellComponent {
     if (window.innerWidth < 1024) {
       this.sidebarOpen.set(false);
     }
+  }
+
+  protected getDefaultSideOpenValue(): boolean {
+    if (window.innerWidth < 1024) {
+      return false;
+    }
+
+    const value = localStorage.getItem(this.STORAGE_KEY);
+
+    if (value === null) {
+      return true;
+    }
+
+    return JSON.parse(value);
+  }
+
+  protected updateSidebar(value: boolean): void {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(value));
+    this.sidebarOpen.set(value);
   }
 }
