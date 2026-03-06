@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -14,13 +14,24 @@ export interface NavItem {
   imports: [RouterLink, RouterLinkActive, MatIconModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
-  host: { '[class.open]': 'open()' },
+  host: {
+    '[class.open]': 'open()',
+    '[class.no-transition]': '!ready()',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SidebarComponent {
+export class SidebarComponent implements AfterViewInit {
   readonly navItems = input<NavItem[]>([]);
   readonly open = input<boolean>(true);
   readonly navItemClick = output<void>();
+
+  protected readonly ready = signal<boolean>(false);
+
+  ngAfterViewInit(): void {
+    // Wait one frame before enabling transitions so the initial open state
+    // is painted without animating in from the closed position.
+    setTimeout(() => this.ready.set(true));
+  }
 
   protected onNavItemClick(): void {
     this.navItemClick.emit();

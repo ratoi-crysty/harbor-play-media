@@ -1,3 +1,9 @@
+// Suppress all transitions during initial render (before `ready` is set).
+:host.no-transition,
+:host.no-transition .sidebar {
+  transition: none !important;
+}
+
 // The host acts as the width-animating container on desktop.
 // On mobile it has zero width (sidebar floats as a fixed overlay).
 :host {
