@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -15,6 +15,7 @@ export interface NavItem {
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
   host: { '[class.open]': 'open()' },
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
   readonly navItems = input<NavItem[]>([]);

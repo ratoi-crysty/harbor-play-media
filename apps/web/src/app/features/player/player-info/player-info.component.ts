@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
@@ -11,6 +11,7 @@ import { formatFileSize } from '../../../core/mock-data';
   imports: [MatButtonModule, MatIconModule, MatChipsModule],
   templateUrl: './player-info.component.html',
   styleUrl: './player-info.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerInfoComponent {
   readonly media = input.required<MediaModel>();

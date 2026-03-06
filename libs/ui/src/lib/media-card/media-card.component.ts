@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MediaModel } from '@harbor-play-media/shared-api';
 
@@ -8,6 +8,7 @@ import { MediaModel } from '@harbor-play-media/shared-api';
   imports: [MatIconModule],
   templateUrl: './media-card.component.html',
   styleUrl: './media-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MediaCardComponent {
   readonly media = input.required<MediaModel>();

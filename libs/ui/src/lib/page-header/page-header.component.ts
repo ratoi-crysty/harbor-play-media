@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [MatIconModule, MatButtonModule],
   templateUrl: './page-header.component.html',
   styleUrl: './page-header.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageHeaderComponent {
   readonly sidebarOpen = input<boolean>(true);

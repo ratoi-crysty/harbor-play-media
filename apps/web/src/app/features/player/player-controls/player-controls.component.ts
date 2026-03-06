@@ -1,4 +1,4 @@
-import { Component, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +12,7 @@ import { formatDuration } from '../../../core/mock-data';
   imports: [MatIconModule, MatSliderModule, MatButtonModule, MatTooltipModule],
   templateUrl: './player-controls.component.html',
   styleUrl: './player-controls.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerControlsComponent {
   readonly media = input.required<MediaModel>();

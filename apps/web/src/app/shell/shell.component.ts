@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent, PageHeaderComponent, NavItem } from '@harbor-play-media/ui';
 
@@ -8,6 +8,7 @@ import { SidebarComponent, PageHeaderComponent, NavItem } from '@harbor-play-med
   imports: [RouterOutlet, SidebarComponent, PageHeaderComponent],
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShellComponent {
   protected readonly navItems: NavItem[] = [
