@@ -1,19 +1,44 @@
+// The host acts as the width-animating container on desktop.
+// On mobile it has zero width (sidebar floats as a fixed overlay).
 :host {
   display: block;
-  width: 250px;
   flex-shrink: 0;
+  overflow: hidden; // clips the sliding .sidebar panel
+  width: 0;
+  transition: width 0.25s ease;
+
+  // Desktop: host expands to give the sidebar physical space
+  @media (min-width: 1024px) {
+    &.open {
+      width: 250px;
+    }
+  }
 }
 
 .sidebar {
   width: 250px;
-  height: 100vh;
+  min-width: 250px; // prevent compression when host clips
+  height: 100%;
   background: var(--color-surface);
   border-right: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
-  position: sticky;
-  top: 0;
   overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform 0.25s ease;
+
+  &.open {
+    transform: translateX(0);
+  }
+
+  // Mobile/tablet: overlay mode
+  @media (max-width: 1023px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100dvh;
+    z-index: 200;
+  }
 }
 
 .sidebar-logo {
@@ -23,6 +48,7 @@
   padding: 20px 16px 24px;
   border-bottom: 1px solid var(--color-border);
   color: var(--color-accent);
+  flex-shrink: 0;
 
   .logo-icon {
     font-size: 28px;

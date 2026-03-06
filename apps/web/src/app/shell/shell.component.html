@@ -1,5 +1,18 @@
-<div class="shell-layout">
-  <lib-sidebar [navItems]="navItems" />
+<lib-page-header
+  [sidebarOpen]="sidebarOpen()"
+  (menuToggle)="toggleSidebar()"
+/>
+
+<div class="shell-body" [class.sidebar-open]="sidebarOpen()">
+  <!-- Mobile/tablet backdrop -->
+  <div class="sidebar-backdrop" (click)="closeSidebar()" aria-hidden="true"></div>
+
+  <lib-sidebar
+    [navItems]="navItems"
+    [open]="sidebarOpen()"
+    (navItemClick)="onNavItemClick()"
+  />
+
   <main class="shell-main">
     <router-outlet />
   </main>

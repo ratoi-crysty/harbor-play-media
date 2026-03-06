@@ -1,16 +1,42 @@
 :host {
-  display: block;
-  height: 100vh;
-}
-
-.shell-layout {
   display: flex;
+  flex-direction: column;
   height: 100vh;
   overflow: hidden;
+}
+
+.shell-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
 }
 
 .shell-main {
   flex: 1;
   overflow-y: auto;
   min-width: 0;
+}
+
+// Backdrop: only active on mobile/tablet when sidebar is open
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 199;
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+
+  @media (max-width: 1023px) {
+    display: block;
+  }
+}
+
+.shell-body.sidebar-open .sidebar-backdrop {
+  @media (max-width: 1023px) {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }

@@ -1,25 +1,55 @@
 :host {
   display: block;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  flex-shrink: 0;
 }
 
 .page-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 12px 24px;
-  background: var(--color-bg);
+  gap: 12px;
+  padding: 8px 16px;
+  background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
-  gap: 16px;
+  height: 56px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.hamburger-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: background 0.15s ease, color 0.15s ease;
+  padding: 0;
+
+  mat-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--color-text);
+  }
 }
 
 .search-wrap {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--color-surface);
+  background: var(--color-bg);
   border: 1px solid var(--color-border);
   border-radius: 6px;
   padding: 6px 12px;
@@ -31,6 +61,7 @@
     width: 18px;
     height: 18px;
     color: var(--color-text-secondary);
+    flex-shrink: 0;
   }
 
   .search-input {
@@ -51,7 +82,8 @@
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .avatar {

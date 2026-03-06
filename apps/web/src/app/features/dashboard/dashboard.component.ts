@@ -3,13 +3,13 @@ import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MediaModel } from '@harbor-play-media/shared-api';
-import { MediaCardComponent, PageHeaderComponent } from '@harbor-play-media/ui';
+import { MediaCardComponent } from '@harbor-play-media/ui';
 import { MOCK_MEDIA, formatDuration } from '../../core/mock-data';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MediaCardComponent, PageHeaderComponent],
+  imports: [MatButtonModule, MatIconModule, MediaCardComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
