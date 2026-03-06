@@ -27,7 +27,7 @@
   <h2 class="section-title">Recently Added</h2>
   <div class="media-grid">
     @for (item of recentlyAdded(); track item.id) {
-      <lib-media-card [media]="item" (cardClicked)="onMediaClick($event)" />
+      <lib-media-card [media]="item" />
     }
   </div>
 </section>
@@ -37,7 +37,7 @@
   <h2 class="section-title">Most Popular</h2>
   <div class="media-grid">
     @for (item of mostPopular(); track item.id) {
-      <lib-media-card [media]="item" (cardClicked)="onMediaClick($event)" />
+      <lib-media-card [media]="item" />
     }
   </div>
 </section>

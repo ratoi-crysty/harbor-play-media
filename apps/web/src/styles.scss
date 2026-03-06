@@ -31,3 +31,27 @@ body {
   font-family: Roboto, sans-serif;
   min-height: 100vh;
 }
+
+// ─── View Transition: route changes ──────────────────────────────────────────
+// Suppress the default full-page cross-fade so the sidebar and header stay put.
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+// Animate only the main content area (named in shell.component.scss).
+@keyframes vt-fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes vt-slide-up-fade-in {
+  from { opacity: 0; translate: 0 10px; }
+}
+
+::view-transition-old(main-content) {
+  animation: 120ms ease-in vt-fade-out forwards;
+}
+
+::view-transition-new(main-content) {
+  animation: 240ms ease-out vt-slide-up-fade-in forwards;
+}

@@ -1,15 +1,18 @@
-<article class="media-card" (click)="onClick()" (keydown.enter)="onClick()" tabindex="0" role="button" [attr.aria-label]="media().title">
-  <div class="thumbnail-wrap">
-    <img [src]="media().thumbnailUrl" [alt]="media().title" class="thumbnail" loading="lazy" />
-    <span class="duration-badge">{{ formatDuration(media().duration) }}</span>
-    <div class="play-overlay">
-      <mat-icon>play_circle_outline</mat-icon>
+<a class="media-link" [routerLink]="['/player', media().id]">
+  <article class="media-card" tabindex="0" role="button" [attr.aria-label]="media().title">
+    <div class="thumbnail-wrap">
+      <img [src]="media().thumbnailUrl" [alt]="media().title" class="thumbnail" loading="lazy" />
+      <span class="duration-badge">{{ duration() }}</span>
+      <div class="play-overlay">
+        <mat-icon>play_circle_outline</mat-icon>
+      </div>
     </div>
-  </div>
-  <div class="card-body">
-    <p class="card-title">{{ media().title }}</p>
-    @if (media().resolution) {
-      <span class="resolution-badge">{{ media().resolution }}</span>
-    }
-  </div>
-</article>
+    <div class="card-body">
+      <p class="card-title">{{ media().title }}</p>
+      @if (media().resolution) {
+        <span class="resolution-badge">{{ media().resolution }}</span>
+      }
+    </div>
+  </article>
+
+</a>

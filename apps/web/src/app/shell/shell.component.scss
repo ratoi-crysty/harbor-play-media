@@ -16,6 +16,9 @@
   flex: 1;
   overflow-y: auto;
   min-width: 0;
+  // Isolate the scrollable content area as its own view transition layer.
+  // This keeps the sidebar and header static during route changes.
+  view-transition-name: main-content;
 }
 
 // Backdrop: only active on mobile/tablet when sidebar is open
