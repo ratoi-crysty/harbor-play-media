@@ -1,0 +1,26 @@
+<div class="player-info">
+  <div class="info-header">
+    <h2 class="media-title">{{ media().title }}</h2>
+    <div class="action-buttons">
+      <button mat-stroked-button class="action-btn">
+        <mat-icon>download</mat-icon>
+        Download
+      </button>
+      <button mat-stroked-button class="action-btn">
+        <mat-icon>share</mat-icon>
+        Share
+      </button>
+    </div>
+  </div>
+
+  <mat-chip-set class="info-chips" aria-label="Media details">
+    <mat-chip>{{ media().mimeType }}</mat-chip>
+    @if (media().resolution) {
+      <mat-chip>{{ media().resolution }}</mat-chip>
+    }
+    <mat-chip>{{ formatFileSize(media().fileSize) }}</mat-chip>
+    <mat-chip>{{ media().viewCount.toLocaleString() }} views</mat-chip>
+  </mat-chip-set>
+
+  <p class="media-description">{{ media().description }}</p>
+</div>

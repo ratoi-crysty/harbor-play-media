@@ -1,0 +1,18 @@
+<header class="page-header">
+  <div class="search-wrap">
+    <mat-icon class="search-icon">search</mat-icon>
+    <input
+      class="search-input"
+      type="text"
+      placeholder="Search media..."
+      [value]="searchQuery()"
+      (input)="onSearch($event)"
+      aria-label="Search media"
+    />
+  </div>
+  <div class="header-actions">
+    <div class="avatar" aria-label="User profile">
+      <mat-icon>account_circle</mat-icon>
+    </div>
+  </div>
+</header>

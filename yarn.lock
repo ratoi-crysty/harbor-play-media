@@ -368,6 +368,13 @@
   dependencies:
     "@angular-eslint/bundled-angular-compiler" "21.2.0"
 
+"@angular/animations@~21.1.0":
+  version "21.1.6"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-21.1.6.tgz#fb238b046f43eeae332b8822d2cefd6f69f852fa"
+  integrity sha512-Ft8B0tHBRyd7ORpbaa2S0yRqHSdsyMH6oot7ODAA3kv03k4GTwp74U6Y/NyV4JoZ+lr28+EV4YMv3mAqJwIy/g==
+  dependencies:
+    tslib "^2.3.0"
+
 "@angular/build@21.1.5", "@angular/build@~21.1.0":
   version "21.1.5"
   resolved "https://registry.yarnpkg.com/@angular/build/-/build-21.1.5.tgz#3102cf4fb49c13119fcd8f93374dc18ca1d7df0a"
@@ -402,6 +409,14 @@
     watchpack "2.5.0"
   optionalDependencies:
     lmdb "3.4.4"
+
+"@angular/cdk@~21.1.0":
+  version "21.1.6"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-21.1.6.tgz#62f6c305f3911a3a2b8038773315ee46a8ed19e1"
+  integrity sha512-a6isY8eWxfRO99KPs8GLMQRDE06diNbPmD9tcYi+EWxjPFOZ88QJmMN8a0yja+LDQaG2kRbNBLjYUEro3qCpTQ==
+  dependencies:
+    parse5 "^8.0.0"
+    tslib "^2.3.0"
 
 "@angular/cli@~21.1.0":
   version "21.1.5"
@@ -475,6 +490,13 @@
   version "21.1.6"
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-21.1.6.tgz#53d2e49edc4622f074197ef3620dc82b28909021"
   integrity sha512-I2gYI9cKP/B/rUz8WVaWNpuULSdq4W+ZUm6YQyUXdGEh3dDEssK1xLucPBfUT7RAr6h7+w5/RS+zKWC1q9g24w==
+
+"@angular/material@~21.1.0":
+  version "21.1.6"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-21.1.6.tgz#31e07542bd7eae302e8a442e6a29743ec4397104"
+  integrity sha512-lLLskTudCS+bKKsaBVLPf4Yo1EGZdCi/yLwx6G2j0bhRlI5NLlWBsF3MTpl6cXBns1+37PXFprK5cdWxG0eX1Q==
+  dependencies:
+    tslib "^2.3.0"
 
 "@angular/platform-browser@~21.1.0":
   version "21.1.6"

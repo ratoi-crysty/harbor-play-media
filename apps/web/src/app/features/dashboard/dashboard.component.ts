@@ -1,0 +1,41 @@
+import { Component, signal, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MediaModel } from '@harbor-play-media/shared-api';
+import { MediaCardComponent, PageHeaderComponent } from '@harbor-play-media/ui';
+import { MOCK_MEDIA, formatDuration } from '../../core/mock-data';
+
+@Component({
+  selector: 'app-dashboard',
+  standalone: true,
+  imports: [MatButtonModule, MatIconModule, MediaCardComponent, PageHeaderComponent],
+  templateUrl: './dashboard.component.html',
+  styleUrl: './dashboard.component.scss',
+})
+export class DashboardComponent {
+  private readonly router: Router = inject(Router);
+
+  protected readonly allMedia = signal<MediaModel[]>(MOCK_MEDIA);
+  protected readonly featured = computed<MediaModel>(() => this.allMedia()[0]);
+  protected readonly recentlyAdded = computed<MediaModel[]>(() =>
+    this.allMedia().slice(0, 6)
+  );
+  protected readonly mostPopular = computed<MediaModel[]>(() =>
+    [...this.allMedia()]
+      .sort((a: MediaModel, b: MediaModel) => b.viewCount - a.viewCount)
+      .slice(0, 6)
+  );
+
+  protected formatDuration(seconds: number): string {
+    return formatDuration(seconds);
+  }
+
+  protected onMediaClick(id: string): void {
+    void this.router.navigate(['/player', id]);
+  }
+
+  protected onHeroPlay(): void {
+    void this.router.navigate(['/player', this.featured().id]);
+  }
+}

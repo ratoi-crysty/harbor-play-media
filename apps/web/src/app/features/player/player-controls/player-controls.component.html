@@ -1,0 +1,53 @@
+<div class="controls-bar">
+  <!-- Progress Slider -->
+  <div class="progress-row">
+    <span class="time-label">{{ currentTimeLabel }}</span>
+    <mat-slider class="progress-slider" [min]="0" [max]="100" [step]="0.1">
+      <input matSliderThumb [value]="progress()" (valueChange)="onProgressChange($event)" />
+    </mat-slider>
+    <span class="time-label">{{ totalTimeLabel }}</span>
+  </div>
+
+  <!-- Controls Row -->
+  <div class="controls-row">
+    <div class="controls-left">
+      <button mat-icon-button class="control-btn" matTooltip="Previous" aria-label="Previous">
+        <mat-icon>skip_previous</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        class="control-btn play-btn"
+        [matTooltip]="isPlaying() ? 'Pause' : 'Play'"
+        [attr.aria-label]="isPlaying() ? 'Pause' : 'Play'"
+        (click)="togglePlay()"
+      >
+        <mat-icon>{{ isPlaying() ? 'pause' : 'play_arrow' }}</mat-icon>
+      </button>
+      <button mat-icon-button class="control-btn" matTooltip="Next" aria-label="Next">
+        <mat-icon>skip_next</mat-icon>
+      </button>
+
+      <div class="volume-group">
+        <mat-icon class="volume-icon">volume_up</mat-icon>
+        <mat-slider class="volume-slider" [min]="0" [max]="100" [step]="1">
+          <input matSliderThumb [value]="volume()" (valueChange)="onVolumeChange($event)" />
+        </mat-slider>
+      </div>
+    </div>
+
+    <div class="controls-right">
+      <button
+        mat-button
+        class="quality-badge"
+        (click)="cycleQuality()"
+        [matTooltip]="'Quality: ' + selectedQuality()"
+        aria-label="Change quality"
+      >
+        {{ selectedQuality() }}
+      </button>
+      <button mat-icon-button class="control-btn" matTooltip="Fullscreen" aria-label="Fullscreen">
+        <mat-icon>fullscreen</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

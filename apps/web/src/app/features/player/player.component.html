@@ -1,0 +1,51 @@
+@if (currentMedia(); as media) {
+  <div class="player-page">
+    <!-- Header -->
+    <header class="player-header">
+      <button mat-icon-button (click)="goBack()" aria-label="Go back" class="back-btn">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/" class="breadcrumb-link">Library</a>
+        <mat-icon class="breadcrumb-sep">chevron_right</mat-icon>
+        <span class="breadcrumb-current">{{ media.title }}</span>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="player-content">
+      <!-- Left: Video + Controls + Info -->
+      <div class="player-main">
+        <!-- Video Area -->
+        <div class="video-area">
+          <div class="video-placeholder">
+            <mat-icon class="placeholder-icon">play_circle_outline</mat-icon>
+            <p class="placeholder-label">{{ media.title }}</p>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <app-player-controls [media]="media" />
+
+        <!-- Info -->
+        <app-player-info [media]="media" />
+      </div>
+
+      <!-- Right: Up Next -->
+      <aside class="player-aside">
+        <h3 class="aside-title">Up Next</h3>
+        <div class="up-next-list">
+          @for (item of upNext(); track item.id) {
+            <lib-media-card [media]="item" (cardClicked)="onUpNextClick($event)" />
+          }
+        </div>
+      </aside>
+    </div>
+  </div>
+} @else {
+  <div class="not-found">
+    <mat-icon>error_outline</mat-icon>
+    <p>Media not found.</p>
+    <button mat-raised-button color="primary" (click)="goBack()">Back to Library</button>
+  </div>
+}
