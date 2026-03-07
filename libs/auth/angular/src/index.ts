@@ -4,3 +4,4 @@ export * from './services/user-management.service';
 export * from './guards/auth.guard';
 export * from './guards/non-auth.guard';
 export * from './guards/role.guard';
+export * from './auth.interceptor';

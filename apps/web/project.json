@@ -61,6 +61,9 @@
           "buildTarget": "web:build:development"
         }
       },
+      "options": {
+        "proxyConfig": "apps/web/proxy.config.json"
+      },
       "defaultConfiguration": "development"
     },
     "extract-i18n": {
