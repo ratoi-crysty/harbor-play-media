@@ -14,7 +14,7 @@ import {
   UserResponse,
   UserRole,
   UserStatus,
-} from '@harbor-play-media/common';
+} from '@auth-lib/common';
 import { UserEntity, UserService } from '../user';
 import { AUTH_CONFIG, AuthModuleConfig } from './auth.config';
 import { InvitationService } from '../invitation';

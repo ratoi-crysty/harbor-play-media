@@ -1,10 +1,5 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { UserListItem, UserRole, UserStatus } from '@harbor-play-media/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { UserListItem, UserRole, UserStatus } from '@auth-lib/common';
 import { UserService, UserEntity } from '../user';
 
 @Injectable()
@@ -16,11 +11,7 @@ export class UserManagementService {
     return users.map((user) => this.toListItem(user));
   }
 
-  async updateRole(
-    userId: number,
-    newRole: UserRole,
-    currentUser: UserEntity
-  ): Promise<UserListItem> {
+  async updateRole(userId: number, newRole: UserRole, currentUser: UserEntity): Promise<UserListItem> {
     if (userId === currentUser.id) {
       throw new ForbiddenException('Cannot change your own role');
     }
@@ -31,24 +22,14 @@ export class UserManagementService {
       throw new NotFoundException('User not found');
     }
 
-    if (
-      user.role === UserRole.SUPERADMIN &&
-      newRole !== UserRole.SUPERADMIN
-    ) {
-      const superadminCount: number = await this.userService.countByRole(
-        UserRole.SUPERADMIN
-      );
+    if (user.role === UserRole.SUPERADMIN && newRole !== UserRole.SUPERADMIN) {
+      const superadminCount: number = await this.userService.countByRole(UserRole.SUPERADMIN);
       if (superadminCount <= 1) {
-        throw new BadRequestException(
-          'Cannot demote the last superadmin'
-        );
+        throw new BadRequestException('Cannot demote the last superadmin');
       }
     }
 
-    const updatedUser: UserEntity | null = await this.userService.updateRole(
-      userId,
-      newRole
-    );
+    const updatedUser: UserEntity | null = await this.userService.updateRole(userId, newRole);
 
     if (!updatedUser) {
       throw new NotFoundException('User not found');
@@ -68,10 +49,7 @@ export class UserManagementService {
       throw new BadRequestException('User is not awaiting confirmation');
     }
 
-    const updatedUser: UserEntity | null = await this.userService.updateStatus(
-      userId,
-      UserStatus.REGISTERED
-    );
+    const updatedUser: UserEntity | null = await this.userService.updateStatus(userId, UserStatus.REGISTERED);
 
     if (!updatedUser) {
       throw new NotFoundException('User not found');

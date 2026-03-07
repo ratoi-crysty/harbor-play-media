@@ -15,7 +15,7 @@ export interface CreateInvitationOptions {
 export class InvitationService {
   constructor(
     @InjectRepository(InvitationEntity)
-    private readonly invitationRepository: Repository<InvitationEntity>
+    private readonly invitationRepository: Repository<InvitationEntity>,
   ) {}
 
   async create(options: CreateInvitationOptions): Promise<InvitationEntity> {
@@ -41,10 +41,7 @@ export class InvitationService {
     });
   }
 
-  async findValidByTokenAndEmail(
-    token: string,
-    email: string
-  ): Promise<InvitationEntity | null> {
+  async findValidByTokenAndEmail(token: string, email: string): Promise<InvitationEntity | null> {
     return this.invitationRepository.findOne({
       where: {
         token,

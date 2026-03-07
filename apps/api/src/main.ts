@@ -3,8 +3,9 @@ import { NestFactory } from '@nestjs/core';
 import session from 'express-session';
 import { DataSource } from 'typeorm';
 import { ISession, TypeormStore } from 'connect-typeorm';
-import { SessionEntity } from '@harbor-play-media/nest';
+import { SessionEntity } from '@auth-lib/nest';
 import { AppModule } from './app/app.module';
+import { environment } from './environments/environment';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
@@ -18,7 +19,7 @@ async function bootstrap(): Promise<void> {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
-    })
+    }),
   );
 
   const dataSource: DataSource = app.get(DataSource);
@@ -32,18 +33,16 @@ async function bootstrap(): Promise<void> {
       store: new TypeormStore({ cleanupLimit: 2 }).connect(sessionRepository),
       cookie: {
         httpOnly: true,
-        secure: false,
+        secure: environment.isProd,
         sameSite: 'lax',
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       },
-    })
+    }),
   );
 
   const port: string | number = process.env['PORT'] || 3333;
   await app.listen(port);
-  Logger.log(
-    `Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
+  Logger.log(`Application is running on: http://localhost:${port}/${globalPrefix}`);
 }
 
 bootstrap();

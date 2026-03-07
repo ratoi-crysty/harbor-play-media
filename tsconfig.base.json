@@ -17,9 +17,9 @@
     "strict": true,
     "paths": {
       "@harbor-play-media/shared-api": ["libs/shared-api/src/index.ts"],
-      "@harbor-play-media/common": ["libs/auth/common/src/index.ts"],
-      "@harbor-play-media/nest": ["libs/auth/nest/src/index.ts"],
-      "@harbor-play-media/angular": ["libs/auth/angular/src/index.ts"],
+      "@auth-lib/common": ["libs/auth/common/src/index.ts"],
+      "@auth-lib/nest": ["libs/auth/nest/src/index.ts"],
+      "@auth-lib/angular": ["libs/auth/angular/src/index.ts"],
       "@harbor-play-media/ui": ["libs/ui/src/index.ts"]
     }
   },

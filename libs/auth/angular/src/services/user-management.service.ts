@@ -1,11 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {
-  UpdateUserRoleRequest,
-  UserListItem,
-  UserListResponse,
-} from '@harbor-play-media/common';
+import { UpdateUserRoleRequest, UserListItem, UserListResponse } from '@auth-lib/common';
 import { AUTH_CONFIG, AuthConfig } from '../auth.config';
 
 @Injectable({ providedIn: 'root' })

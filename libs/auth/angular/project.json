@@ -1,5 +1,5 @@
 {
-  "name": "angular",
+  "name": "auth-lib-angular",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/auth/angular/src",
   "prefix": "lib",

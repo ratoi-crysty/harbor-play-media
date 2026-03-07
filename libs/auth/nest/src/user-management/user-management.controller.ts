@@ -10,13 +10,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import {
-  InvitationListResponse,
-  InvitationResponse,
-  UserListItem,
-  UserListResponse,
-  UserRole,
-} from '@harbor-play-media/common';
+import { InvitationListResponse, InvitationResponse, UserListItem, UserListResponse, UserRole } from '@auth-lib/common';
 import { CurrentUser, Roles } from '../auth';
 import { UserEntity } from '../user';
 import { UpdateRoleDto } from './dto/update-role.dto';

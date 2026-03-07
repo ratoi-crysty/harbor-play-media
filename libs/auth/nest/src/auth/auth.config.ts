@@ -1,4 +1,4 @@
-import { RegistrationMode } from '@harbor-play-media/common';
+import { RegistrationMode } from '@auth-lib/common';
 
 export interface AuthModuleConfig {
   registrationMode: RegistrationMode;

@@ -1,12 +1,5 @@
-import { InvitationModel } from '@harbor-play-media/common';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { InvitationModel } from '@auth-lib/common';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from '../user';
 
 @Entity('invitations')

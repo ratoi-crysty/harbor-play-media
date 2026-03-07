@@ -6,8 +6,7 @@ import { UserModule } from '../user';
 
 @Module({
   imports: [TypeOrmModule.forFeature([InvitationEntity]), UserModule],
-  providers:  [InvitationService],
+  providers: [InvitationService],
   exports: [InvitationService],
 })
-export class InvitationModule {
-}
+export class InvitationModule {}

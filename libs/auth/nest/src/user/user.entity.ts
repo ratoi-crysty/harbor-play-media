@@ -1,11 +1,5 @@
-import { UserModel, UserResponse, UserRole, UserStatus } from '@harbor-play-media/common';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { UserModel, UserResponse, UserRole, UserStatus } from '@auth-lib/common';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('users')
 export class UserEntity implements UserModel {

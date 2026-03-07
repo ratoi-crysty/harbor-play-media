@@ -1,18 +1,10 @@
 import { inject } from '@angular/core';
-import {
-  HttpErrorResponse,
-  HttpHandlerFn,
-  HttpInterceptorFn,
-  HttpRequest,
-} from '@angular/common/http';
+import { HttpErrorResponse, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { AuthService } from './services/auth.service';
 
-export const authInterceptor: HttpInterceptorFn = (
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn
-) => {
+export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
   const router: Router = inject(Router);
   const authService: AuthService = inject(AuthService);
 
@@ -27,6 +19,6 @@ export const authInterceptor: HttpInterceptorFn = (
         router.navigate(['/login']);
       }
       return throwError(() => error);
-    })
+    }),
   );
 };

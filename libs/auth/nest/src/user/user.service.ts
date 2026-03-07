@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRole, UserStatus } from '@harbor-play-media/common';
+import { UserRole, UserStatus } from '@auth-lib/common';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 
@@ -16,7 +16,7 @@ export interface CreateUserOptions {
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
 
   async findByEmail(email: string): Promise<UserEntity | null> {
