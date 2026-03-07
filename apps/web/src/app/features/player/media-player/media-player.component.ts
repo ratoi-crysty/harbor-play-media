@@ -9,12 +9,13 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MediaModel } from '@harbor-play-media/shared-api';
+import { MatIconModule } from '@angular/material/icon';
 import { PlayerControlsComponent } from '../player-controls/player-controls.component';
 
 @Component({
   selector: 'app-media-player',
   standalone: true,
-  imports: [PlayerControlsComponent],
+  imports: [PlayerControlsComponent, MatIconModule],
   templateUrl: './media-player.component.html',
   styleUrl: './media-player.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,8 +32,10 @@ export class MediaPlayerComponent implements OnDestroy {
   protected readonly volume = signal<number>(80);
   protected readonly isMuted = signal<boolean>(false);
   protected readonly isFullscreen = signal<boolean>(false);
+  protected readonly playPauseIcon = signal<'play_arrow' | 'pause' | null>(null);
 
   private cleanupFns: (() => void)[] = [];
+  private iconTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     effect(() => {
@@ -47,6 +50,9 @@ export class MediaPlayerComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.cleanupFns.forEach((fn: () => void) => fn());
     document.removeEventListener('fullscreenchange', this.onFullscreenChange);
+    if (this.iconTimeoutId !== null) {
+      clearTimeout(this.iconTimeoutId);
+    }
   }
 
   protected onVideoReady(): void {
@@ -93,9 +99,22 @@ export class MediaPlayerComponent implements OnDestroy {
     const el: HTMLVideoElement = this.videoEl.nativeElement;
     if (el.paused) {
       void el.play();
+      this.showIcon('play_arrow');
     } else {
       el.pause();
+      this.showIcon('pause');
     }
+  }
+
+  private showIcon(icon: 'play_arrow' | 'pause'): void {
+    if (this.iconTimeoutId !== null) {
+      clearTimeout(this.iconTimeoutId);
+    }
+    this.playPauseIcon.set(icon);
+    this.iconTimeoutId = setTimeout(() => {
+      this.playPauseIcon.set(null);
+      this.iconTimeoutId = null;
+    }, 600);
   }
 
   protected toggleMute(): void {

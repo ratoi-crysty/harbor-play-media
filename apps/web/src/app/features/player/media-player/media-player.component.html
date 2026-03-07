@@ -9,6 +9,11 @@
       (loadedmetadata)="onVideoReady()"
       (click)="togglePlay()"
     ></video>
+    @if (playPauseIcon()) {
+      <div class="play-pause-overlay">
+        <mat-icon class="play-pause-icon">{{ playPauseIcon() }}</mat-icon>
+      </div>
+    }
   </div>
 
   <app-player-controls
