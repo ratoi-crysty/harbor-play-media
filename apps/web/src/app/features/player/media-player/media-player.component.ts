@@ -5,8 +5,9 @@ import {
   ElementRef,
   input,
   OnDestroy,
+  Signal,
   signal,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { MediaModel } from '@harbor-play-media/shared-api';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,9 +25,9 @@ export class MediaPlayerComponent implements OnDestroy {
   readonly media = input.required<MediaModel>();
   readonly autoStart = input<boolean>(false);
 
-  @ViewChild('mediaEl') videoEl!: ElementRef<HTMLVideoElement>;
+  videoEl: Signal<ElementRef<HTMLVideoElement> | undefined> = viewChild<ElementRef<HTMLVideoElement>>('mediaEl');
 
-  protected readonly isPlaying = signal<boolean>(false);
+  protected readonly isPlaying = signal<boolean>(this.autoStart());
   protected readonly currentTime = signal<number>(0);
   protected readonly duration = signal<number>(0);
   protected readonly volume = signal<number>(80);
@@ -55,8 +56,18 @@ export class MediaPlayerComponent implements OnDestroy {
     }
   }
 
+  protected getVideoElement(): HTMLVideoElement {
+    const element = this.videoEl()?.nativeElement;
+
+    if (!element) {
+      throw new Error('Unable to get video element from video element');
+    }
+
+    return element;
+  }
+
   protected onVideoReady(): void {
-    const el: HTMLVideoElement = this.videoEl.nativeElement;
+    const el: HTMLVideoElement = this.getVideoElement();
     this.setupListeners(el);
     el.volume = this.volume() / 100;
     if (this.isPlaying() && navigator.userActivation.hasBeenActive) {
@@ -96,7 +107,7 @@ export class MediaPlayerComponent implements OnDestroy {
   }
 
   protected togglePlay(): void {
-    const el: HTMLVideoElement = this.videoEl.nativeElement;
+    const el: HTMLVideoElement = this.getVideoElement();
     if (el.paused) {
       void el.play();
       this.showIcon('play_arrow');
@@ -122,27 +133,27 @@ export class MediaPlayerComponent implements OnDestroy {
   }
 
   protected toggleMute(): void {
-    this.videoEl.nativeElement.muted = !this.videoEl.nativeElement.muted;
+    this.getVideoElement().muted = !this.getVideoElement().muted;
   }
 
   protected skipBackward(): void {
-    this.videoEl.nativeElement.currentTime = Math.max(0, this.videoEl.nativeElement.currentTime - 10);
+    this.getVideoElement().currentTime = Math.max(0, this.getVideoElement().currentTime - 10);
   }
 
   protected skipForward(): void {
-    const el: HTMLVideoElement = this.videoEl.nativeElement;
+    const el: HTMLVideoElement = this.getVideoElement();
     el.currentTime = Math.min(el.duration || 0, el.currentTime + 10);
   }
 
   protected onProgressChange(value: number): void {
-    const el: HTMLVideoElement = this.videoEl.nativeElement;
+    const el: HTMLVideoElement = this.getVideoElement();
     if (el.duration) {
       el.currentTime = (value / 100) * el.duration;
     }
   }
 
   protected onVolumeChange(value: number): void {
-    const el: HTMLVideoElement = this.videoEl.nativeElement;
+    const el: HTMLVideoElement = this.getVideoElement();
     el.volume = value / 100;
     el.muted = false;
   }
@@ -151,7 +162,7 @@ export class MediaPlayerComponent implements OnDestroy {
     if (document.fullscreenElement) {
       void document.exitFullscreen();
     } else {
-      void this.videoEl.nativeElement.requestFullscreen();
+      void this.getVideoElement().requestFullscreen();
     }
   }
 }
