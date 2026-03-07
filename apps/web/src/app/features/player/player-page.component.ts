@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MediaModel } from '@harbor-play-media/shared-api';
 import { MediaCardComponent } from '@harbor-play-media/ui';
 import { MOCK_MEDIA, getMockMediaById } from '../../core/mock-data';
-import { VideoPlayerComponent } from './video-player/video-player.component';
+import { MediaPlayerComponent } from './media-player/media-player.component';
 import { PlayerInfoComponent } from './player-info/player-info.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
@@ -18,7 +18,7 @@ import { map } from 'rxjs';
     MatIconModule,
     MatButtonModule,
     MediaCardComponent,
-    VideoPlayerComponent,
+    MediaPlayerComponent,
     PlayerInfoComponent,
   ],
   templateUrl: './player-page.component.html',

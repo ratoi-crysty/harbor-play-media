@@ -12,14 +12,14 @@ import { MediaModel } from '@harbor-play-media/shared-api';
 import { PlayerControlsComponent } from '../player-controls/player-controls.component';
 
 @Component({
-  selector: 'app-video-player',
+  selector: 'app-media-player',
   standalone: true,
   imports: [PlayerControlsComponent],
-  templateUrl: './video-player.component.html',
-  styleUrl: './video-player.component.scss',
+  templateUrl: './media-player.component.html',
+  styleUrl: './media-player.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class VideoPlayerComponent implements OnDestroy {
+export class MediaPlayerComponent implements OnDestroy {
   readonly media = input.required<MediaModel>();
   readonly autoStart = input<boolean>(false);
 
