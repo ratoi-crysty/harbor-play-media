@@ -50,7 +50,7 @@
           <mat-icon>{{ volumeIcon() }}</mat-icon>
         </button>
         <mat-slider class="volume-slider" [min]="0" [max]="100" [step]="1">
-          <input matSliderThumb [value]="volume()" (valueChange)="onVolumeChange($event)" />
+          <input matSliderThumb [value]="volume()" (input)="onVolumeChange($event)" />
         </mat-slider>
       </div>
     </div>
