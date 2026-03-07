@@ -26,8 +26,8 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
   readonly media = input.required<MediaModel>();
   readonly autoStart = input<boolean>(false);
 
-  videoEl: Signal<ElementRef<HTMLVideoElement> | undefined> = viewChild<ElementRef<HTMLVideoElement>>('mediaEl');
-
+  protected readonly videoEl: Signal<ElementRef<HTMLVideoElement> | undefined> =
+    viewChild<ElementRef<HTMLVideoElement>>('mediaEl');
   protected readonly isPlaying = signal<boolean>(this.autoStart());
   protected readonly currentTime = signal<number>(0);
   protected readonly duration = signal<number>(0);
@@ -118,14 +118,14 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
     const el: HTMLVideoElement = this.getMediaElement();
     if (el.paused) {
       void el.play();
-      this.showIcon('play_arrow');
+      this.showIconEffect('play_arrow');
     } else {
       el.pause();
-      this.showIcon('pause');
+      this.showIconEffect('pause');
     }
   }
 
-  private showIcon(icon: 'play_arrow' | 'pause'): void {
+  private showIconEffect(icon: 'play_arrow' | 'pause'): void {
     if (this.iconTimeoutId !== null) {
       clearTimeout(this.iconTimeoutId);
       this.iconTimeoutId = null;
