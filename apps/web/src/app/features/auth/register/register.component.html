@@ -45,7 +45,7 @@
           type="text"
           autocomplete="name"
           [value]="formData().name"
-          (input)="updateField('name', $any($event.target).value)"
+          (input)="updateField('name', $event)"
         />
         <mat-icon matPrefix>person_outline</mat-icon>
       </mat-form-field>
@@ -57,7 +57,7 @@
           type="email"
           autocomplete="email"
           [value]="formData().email"
-          (input)="updateField('email', $any($event.target).value)"
+          (input)="updateField('email', $event)"
         />
         <mat-icon matPrefix>mail_outline</mat-icon>
       </mat-form-field>
@@ -69,7 +69,7 @@
           [type]="showPassword() ? 'text' : 'password'"
           autocomplete="new-password"
           [value]="formData().password"
-          (input)="updateField('password', $any($event.target).value)"
+          (input)="updateField('password', $event)"
           (keydown.enter)="submit()"
         />
         <mat-icon matPrefix>lock_outline</mat-icon>
@@ -92,7 +92,7 @@
             type="text"
             autocomplete="off"
             [value]="formData().inviteToken ?? ''"
-            (input)="updateField('inviteToken', $any($event.target).value)"
+            (input)="updateField('inviteToken', $event)"
           />
           <mat-icon matPrefix>vpn_key</mat-icon>
         </mat-form-field>

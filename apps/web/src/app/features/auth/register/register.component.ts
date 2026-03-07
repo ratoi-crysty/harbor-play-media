@@ -47,7 +47,8 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  updateField(field: keyof RegisterRequest, value: string): void {
+  updateField(field: keyof RegisterRequest, event: Event): void {
+    const value: string = (event.target as HTMLInputElement).value;
     this.formData.update((f: RegisterRequest) => ({ ...f, [field]: value }));
     this.error.set(null);
   }
