@@ -8,7 +8,7 @@ function getRegistrationMode(): RegistrationMode {
   if (Object.values(RegistrationMode).includes(mode as RegistrationMode)) {
     return mode as RegistrationMode;
   }
-  return RegistrationMode.OPEN;
+  return RegistrationMode.INVITE;
 }
 
 @Module({

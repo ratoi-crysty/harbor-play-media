@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Signal, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
+import { Observable, catchError, map, of } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,29 +25,28 @@ import { RegisterRequest, RegistrationConfigResponse, RegistrationMode } from '@
   styleUrl: './register.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
   private readonly authService: AuthService = inject(AuthService);
   private readonly router: Router = inject(Router);
 
   readonly formData = signal<RegisterRequest>({ name: '', email: '', password: '' });
-  readonly registrationMode = signal<RegistrationMode | null>(null);
   readonly loading = signal<boolean>(false);
   readonly error = signal<string | null>(null);
   readonly registered = signal<boolean>(false);
   readonly showPassword = signal<boolean>(false);
 
-  protected readonly RegistrationMode: typeof RegistrationMode = RegistrationMode;
-
-  ngOnInit(): void {
-    this.authService.getRegistrationConfig().subscribe({
-      next: (config: RegistrationConfigResponse): void => {
-        this.registrationMode.set(config.mode);
-      },
-      error: (): void => {
+  readonly registrationMode: Signal<RegistrationMode | null> = toSignal(
+    this.authService.getRegistrationConfig().pipe(
+      map((config: RegistrationConfigResponse): RegistrationMode => config.mode),
+      catchError((): Observable<null> => {
         this.error.set('Could not load registration settings. Please try again later.');
-      },
-    });
-  }
+        return of(null);
+      }),
+    ),
+    { initialValue: null },
+  );
+
+  protected readonly RegistrationMode: typeof RegistrationMode = RegistrationMode;
 
   updateField(field: keyof RegisterRequest, event: Event): void {
     const value: string = (event.target as HTMLInputElement).value;
