@@ -19,7 +19,7 @@
         type="email"
         autocomplete="email"
         [value]="formData().email"
-        (input)="updateField('email', $any($event.target).value)"
+        (input)="updateField('email', $event)"
       />
       <mat-icon matPrefix>mail_outline</mat-icon>
     </mat-form-field>
@@ -31,7 +31,7 @@
         [type]="showPassword() ? 'text' : 'password'"
         autocomplete="current-password"
         [value]="formData().password"
-        (input)="updateField('password', $any($event.target).value)"
+        (input)="updateField('password', $event)"
         (keydown.enter)="submit()"
       />
       <mat-icon matPrefix>lock_outline</mat-icon>

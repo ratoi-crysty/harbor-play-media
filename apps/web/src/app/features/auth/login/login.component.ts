@@ -32,7 +32,8 @@ export class LoginComponent {
   readonly error = signal<string | null>(null);
   readonly showPassword = signal<boolean>(false);
 
-  updateField(field: keyof LoginRequest, value: string): void {
+  updateField(field: keyof LoginRequest, event: Event): void {
+    const value: string = (event.target as HTMLInputElement).value;
     this.formData.update((f: LoginRequest) => ({ ...f, [field]: value }));
     this.error.set(null);
   }
