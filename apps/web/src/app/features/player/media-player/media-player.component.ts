@@ -109,12 +109,16 @@ export class MediaPlayerComponent implements OnDestroy {
   private showIcon(icon: 'play_arrow' | 'pause'): void {
     if (this.iconTimeoutId !== null) {
       clearTimeout(this.iconTimeoutId);
-    }
-    this.playPauseIcon.set(icon);
-    this.iconTimeoutId = setTimeout(() => {
-      this.playPauseIcon.set(null);
       this.iconTimeoutId = null;
-    }, 600);
+    }
+    this.playPauseIcon.set(null);
+    requestAnimationFrame(() => {
+      this.playPauseIcon.set(icon);
+      this.iconTimeoutId = setTimeout(() => {
+        this.playPauseIcon.set(null);
+        this.iconTimeoutId = null;
+      }, 600);
+    });
   }
 
   protected toggleMute(): void {
