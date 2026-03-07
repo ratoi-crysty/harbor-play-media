@@ -5,6 +5,7 @@ import {
   ElementRef,
   input,
   OnDestroy,
+  OnInit,
   Signal,
   signal,
   viewChild,
@@ -21,7 +22,7 @@ import { PlayerControlsComponent } from '../player-controls/player-controls.comp
   styleUrl: './media-player.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MediaPlayerComponent implements OnDestroy {
+export class MediaPlayerComponent implements OnInit, OnDestroy {
   readonly media = input.required<MediaModel>();
   readonly autoStart = input<boolean>(false);
 
@@ -35,28 +36,31 @@ export class MediaPlayerComponent implements OnDestroy {
   protected readonly isFullscreen = signal<boolean>(false);
   protected readonly playPauseIcon = signal<'play_arrow' | 'pause' | null>(null);
 
-  private cleanupFns: (() => void)[] = [];
   private iconTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     effect(() => {
       // Re-run when media changes to reset state
       this.media();
-      this.isPlaying.set(this.autoStart());
+      // TODO: Re-enable this when production ready
+      // this.isPlaying.set(this.autoStart());
       this.currentTime.set(0);
-      this.duration.set(0);
+      this.duration.set(this.media().duration);
     });
   }
 
+  ngOnInit() {
+    this.setupListeners();
+  }
+
   ngOnDestroy(): void {
-    this.cleanupFns.forEach((fn: () => void) => fn());
     document.removeEventListener('fullscreenchange', this.onFullscreenChange);
     if (this.iconTimeoutId !== null) {
       clearTimeout(this.iconTimeoutId);
     }
   }
 
-  protected getVideoElement(): HTMLVideoElement {
+  protected getMediaElement(): HTMLVideoElement {
     const element = this.videoEl()?.nativeElement;
 
     if (!element) {
@@ -67,9 +71,10 @@ export class MediaPlayerComponent implements OnDestroy {
   }
 
   protected onVideoReady(): void {
-    const el: HTMLVideoElement = this.getVideoElement();
-    this.setupListeners(el);
+    const el: HTMLVideoElement = this.getMediaElement();
+
     el.volume = this.volume() / 100;
+
     if (this.isPlaying() && navigator.userActivation.hasBeenActive) {
       el.play().catch(console.error);
     }
@@ -79,35 +84,38 @@ export class MediaPlayerComponent implements OnDestroy {
     this.isFullscreen.set(!!document.fullscreenElement);
   };
 
-  private setupListeners(el: HTMLVideoElement): void {
-    this.cleanupFns.forEach((fn: () => void) => fn());
-    this.cleanupFns = [];
+  protected updateCurrentTime() {
+    const el: HTMLVideoElement = this.getMediaElement();
+    this.currentTime.set(el.currentTime);
+  }
 
-    const handlers: Record<string, EventListener> = {
-      timeupdate: () => this.currentTime.set(el.currentTime),
-      play: () => this.isPlaying.set(true),
-      pause: () => this.isPlaying.set(false),
-      ended: () => this.isPlaying.set(false),
-      durationchange: () => {
-        const d: number = el.duration;
-        this.duration.set(isFinite(d) ? d : 0);
-      },
-      volumechange: () => {
-        this.volume.set(Math.round(el.volume * 100));
-        this.isMuted.set(el.muted);
-      },
-    };
+  protected play() {
+    this.isPlaying.set(true);
+  }
 
-    for (const [event, handler] of Object.entries(handlers)) {
-      el.addEventListener(event, handler);
-      this.cleanupFns.push(() => el.removeEventListener(event, handler));
-    }
+  protected pause() {
+    this.isPlaying.set(false);
+  }
 
+  changeDuration() {
+    const el: HTMLVideoElement = this.getMediaElement();
+
+    this.duration.set(isFinite(el.duration) ? el.duration : 0);
+  }
+
+  changeVolume() {
+    const el: HTMLVideoElement = this.getMediaElement();
+
+    this.volume.set(Math.round(el.volume * 100));
+    this.isMuted.set(el.muted);
+  }
+
+  private setupListeners(): void {
     document.addEventListener('fullscreenchange', this.onFullscreenChange);
   }
 
   protected togglePlay(): void {
-    const el: HTMLVideoElement = this.getVideoElement();
+    const el: HTMLVideoElement = this.getMediaElement();
     if (el.paused) {
       void el.play();
       this.showIcon('play_arrow');
@@ -133,27 +141,27 @@ export class MediaPlayerComponent implements OnDestroy {
   }
 
   protected toggleMute(): void {
-    this.getVideoElement().muted = !this.getVideoElement().muted;
+    this.getMediaElement().muted = !this.getMediaElement().muted;
   }
 
   protected skipBackward(): void {
-    this.getVideoElement().currentTime = Math.max(0, this.getVideoElement().currentTime - 10);
+    this.getMediaElement().currentTime = Math.max(0, this.getMediaElement().currentTime - 10);
   }
 
   protected skipForward(): void {
-    const el: HTMLVideoElement = this.getVideoElement();
+    const el: HTMLVideoElement = this.getMediaElement();
     el.currentTime = Math.min(el.duration || 0, el.currentTime + 10);
   }
 
   protected onProgressChange(value: number): void {
-    const el: HTMLVideoElement = this.getVideoElement();
+    const el: HTMLVideoElement = this.getMediaElement();
     if (el.duration) {
       el.currentTime = (value / 100) * el.duration;
     }
   }
 
   protected onVolumeChange(value: number): void {
-    const el: HTMLVideoElement = this.getVideoElement();
+    const el: HTMLVideoElement = this.getMediaElement();
     el.volume = value / 100;
     el.muted = false;
   }
@@ -162,7 +170,7 @@ export class MediaPlayerComponent implements OnDestroy {
     if (document.fullscreenElement) {
       void document.exitFullscreen();
     } else {
-      void this.getVideoElement().requestFullscreen();
+      void this.getMediaElement().requestFullscreen();
     }
   }
 }

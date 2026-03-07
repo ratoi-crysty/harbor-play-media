@@ -8,6 +8,12 @@
       preload="metadata"
       (loadedmetadata)="onVideoReady()"
       (click)="togglePlay()"
+      (timeupdate)="updateCurrentTime()"
+      (play)="play()"
+      (pause)="pause()"
+      (ended)="pause()"
+      (durationchange)="changeDuration()"
+      (volumechange)="changeVolume()"
     ></video>
     @if (playPauseIcon()) {
       <div class="play-pause-overlay">

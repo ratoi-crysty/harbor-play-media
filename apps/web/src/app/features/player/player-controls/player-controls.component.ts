@@ -31,14 +31,11 @@ export class PlayerControlsComponent {
   readonly volumeChange = output<number>();
   readonly toggleFullscreen = output<void>();
 
+  protected readonly currentTimeLabel = computed<string>(() => formatDuration(Math.floor(this.currentTime())));
+  protected readonly totalTimeLabel = computed<string>(() => formatDuration(Math.floor(this.duration())));
   protected readonly progress = computed<number>(() =>
     this.duration() > 0 ? (this.currentTime() / this.duration()) * 100 : 0,
   );
-
-  protected readonly currentTimeLabel = computed<string>(() => formatDuration(Math.floor(this.currentTime())));
-
-  protected readonly totalTimeLabel = computed<string>(() => formatDuration(Math.floor(this.duration())));
-
   protected readonly volumeIcon = computed<string>(() => {
     if (this.isMuted() || this.volume() === 0) return 'volume_off';
     if (this.volume() < 50) return 'volume_down';
