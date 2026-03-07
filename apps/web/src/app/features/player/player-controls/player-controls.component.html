@@ -16,7 +16,7 @@
         class="control-btn"
         matTooltip="Back 10s"
         aria-label="Skip backward 10 seconds"
-        (click)="skipBackward()"
+        (click)="skipBackward.emit()"
       >
         <mat-icon>replay_10</mat-icon>
       </button>
@@ -25,7 +25,7 @@
         class="control-btn play-btn"
         [matTooltip]="isPlaying() ? 'Pause' : 'Play'"
         [attr.aria-label]="isPlaying() ? 'Pause' : 'Play'"
-        (click)="togglePlay()"
+        (click)="togglePlay.emit()"
       >
         <mat-icon>{{ isPlaying() ? 'pause' : 'play_arrow' }}</mat-icon>
       </button>
@@ -34,7 +34,7 @@
         class="control-btn"
         matTooltip="Forward 10s"
         aria-label="Skip forward 10 seconds"
-        (click)="skipForward()"
+        (click)="skipForward.emit()"
       >
         <mat-icon>forward_10</mat-icon>
       </button>
@@ -45,7 +45,7 @@
           class="control-btn volume-btn"
           [matTooltip]="isMuted() ? 'Unmute' : 'Mute'"
           [attr.aria-label]="isMuted() ? 'Unmute' : 'Mute'"
-          (click)="toggleMute()"
+          (click)="toggleMute.emit()"
         >
           <mat-icon>{{ volumeIcon() }}</mat-icon>
         </button>
@@ -66,7 +66,7 @@
         class="control-btn"
         [matTooltip]="isFullscreen() ? 'Exit fullscreen' : 'Fullscreen'"
         [attr.aria-label]="isFullscreen() ? 'Exit fullscreen' : 'Fullscreen'"
-        (click)="toggleFullscreen()"
+        (click)="toggleFullscreen.emit()"
       >
         <mat-icon>{{ isFullscreen() ? 'fullscreen_exit' : 'fullscreen' }}</mat-icon>
       </button>

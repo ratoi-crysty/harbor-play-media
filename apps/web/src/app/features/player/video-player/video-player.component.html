@@ -1,0 +1,29 @@
+<div class="video-wrapper">
+  <div class="video-area">
+    <video
+      #mediaEl
+      [src]="media().url"
+      [poster]="media().thumbnailUrl"
+      class="media-video"
+      preload="metadata"
+      (loadedmetadata)="onVideoReady()"
+    ></video>
+  </div>
+
+  <app-player-controls
+    [media]="media()"
+    [isPlaying]="isPlaying()"
+    [currentTime]="currentTime()"
+    [duration]="duration()"
+    [volume]="volume()"
+    [isMuted]="isMuted()"
+    [isFullscreen]="isFullscreen()"
+    (togglePlay)="togglePlay()"
+    (skipBackward)="skipBackward()"
+    (skipForward)="skipForward()"
+    (toggleMute)="toggleMute()"
+    (progressChange)="onProgressChange($event)"
+    (volumeChange)="onVolumeChange($event)"
+    (toggleFullscreen)="toggleFullscreen()"
+  />
+</div>

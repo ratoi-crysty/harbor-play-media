@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 import { ShellComponent } from './shell/shell.component';
-import { DashboardComponent } from './features/dashboard/dashboard.component';
-import { PlayerComponent } from './features/player/player.component';
+import { DashboardPageComponent } from './features/dashboard/dashboard-page.component';
+import { PlayerPageComponent } from './features/player/player-page.component';
 import { AuthShellComponent } from './features/auth/auth-shell/auth-shell.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
@@ -13,8 +13,8 @@ export const appRoutes: Route[] = [
     component: ShellComponent,
     canActivate: [authGuard],
     children: [
-      { path: '', component: DashboardComponent },
-      { path: 'player/:id', component: PlayerComponent },
+      { path: '', component: DashboardPageComponent },
+      { path: 'player/:id', component: PlayerPageComponent },
     ],
   },
   {

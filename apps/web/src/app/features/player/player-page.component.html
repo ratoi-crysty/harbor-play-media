@@ -16,19 +16,7 @@
     <div class="player-content">
       <!-- Left: Video + Controls + Info -->
       <div class="player-main">
-        <!-- Video Area -->
-        <div class="video-area">
-          <video
-            #mediaEl
-            [src]="media.url"
-            [poster]="media.thumbnailUrl"
-            class="media-video"
-            preload="metadata"
-          ></video>
-        </div>
-
-        <!-- Controls -->
-        <app-player-controls [media]="media" [mediaEl]="mediaEl" />
+        <app-video-player [media]="media" [autoStart]="true" />
 
         <!-- Info -->
         <app-player-info [media]="media" />

@@ -5,27 +5,27 @@ import { MatButtonModule } from '@angular/material/button';
 import { MediaModel } from '@harbor-play-media/shared-api';
 import { MediaCardComponent } from '@harbor-play-media/ui';
 import { MOCK_MEDIA, getMockMediaById } from '../../core/mock-data';
-import { PlayerControlsComponent } from './player-controls/player-controls.component';
+import { VideoPlayerComponent } from './video-player/video-player.component';
 import { PlayerInfoComponent } from './player-info/player-info.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 
 @Component({
-  selector: 'app-player',
+  selector: 'app-player-page',
   standalone: true,
   imports: [
     RouterLink,
     MatIconModule,
     MatButtonModule,
     MediaCardComponent,
-    PlayerControlsComponent,
+    VideoPlayerComponent,
     PlayerInfoComponent,
   ],
-  templateUrl: './player.component.html',
-  styleUrl: './player.component.scss',
+  templateUrl: './player-page.component.html',
+  styleUrl: './player-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlayerComponent {
+export class PlayerPageComponent {
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   private readonly router: Router = inject(Router);
 

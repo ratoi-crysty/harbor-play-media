@@ -7,14 +7,14 @@ import { MediaCardComponent } from '@harbor-play-media/ui';
 import { formatDuration, MOCK_MEDIA } from '../../core/mock-data';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-dashboard-page',
   standalone: true,
   imports: [MatButtonModule, MatIconModule, MediaCardComponent],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss',
+  templateUrl: './dashboard-page.component.html',
+  styleUrl: './dashboard-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardComponent {
+export class DashboardPageComponent {
   private readonly router: Router = inject(Router);
 
   protected readonly allMedia = signal<MediaModel[]>(MOCK_MEDIA);
