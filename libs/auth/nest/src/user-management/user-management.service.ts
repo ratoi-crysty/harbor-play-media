@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { UserListItem, UserRole, UserStatus } from '@harbor-play-media/common';
+import { UserListItem, UserRole, UserStatus } from '@auth-lib/common';
 import { UserService, UserEntity } from '../user';
 
 @Injectable()

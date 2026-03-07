@@ -1,4 +1,4 @@
-import { InvitationModel } from '@harbor-play-media/common';
+import { InvitationModel } from '@auth-lib/common';
 import {
   Column,
   CreateDateColumn,

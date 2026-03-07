@@ -1,4 +1,4 @@
-import { SessionModel } from '@harbor-play-media/common';
+import { SessionModel } from '@auth-lib/common';
 import { ISession } from 'connect-typeorm';
 import { Column, DeleteDateColumn, Entity, Index, PrimaryColumn } from 'typeorm';
 

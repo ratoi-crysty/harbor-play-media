@@ -5,7 +5,7 @@ import {
   UpdateUserRoleRequest,
   UserListItem,
   UserListResponse,
-} from '@harbor-play-media/common';
+} from '@auth-lib/common';
 import { AUTH_CONFIG, AuthConfig } from '../auth.config';
 
 @Injectable({ providedIn: 'root' })

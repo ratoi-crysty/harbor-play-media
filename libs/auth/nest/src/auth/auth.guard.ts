@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { UserEntity, UserService } from '../user';
 import { AuthRequest } from './auth.types';
-import { UserRole } from '@harbor-play-media/common';
+import { UserRole } from '@auth-lib/common';
 import { Reflector } from '@nestjs/core';
 
 enum MetadataKey {

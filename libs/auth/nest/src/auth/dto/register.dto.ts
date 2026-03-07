@@ -1,5 +1,5 @@
 import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
-import { RegisterRequest } from '@harbor-play-media/common';
+import { RegisterRequest } from '@auth-lib/common';
 
 export class RegisterDto implements RegisterRequest {
   @IsEmail()

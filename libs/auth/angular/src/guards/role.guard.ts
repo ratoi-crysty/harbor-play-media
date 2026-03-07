@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { map, Observable } from 'rxjs';
-import { isAllowed, UserResponse, UserRole } from '@harbor-play-media/common';
+import { isAllowed, UserResponse, UserRole } from '@auth-lib/common';
 
 export function createRoleGuard(roles: UserRole[]): CanActivateFn {
   return (): Observable<true | UrlTree> => {

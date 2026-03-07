@@ -16,7 +16,7 @@ import {
   UserListItem,
   UserListResponse,
   UserRole,
-} from '@harbor-play-media/common';
+} from '@auth-lib/common';
 import { CurrentUser, Roles } from '../auth';
 import { UserEntity } from '../user';
 import { UpdateRoleDto } from './dto/update-role.dto';

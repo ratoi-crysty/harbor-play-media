@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RegistrationMode } from '@harbor-play-media/common';
-import { AuthModule, UserEntity, SessionEntity, InvitationEntity, UserManagementModule } from '@harbor-play-media/nest';
+import { RegistrationMode } from '@auth-lib/common';
+import { AuthModule, UserEntity, SessionEntity, InvitationEntity, UserManagementModule } from '@auth-lib/nest';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 

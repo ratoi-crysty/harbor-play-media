@@ -9,7 +9,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { AuthResponse, RegistrationConfigResponse, UserResponse } from '@harbor-play-media/common';
+import { AuthResponse, RegistrationConfigResponse, UserResponse } from '@auth-lib/common';
 import { AuthService } from './auth.service';
 import { PublicApi } from './auth.guard';
 import { LoginDto } from './dto/login.dto';

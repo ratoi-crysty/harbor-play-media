@@ -1,4 +1,4 @@
-import { UserModel, UserResponse, UserRole, UserStatus } from '@harbor-play-media/common';
+import { UserModel, UserResponse, UserRole, UserStatus } from '@auth-lib/common';
 import {
   Column,
   CreateDateColumn,
