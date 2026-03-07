@@ -20,7 +20,7 @@ export class PlayerControlsComponent {
   protected isPlaying = signal<boolean>(false);
   protected progress = signal<number>(0);
   protected volume = signal<number>(80);
-  protected selectedQuality = signal<string>('Auto');
+  protected quality = signal<string>('1080');
 
   protected get currentTimeLabel(): string {
     const total: number = this.media().duration;
@@ -45,11 +45,5 @@ export class PlayerControlsComponent {
     if (value !== null) {
       this.volume.set(value);
     }
-  }
-
-  protected cycleQuality(): void {
-    const qualities: string[] = ['Auto', '4K', '1080p', '720p', '480p'];
-    const current: number = qualities.indexOf(this.selectedQuality());
-    this.selectedQuality.set(qualities[(current + 1) % qualities.length]);
   }
 }

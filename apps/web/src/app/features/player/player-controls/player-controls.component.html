@@ -36,15 +36,13 @@
     </div>
 
     <div class="controls-right">
-      <button
-        mat-button
+      <div
         class="quality-badge"
-        (click)="cycleQuality()"
-        [matTooltip]="'Quality: ' + selectedQuality()"
+        [matTooltip]="'Quality: ' + quality()"
         aria-label="Change quality"
       >
-        {{ selectedQuality() }}
-      </button>
+        {{ quality() }}
+      </div>
       <button mat-icon-button class="control-btn" matTooltip="Fullscreen" aria-label="Fullscreen">
         <mat-icon>fullscreen</mat-icon>
       </button>
