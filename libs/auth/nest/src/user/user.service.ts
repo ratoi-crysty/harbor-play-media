@@ -16,7 +16,7 @@ export interface CreateUserOptions {
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
 
   async findByEmail(email: string): Promise<UserEntity | null> {
