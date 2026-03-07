@@ -18,14 +18,17 @@
       <div class="player-main">
         <!-- Video Area -->
         <div class="video-area">
-          <div class="video-placeholder">
-            <mat-icon class="placeholder-icon">play_circle_outline</mat-icon>
-            <p class="placeholder-label">{{ media.title }}</p>
-          </div>
+          <video
+            #mediaEl
+            [src]="media.url"
+            [poster]="media.thumbnailUrl"
+            class="media-video"
+            preload="metadata"
+          ></video>
         </div>
 
         <!-- Controls -->
-        <app-player-controls [media]="media" />
+        <app-player-controls [media]="media" [mediaEl]="mediaEl" />
 
         <!-- Info -->
         <app-player-info [media]="media" />
