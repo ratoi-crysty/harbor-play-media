@@ -31,8 +31,4 @@ export class DashboardComponent {
   protected onMediaClick(id: string): void {
     void this.router.navigate(['/player', id]);
   }
-
-  protected onHeroPlay(): void {
-    void this.router.navigate(['/player', this.featured().id]);
-  }
 }

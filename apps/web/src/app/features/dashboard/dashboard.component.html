@@ -14,7 +14,7 @@
       </div>
       <h1 class="hero-title">{{ featured().title }}</h1>
       <p class="hero-description">{{ featured().description }}</p>
-      <button mat-raised-button color="primary" class="hero-play-btn" (click)="onHeroPlay()">
+      <button mat-raised-button color="primary" class="hero-play-btn" (click)="onMediaClick(featured().id)">
         <mat-icon>play_arrow</mat-icon>
         Play Now
       </button>
