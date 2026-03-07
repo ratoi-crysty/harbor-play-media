@@ -105,9 +105,9 @@
       [disabled]="loading() || registrationMode() === null"
       (click)="submit()"
     >
-      <mat-spinner [hidden]="!loading()" diameter="18" />
+      @if (loading()) { <mat-spinner diameter="18" /> }
       <span>{{ loading() ? 'Creating account…' : 'Create account' }}</span>
-      <mat-icon [hidden]="loading()">arrow_forward</mat-icon>
+      @if (!loading()) { <mat-icon>arrow_forward</mat-icon> }
     </button>
 
     <p class="footer-link">

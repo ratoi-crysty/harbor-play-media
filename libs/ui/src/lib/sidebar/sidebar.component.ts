@@ -24,6 +24,7 @@ export class SidebarComponent implements AfterViewInit {
   readonly navItems = input<NavItem[]>([]);
   readonly open = input<boolean>(true);
   readonly navItemClick = output<void>();
+  readonly logout = output<void>();
 
   protected readonly ready = signal<boolean>(false);
 
@@ -35,5 +36,9 @@ export class SidebarComponent implements AfterViewInit {
 
   protected onNavItemClick(): void {
     this.navItemClick.emit();
+  }
+
+  protected onLogout(): void {
+    this.logout.emit();
   }
 }

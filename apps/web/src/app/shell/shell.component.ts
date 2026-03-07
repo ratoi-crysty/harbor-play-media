@@ -11,6 +11,7 @@ import {
 import { Router, RouterOutlet, Scroll } from '@angular/router';
 import { SidebarComponent, PageHeaderComponent, NavItem } from '@harbor-play-media/ui';
 import { filter } from 'rxjs';
+import { AuthService } from '@auth-lib/angular';
 
 @Component({
   selector: 'app-shell',
@@ -23,6 +24,7 @@ import { filter } from 'rxjs';
 export class ShellComponent implements OnInit {
   protected readonly STORAGE_KEY = 'shell.sidebar-open';
   protected router: Router = inject(Router);
+  private readonly authService: AuthService = inject(AuthService);
   protected body: Signal<ElementRef<HTMLElement> | undefined> = viewChild<ElementRef<HTMLElement>>('mainBody');
 
   protected readonly navItems: NavItem[] = [
@@ -75,5 +77,13 @@ export class ShellComponent implements OnInit {
   protected updateSidebar(value: boolean): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(value));
     this.sidebarOpen.set(value);
+  }
+
+  protected onLogout(): void {
+    this.authService.logout().subscribe({
+      next: (): void => {
+        this.router.navigate(['/auth/login']);
+      },
+    });
   }
 }
