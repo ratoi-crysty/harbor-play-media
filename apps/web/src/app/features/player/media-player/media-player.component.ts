@@ -140,6 +140,25 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
     });
   }
 
+  protected onKeydown(event: KeyboardEvent): void {
+    const el: HTMLVideoElement = this.getMediaElement();
+    const stepSize = 5;
+
+    switch (event.key) {
+      case 'ArrowLeft':
+        event.preventDefault();
+        el.currentTime = Math.max(0, el.currentTime - stepSize);
+        break;
+      case 'ArrowRight':
+        event.preventDefault();
+        el.currentTime = Math.min(el.duration || 0, el.currentTime + stepSize);
+        break;
+      case ' ':
+        event.preventDefault();
+        this.togglePlay();
+    }
+  }
+
   protected toggleMute(): void {
     this.getMediaElement().muted = !this.getMediaElement().muted;
   }
@@ -154,6 +173,7 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
   }
 
   protected onProgressChange(value: number): void {
+    console.log('onProgressChange');
     const el: HTMLVideoElement = this.getMediaElement();
     if (el.duration) {
       el.currentTime = (value / 100) * el.duration;

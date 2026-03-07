@@ -42,7 +42,6 @@ export class PlayerControlsComponent {
     return 'volume_up';
   });
   protected readonly qualityLabel = computed<string>(() => this.media().resolution ?? '');
-  protected readonly step = computed(() => (5 / this.duration()) * 100);
 
   protected onProgressChange(value: number | null): void {
     if (value !== null) {

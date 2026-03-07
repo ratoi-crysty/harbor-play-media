@@ -2,7 +2,7 @@
   <!-- Progress Slider -->
   <div class="progress-row">
     <span class="time-label">{{ currentTimeLabel() }}</span>
-    <mat-slider class="progress-slider" [min]="0" [max]="100" [step]="step()">
+    <mat-slider class="progress-slider" [min]="0" [max]="100" [step]="0">
       <input matSliderThumb [value]="progress()"  (valueChange)="onProgressChange($event)" />
     </mat-slider>
     <span class="time-label">{{ totalTimeLabel() }}</span>
