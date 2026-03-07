@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   imports: [RouterOutlet],
@@ -8,4 +8,12 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {}
+export class AppComponent implements OnInit {
+  protected router: Router = inject(Router);
+
+  ngOnInit() {
+    this.router.events.subscribe((event) => {
+      console.log('Route event', event);
+    });
+  }
+}

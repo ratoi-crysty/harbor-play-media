@@ -1,8 +1,5 @@
-import {
-  ApplicationConfig,
-  provideBrowserGlobalErrorListeners,
-} from '@angular/core';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -10,8 +7,8 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       appRoutes,
-      // withViewTransitions({ skipInitialTransition: true }), // currently breaks scroll to top
-      withInMemoryScrolling({ scrollPositionRestoration: 'top', anchorScrolling: 'enabled' }),
+      withViewTransitions({ skipInitialTransition: true }),
+      withInMemoryScrolling({ scrollPositionRestoration: 'top' }),
     ),
   ],
 };

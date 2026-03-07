@@ -1,6 +1,16 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  Signal,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { Router, RouterOutlet, Scroll } from '@angular/router';
 import { SidebarComponent, PageHeaderComponent, NavItem } from '@harbor-play-media/ui';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-shell',
@@ -10,8 +20,10 @@ import { SidebarComponent, PageHeaderComponent, NavItem } from '@harbor-play-med
   styleUrl: './shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ShellComponent {
+export class ShellComponent implements OnInit {
   protected readonly STORAGE_KEY = 'shell.sidebar-open';
+  protected router: Router = inject(Router);
+  protected body: Signal<ElementRef<HTMLElement> | undefined> = viewChild<ElementRef<HTMLElement>>('mainBody');
 
   protected readonly navItems: NavItem[] = [
     { label: 'Library', icon: 'video_library', route: '/' },
@@ -22,6 +34,14 @@ export class ShellComponent {
 
   // Start open on desktop, closed on mobile/tablet
   protected readonly sidebarOpen = signal<boolean>(this.getDefaultSideOpenValue());
+
+  ngOnInit() {
+    this.router.events.pipe(filter((event) => event instanceof Scroll)).subscribe({
+      next: () => {
+        this.body()?.nativeElement.scrollTo(0, 0);
+      },
+    });
+  }
 
   protected toggleSidebar(): void {
     this.updateSidebar(!this.sidebarOpen());
