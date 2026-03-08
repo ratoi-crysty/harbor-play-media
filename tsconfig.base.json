@@ -20,7 +20,8 @@
       "@auth-lib/nest": ["libs/auth/nest/src/index.ts"],
       "@auth-lib/angular": ["libs/auth/angular/src/index.ts"],
       "@harbor-play-media/shared-api": ["libs/shared-api/src/index.ts"],
-      "@harbor-play-media/ui": ["libs/ui/src/index.ts"]
+      "@harbor-play-media/ui": ["libs/ui/src/index.ts"],
+      "@harbor-play-media/ng-media-chrome": ["libs/ng-media-chrome/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
