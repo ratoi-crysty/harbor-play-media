@@ -1,3 +1,4 @@
+import Bugsnag from '@bugsnag/node';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import session from 'express-session';
@@ -5,7 +6,12 @@ import { DataSource } from 'typeorm';
 import { ISession, TypeormStore } from 'connect-typeorm';
 import { SessionEntity } from '@auth-lib/nest';
 import { AppModule } from './app/app.module';
+import { BugsnagExceptionFilter } from './app/bugsnag.filter';
 import { environment } from './environments/environment';
+
+if (environment.bugsnagApiKey) {
+  Bugsnag.start({ apiKey: environment.bugsnagApiKey });
+}
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
@@ -39,6 +45,8 @@ async function bootstrap(): Promise<void> {
       },
     }),
   );
+
+  app.useGlobalFilters(new BugsnagExceptionFilter());
 
   const port: string | number = process.env['PORT'] || 3333;
   await app.listen(port);

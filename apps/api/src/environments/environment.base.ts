@@ -7,6 +7,7 @@ export interface Environment {
   dataPath: string;
   dbPath: string;
   uploadsPath: string;
+  bugsnagApiKey: string | undefined;
 }
 
 export const environmentBase: Environment = {
@@ -14,6 +15,7 @@ export const environmentBase: Environment = {
   dataPath,
   dbPath: join(dataPath, 'database.sqlite'),
   uploadsPath: join(dataPath, 'uploads'),
+  bugsnagApiKey: process.env['BUGSNAG_API_KEY'],
 };
 
 console.log('environmentBase', { environmentBase });
