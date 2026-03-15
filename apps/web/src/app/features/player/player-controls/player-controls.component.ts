@@ -3,7 +3,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MediaModel } from '@harbor-play-media/shared-api';
 import { formatDuration } from '../../../core/mock-data';
 
 @Component({
@@ -15,7 +14,7 @@ import { formatDuration } from '../../../core/mock-data';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerControlsComponent {
-  readonly media = input.required<MediaModel>();
+  readonly resolution = input<string | undefined>(undefined);
   readonly isPlaying = input.required<boolean>();
   readonly currentTime = input.required<number>();
   readonly duration = input.required<number>();
@@ -41,7 +40,7 @@ export class PlayerControlsComponent {
     if (this.volume() < 50) return 'volume_down';
     return 'volume_up';
   });
-  protected readonly qualityLabel = computed<string>(() => this.media().resolution ?? '');
+  protected readonly qualityLabel = computed<string>(() => this.resolution() ?? '');
 
   protected onProgressChange(value: number | null): void {
     if (value !== null) {

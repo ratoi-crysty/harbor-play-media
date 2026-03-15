@@ -2,8 +2,7 @@
   <div class="video-area">
     <video
       #mediaEl
-      [src]="media().url"
-      [poster]="media().thumbnailUrl"
+      [src]="url()"
       class="media-video"
       preload="metadata"
       (loadedmetadata)="onVideoReady()"
@@ -23,7 +22,7 @@
   </div>
 
   <app-player-controls
-    [media]="media()"
+    [resolution]="resolution()"
     [isPlaying]="isPlaying()"
     [currentTime]="currentTime()"
     [duration]="duration()"

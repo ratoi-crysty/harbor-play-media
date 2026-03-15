@@ -10,7 +10,6 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { MediaModel } from '@harbor-play-media/shared-api';
 import { MatIconModule } from '@angular/material/icon';
 import { PlayerControlsComponent } from '../player-controls/player-controls.component';
 
@@ -23,7 +22,8 @@ import { PlayerControlsComponent } from '../player-controls/player-controls.comp
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MediaPlayerComponent implements OnInit, OnDestroy {
-  readonly media = input.required<MediaModel>();
+  readonly url = input.required<string>();
+  readonly resolution = input<string | undefined>(undefined);
   readonly autoStart = input<boolean>(false);
 
   protected readonly videoEl: Signal<ElementRef<HTMLVideoElement> | undefined> =
@@ -40,12 +40,12 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
 
   constructor() {
     effect(() => {
-      // Re-run when media changes to reset state
-      this.media();
+      // Re-run when url changes to reset state
+      this.url();
       // TODO: Re-enable this when production ready
       // this.isPlaying.set(this.autoStart());
       this.currentTime.set(0);
-      this.duration.set(this.media().duration);
+      this.duration.set(0);
     });
   }
 
