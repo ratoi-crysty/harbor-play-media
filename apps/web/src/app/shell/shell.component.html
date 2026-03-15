@@ -1,0 +1,20 @@
+<lib-page-header
+  [sidebarOpen]="sidebarOpen()"
+  (menuToggle)="toggleSidebar()"
+/>
+
+<div class="shell-body" [class.sidebar-open]="sidebarOpen()">
+  <!-- Mobile/tablet backdrop -->
+  <div class="sidebar-backdrop" (click)="closeSidebar()" aria-hidden="true"></div>
+
+  <lib-sidebar
+    [navItems]="navItems"
+    [open]="sidebarOpen()"
+    (navItemClick)="onNavItemClick()"
+    (logout)="onLogout()"
+  />
+
+  <main class="shell-main" #mainBody>
+    <router-outlet />
+  </main>
+</div>

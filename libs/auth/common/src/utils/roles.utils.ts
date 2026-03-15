@@ -1,19 +1,12 @@
 import { UserResponse } from '../requests/auth.interface';
 import { UserRole } from '../models/user.enum';
 
-export function isAllowed(user: UserResponse, roles: UserRole[]) {
-  const userRoles: UserRole[] = [];
+const ROLE_HIERARCHY: Record<UserRole, UserRole[]> = {
+  [UserRole.SUPERADMIN]: [UserRole.SUPERADMIN, UserRole.ADMIN, UserRole.USER],
+  [UserRole.ADMIN]: [UserRole.ADMIN, UserRole.USER],
+  [UserRole.USER]: [UserRole.USER],
+};
 
-  switch (user.role) {
-    case UserRole.SUPERADMIN:
-      userRoles.push(UserRole.SUPERADMIN);
-    // fallthrough
-    case UserRole.ADMIN:
-      userRoles.push(UserRole.ADMIN);
-    // fallthrough
-    case UserRole.USER:
-      userRoles.push(UserRole.USER);
-  }
-
-  return userRoles.some((role: UserRole): boolean => roles.includes(role));
+export function isAllowed(user: UserResponse, roles: UserRole[]): boolean {
+  return ROLE_HIERARCHY[user.role].some((role: UserRole): boolean => roles.includes(role));
 }

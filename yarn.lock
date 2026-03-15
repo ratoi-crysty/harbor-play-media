@@ -368,6 +368,13 @@
   dependencies:
     "@angular-eslint/bundled-angular-compiler" "21.2.0"
 
+"@angular/animations@~21.1.0":
+  version "21.1.6"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-21.1.6.tgz#fb238b046f43eeae332b8822d2cefd6f69f852fa"
+  integrity sha512-Ft8B0tHBRyd7ORpbaa2S0yRqHSdsyMH6oot7ODAA3kv03k4GTwp74U6Y/NyV4JoZ+lr28+EV4YMv3mAqJwIy/g==
+  dependencies:
+    tslib "^2.3.0"
+
 "@angular/build@21.1.5", "@angular/build@~21.1.0":
   version "21.1.5"
   resolved "https://registry.yarnpkg.com/@angular/build/-/build-21.1.5.tgz#3102cf4fb49c13119fcd8f93374dc18ca1d7df0a"
@@ -402,6 +409,14 @@
     watchpack "2.5.0"
   optionalDependencies:
     lmdb "3.4.4"
+
+"@angular/cdk@~21.1.0":
+  version "21.1.6"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-21.1.6.tgz#62f6c305f3911a3a2b8038773315ee46a8ed19e1"
+  integrity sha512-a6isY8eWxfRO99KPs8GLMQRDE06diNbPmD9tcYi+EWxjPFOZ88QJmMN8a0yja+LDQaG2kRbNBLjYUEro3qCpTQ==
+  dependencies:
+    parse5 "^8.0.0"
+    tslib "^2.3.0"
 
 "@angular/cli@~21.1.0":
   version "21.1.5"
@@ -475,6 +490,13 @@
   version "21.1.6"
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-21.1.6.tgz#53d2e49edc4622f074197ef3620dc82b28909021"
   integrity sha512-I2gYI9cKP/B/rUz8WVaWNpuULSdq4W+ZUm6YQyUXdGEh3dDEssK1xLucPBfUT7RAr6h7+w5/RS+zKWC1q9g24w==
+
+"@angular/material@~21.1.0":
+  version "21.1.6"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-21.1.6.tgz#31e07542bd7eae302e8a442e6a29743ec4397104"
+  integrity sha512-lLLskTudCS+bKKsaBVLPf4Yo1EGZdCi/yLwx6G2j0bhRlI5NLlWBsF3MTpl6cXBns1+37PXFprK5cdWxG0eX1Q==
+  dependencies:
+    tslib "^2.3.0"
 
 "@angular/platform-browser@~21.1.0":
   version "21.1.6"
@@ -6365,6 +6387,11 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001759, caniuse-lite@^1.0.30001760, can
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001776.tgz#3c64d006348a2e92037aa4302345129806a42d24"
   integrity sha512-sg01JDPzZ9jGshqKSckOQthXnYwOEP50jeVFhaSFbZcOy05TiuuaffDOfcwtCisJ9kNQuLBFibYywv2Bgm9osw==
 
+ce-la-react@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/ce-la-react/-/ce-la-react-0.3.2.tgz#66c1454e024c3b9f65ebac05724d0f50756ff057"
+  integrity sha512-QJ6k4lOD/btI08xG8jBPxRCGXvCnusGGkTsiXk0u3NqUu/W+BXRnFD4PYjwtqh8AWmGa5LDbGk0fLQsqr0nSMA==
+
 chai@^6.2.1:
   version "6.2.2"
   resolved "https://registry.yarnpkg.com/chai/-/chai-6.2.2.tgz#ae41b52c9aca87734505362717f3255facda360e"
@@ -9984,6 +10011,13 @@ mdn-data@2.12.2:
   version "2.12.2"
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.12.2.tgz#9ae6c41a9e65adf61318b32bff7b64fbfb13f8cf"
   integrity sha512-IEn+pegP1aManZuckezWCO+XZQDplx1366JoVhTpMpBB1sPey/SbveZQUosKiKiGYjg1wH4pMlNgXbCiYgihQA==
+
+media-chrome@^4.18.0:
+  version "4.18.0"
+  resolved "https://registry.yarnpkg.com/media-chrome/-/media-chrome-4.18.0.tgz#5ece072b60e137cbebb1ef57fcc19c2218bc305d"
+  integrity sha512-OQmpUCeMMWtUcbar3CiY7V0S6j43HaDhwa6uRUyYiWdfPIj3riWp0agu3x6EcIlDRFIf8iDGZiGeb26ll+mz0g==
+  dependencies:
+    ce-la-react "^0.3.2"
 
 media-typer@0.3.0:
   version "0.3.0"

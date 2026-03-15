@@ -1,0 +1,30 @@
+<header class="page-header">
+  <div class="header-left">
+    <button
+      class="hamburger-btn"
+      (click)="onMenuToggle()"
+      [attr.aria-label]="sidebarOpen() ? 'Close navigation' : 'Open navigation'"
+      [attr.aria-expanded]="sidebarOpen()"
+    >
+      <mat-icon>{{ sidebarOpen() ? 'menu_open' : 'menu' }}</mat-icon>
+    </button>
+  </div>
+
+  <div class="search-wrap">
+    <mat-icon class="search-icon">search</mat-icon>
+    <input
+      class="search-input"
+      type="text"
+      placeholder="Search media..."
+      [value]="searchQuery()"
+      (input)="onSearch($event)"
+      aria-label="Search media"
+    />
+  </div>
+
+  <div class="header-actions">
+    <div class="avatar" aria-label="User profile">
+      <mat-icon>account_circle</mat-icon>
+    </div>
+  </div>
+</header>

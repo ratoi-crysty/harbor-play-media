@@ -1,0 +1,119 @@
+<div class="register-form">
+
+  @if (registered()) {
+    <!-- Confirmation success state -->
+    <div class="success-state" role="status">
+      <div class="success-icon-wrap">
+        <mat-icon class="success-icon">mark_email_read</mat-icon>
+      </div>
+      <h2 class="success-title">Request submitted</h2>
+      <p class="success-body">
+        Your account is awaiting admin approval. You'll be notified once access is granted.
+      </p>
+      <a routerLink="/auth/login" mat-stroked-button class="back-link-btn">
+        Back to sign in
+      </a>
+    </div>
+
+  } @else {
+
+    <div class="form-heading">
+      <h1 class="form-title">Create account</h1>
+      <p class="form-subtitle">
+        @if (registrationMode() === RegistrationMode.INVITE) {
+          You need an invite token to register.
+        } @else if (registrationMode() === RegistrationMode.CONFIRMATION) {
+          Your account will require admin approval.
+        } @else {
+          Join Harbor Play today.
+        }
+      </p>
+    </div>
+
+    @if (error()) {
+      <div class="error-banner" role="alert">
+        <mat-icon class="error-icon">error_outline</mat-icon>
+        <span>{{ error() }}</span>
+      </div>
+    }
+
+    <div class="fields">
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Full name</mat-label>
+        <input
+          matInput
+          type="text"
+          autocomplete="name"
+          [value]="formData().name"
+          (input)="updateField('name', $event)"
+        />
+        <mat-icon matPrefix>person_outline</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          autocomplete="email"
+          [value]="formData().email"
+          (input)="updateField('email', $event)"
+        />
+        <mat-icon matPrefix>mail_outline</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="showPassword() ? 'text' : 'password'"
+          autocomplete="new-password"
+          [value]="formData().password"
+          (input)="updateField('password', $event)"
+          (keydown.enter)="submit()"
+        />
+        <mat-icon matPrefix>lock_outline</mat-icon>
+        <button
+          matSuffix
+          mat-icon-button
+          type="button"
+          (click)="togglePasswordVisibility()"
+          [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+        >
+          <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      @if (registrationMode() === RegistrationMode.INVITE) {
+        <mat-form-field appearance="outline" class="field field--invite">
+          <mat-label>Invite token</mat-label>
+          <input
+            matInput
+            type="text"
+            autocomplete="off"
+            [value]="formData().inviteToken ?? ''"
+            (input)="updateField('inviteToken', $event)"
+          />
+          <mat-icon matPrefix>vpn_key</mat-icon>
+        </mat-form-field>
+      }
+    </div>
+
+    <button
+      mat-flat-button
+      class="submit-btn"
+      [disabled]="loading() || registrationMode() === null"
+      (click)="submit()"
+    >
+      @if (loading()) { <mat-spinner diameter="18" /> }
+      <span>{{ loading() ? 'Creating account…' : 'Create account' }}</span>
+      @if (!loading()) { <mat-icon>arrow_forward</mat-icon> }
+    </button>
+
+    <p class="footer-link">
+      Already have an account?
+      <a routerLink="/auth/login">Sign in</a>
+    </p>
+
+  }
+</div>

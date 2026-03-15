@@ -1,0 +1,22 @@
+<media-controller >
+  <video
+    slot="media"
+    [src]="url()"
+    crossorigin
+  >
+    <track
+      label="thumbnails"
+      default
+      kind="metadata"
+      [src]="webVTT()"
+    />
+  </video>
+  <media-control-bar>
+    <media-play-button></media-play-button>
+    <media-mute-button></media-mute-button>
+    <media-volume-range></media-volume-range>
+    <media-time-range></media-time-range>
+    <media-pip-button></media-pip-button>
+    <media-fullscreen-button></media-fullscreen-button>
+  </media-control-bar>
+</media-controller>

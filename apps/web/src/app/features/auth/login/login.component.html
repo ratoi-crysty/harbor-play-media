@@ -1,0 +1,65 @@
+<div class="login-form">
+  <div class="form-heading">
+    <h1 class="form-title">Welcome back</h1>
+    <p class="form-subtitle">Sign in to your account</p>
+  </div>
+
+  @if (error()) {
+    <div class="error-banner" role="alert">
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <span>{{ error() }}</span>
+    </div>
+  }
+
+  <div class="fields">
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        type="email"
+        autocomplete="email"
+        [value]="formData().email"
+        (input)="updateField('email', $event)"
+      />
+      <mat-icon matPrefix>mail_outline</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        [type]="showPassword() ? 'text' : 'password'"
+        autocomplete="current-password"
+        [value]="formData().password"
+        (input)="updateField('password', $event)"
+        (keydown.enter)="submit()"
+      />
+      <mat-icon matPrefix>lock_outline</mat-icon>
+      <button
+        matSuffix
+        mat-icon-button
+        type="button"
+        (click)="togglePasswordVisibility()"
+        [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+      >
+        <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <button
+    mat-flat-button
+    class="submit-btn"
+    [disabled]="loading()"
+    (click)="submit()"
+  >
+    @if (loading()) { <mat-spinner diameter="18" /> }
+    <span>{{ loading() ? 'Signing in…' : 'Sign in' }}</span>
+    @if (!loading()) { <mat-icon>arrow_forward</mat-icon> }
+  </button>
+
+  <p class="footer-link">
+    Don't have an account?
+    <a routerLink="/auth/register">Create one</a>
+  </p>
+</div>

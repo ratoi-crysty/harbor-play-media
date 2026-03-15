@@ -1,0 +1,126 @@
+:host {
+  display: block;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+// ── Heading ──────────────────────────────────────────────────────────────────
+
+.form-heading {
+  margin-bottom: 0.25rem;
+}
+
+.form-title {
+  margin: 0 0 0.25rem;
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.form-subtitle {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #8b949e);
+}
+
+// ── Error banner ─────────────────────────────────────────────────────────────
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(248, 81, 73, 0.1);
+  border: 1px solid rgba(248, 81, 73, 0.3);
+  border-radius: 8px;
+  color: #f85149;
+  font-size: 0.875rem;
+  animation: banner-in 0.2s ease forwards;
+}
+
+.error-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+@keyframes banner-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Fields ───────────────────────────────────────────────────────────────────
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.field {
+  width: 100%;
+}
+
+// ── Submit button ────────────────────────────────────────────────────────────
+
+.submit-btn {
+  width: 100%;
+  height: 44px;
+  border-radius: 8px !important;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+
+  mat-spinner {
+    ::ng-deep circle {
+      stroke: currentColor;
+    }
+  }
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+  }
+
+  &:not([disabled]):hover mat-icon {
+    transform: translateX(3px);
+  }
+
+  &[disabled] {
+    opacity: 0.6;
+  }
+}
+
+// ── Footer link ──────────────────────────────────────────────────────────────
+
+.footer-link {
+  margin: 0;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary, #8b949e);
+
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+  }
+}

@@ -1,1 +1,58 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+html {
+  color-scheme: dark;
+  //noinspection SassScssUnresolvedMixin
+  @include mat.theme((
+    color: (theme-type: dark, primary: mat.$azure-palette),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+:root {
+  --color-bg: #0d1117;
+  --color-surface: #161b22;
+  --color-primary: #388bfd;
+  --color-accent: #58a6ff;
+  --color-text: #c9d1d9;
+  --color-text-secondary: #8b949e;
+  --color-border: #30363d;
+  --color-card-hover: #1c2129;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  margin: 0;
+  font-family: Roboto, sans-serif;
+  min-height: 100vh;
+}
+
+// ─── View Transition: route changes ──────────────────────────────────────────
+// Suppress the default full-page cross-fade so the sidebar and header stay put.
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+// Animate only the main content area (named in shell.component.scss).
+@keyframes vt-fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes vt-slide-up-fade-in {
+  from { opacity: 0; translate: 0 10px; }
+}
+
+::view-transition-old(main-content) {
+  animation: 120ms ease-in vt-fade-out forwards;
+}
+
+::view-transition-new(main-content) {
+  animation: 240ms ease-out vt-slide-up-fade-in forwards;
+}

@@ -1,0 +1,87 @@
+<div class="controls-bar">
+  <!-- Progress Slider -->
+  <div class="progress-row">
+    <span class="time-label">{{ currentTimeLabel() }}</span>
+    <div class="progress-wrapper">
+      <div class="progress-track-bg">
+        <div class="progress-buffered" [style.width.%]="buffered()"></div>
+        <div class="progress-played" [style.width.%]="progress()"></div>
+      </div>
+      <input
+        type="range"
+        class="progress-input"
+        min="0"
+        max="100"
+        step="0.1"
+        [value]="progress()"
+        (input)="onProgressInput($event)"
+      />
+    </div>
+    <span class="time-label">{{ totalTimeLabel() }}</span>
+  </div>
+
+  <!-- Controls Row -->
+  <div class="controls-row">
+    <div class="controls-left">
+      <button
+        mat-icon-button
+        class="control-btn"
+        matTooltip="Back 10s"
+        aria-label="Skip backward 10 seconds"
+        (click)="skipBackward.emit()"
+      >
+        <mat-icon>replay_10</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        class="control-btn play-btn"
+        [matTooltip]="isPlaying() ? 'Pause' : 'Play'"
+        [attr.aria-label]="isPlaying() ? 'Pause' : 'Play'"
+        (click)="togglePlay.emit()"
+      >
+        <mat-icon>{{ isPlaying() ? 'pause' : 'play_arrow' }}</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        class="control-btn"
+        matTooltip="Forward 10s"
+        aria-label="Skip forward 10 seconds"
+        (click)="skipForward.emit()"
+      >
+        <mat-icon>forward_10</mat-icon>
+      </button>
+
+      <div class="volume-group">
+        <button
+          mat-icon-button
+          class="control-btn volume-btn"
+          [matTooltip]="isMuted() ? 'Unmute' : 'Mute'"
+          [attr.aria-label]="isMuted() ? 'Unmute' : 'Mute'"
+          (click)="toggleMute.emit()"
+        >
+          <mat-icon>{{ volumeIcon() }}</mat-icon>
+        </button>
+        <mat-slider class="volume-slider" [min]="0" [max]="100" [step]="1">
+          <input matSliderThumb [value]="volume()" (input)="onVolumeChange($event)" />
+        </mat-slider>
+      </div>
+    </div>
+
+    <div class="controls-right">
+      @if (qualityLabel()) {
+        <div class="quality-badge" [matTooltip]="'Quality: ' + qualityLabel()">
+          {{ qualityLabel() }}
+        </div>
+      }
+      <button
+        mat-icon-button
+        class="control-btn"
+        [matTooltip]="isFullscreen() ? 'Exit fullscreen' : 'Fullscreen'"
+        [attr.aria-label]="isFullscreen() ? 'Exit fullscreen' : 'Fullscreen'"
+        (click)="toggleFullscreen.emit()"
+      >
+        <mat-icon>{{ isFullscreen() ? 'fullscreen_exit' : 'fullscreen' }}</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

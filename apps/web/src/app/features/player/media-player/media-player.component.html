@@ -1,0 +1,42 @@
+<div class="video-wrapper" tabindex="0" (keydown)="onKeydown($event)">
+  <div class="video-area">
+    <video
+      #mediaEl
+      [src]="url()"
+      class="media-video"
+      preload="metadata"
+      (loadedmetadata)="onVideoReady()"
+      (click)="togglePlay()"
+      (timeupdate)="updateCurrentTime()"
+      (play)="play()"
+      (pause)="pause()"
+      (ended)="pause()"
+      (durationchange)="changeDuration()"
+      (volumechange)="changeVolume()"
+      (progress)="updateBuffered()"
+    ></video>
+    @if (playPauseIcon()) {
+      <div class="play-pause-overlay">
+        <mat-icon class="play-pause-icon">{{ playPauseIcon() }}</mat-icon>
+      </div>
+    }
+  </div>
+
+  <app-player-controls
+    [resolution]="resolution()"
+    [buffered]="buffered()"
+    [isPlaying]="isPlaying()"
+    [currentTime]="currentTime()"
+    [duration]="duration()"
+    [volume]="volume()"
+    [isMuted]="isMuted()"
+    [isFullscreen]="isFullscreen()"
+    (togglePlay)="togglePlay()"
+    (skipBackward)="skipBackward()"
+    (skipForward)="skipForward()"
+    (toggleMute)="toggleMute()"
+    (progressChange)="onProgressChange($event)"
+    (volumeChange)="onVolumeChange($event)"
+    (toggleFullscreen)="toggleFullscreen()"
+  />
+</div>

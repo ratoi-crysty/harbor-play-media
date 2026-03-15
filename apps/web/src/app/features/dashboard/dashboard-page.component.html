@@ -1,0 +1,43 @@
+<!-- Hero Section -->
+<section
+  class="hero-section"
+  [style.background-image]="'url(' + featured().thumbnailUrl + ')'"
+>
+  <div class="hero-overlay">
+    <div class="hero-content">
+      <div class="hero-badges">
+        <span class="badge badge-type">{{ featured().mimeType }}</span>
+        @if (featured().resolution) {
+          <span class="badge badge-resolution">{{ featured().resolution }}</span>
+        }
+        <span class="badge badge-duration">{{ formatDuration(featured().duration) }}</span>
+      </div>
+      <h1 class="hero-title">{{ featured().title }}</h1>
+      <p class="hero-description">{{ featured().description }}</p>
+      <button mat-raised-button color="primary" class="hero-play-btn" (click)="onMediaClick(featured().id)">
+        <mat-icon>play_arrow</mat-icon>
+        Play Now
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Recently Added -->
+<section class="media-section">
+  <h2 class="section-title">Recently Added</h2>
+  <div class="media-grid">
+    @for (item of recentlyAdded(); track item.id) {
+      <lib-media-card [media]="item" />
+    }
+  </div>
+</section>
+
+<!-- Most Popular -->
+<section class="media-section">
+  <h2 class="section-title">Most Popular</h2>
+  <div class="media-grid">
+    @for (item of mostPopular(); track item.id) {
+      <lib-media-card [media]="item" />
+    }
+  </div>
+</section>
