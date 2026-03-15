@@ -70,7 +70,6 @@
           autocomplete="new-password"
           [value]="formData().password"
           (input)="updateField('password', $event)"
-          (keydown.enter)="submit()"
         />
         <mat-icon matPrefix>lock_outline</mat-icon>
         <button
@@ -81,6 +80,28 @@
           [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
         >
           <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Confirm password</mat-label>
+        <input
+          matInput
+          [type]="showConfirmPassword() ? 'text' : 'password'"
+          autocomplete="new-password"
+          [value]="confirmPassword()"
+          (input)="updateConfirmPassword($event)"
+          (keydown.enter)="submit()"
+        />
+        <mat-icon matPrefix>lock_outline</mat-icon>
+        <button
+          matSuffix
+          mat-icon-button
+          type="button"
+          (click)="toggleConfirmPasswordVisibility()"
+          [attr.aria-label]="showConfirmPassword() ? 'Hide password' : 'Show password'"
+        >
+          <mat-icon>{{ showConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
       </mat-form-field>
 

@@ -97,7 +97,7 @@ export class InvitationManagementComponent implements OnInit {
   }
 
   onCopyToken(event: CopyTokenEvent): void {
-    const inviteUrl = `${window.location.origin}/register?token=${event.token}`;
+    const inviteUrl = `${window.location.origin}/auth/register?token=${event.token}`;
     navigator.clipboard.writeText(inviteUrl).then(() => {
       this.snackBar.open('Invite link copied to clipboard', 'Dismiss', { duration: 3000 });
     });
