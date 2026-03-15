@@ -38,6 +38,7 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
   protected readonly buffered = signal<number>(0);
 
   private iconTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private autoplayBlocked = false;
 
   constructor() {
     effect(() => {
@@ -49,6 +50,7 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
       this.duration.set(0);
       this.resolution.set(undefined);
       this.buffered.set(0);
+      this.autoplayBlocked = false;
     });
   }
 
@@ -58,6 +60,7 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     document.removeEventListener('fullscreenchange', this.onFullscreenChange);
+    document.removeEventListener('pointerdown', this.onUserActivation);
     if (this.iconTimeoutId !== null) {
       clearTimeout(this.iconTimeoutId);
     }
@@ -79,8 +82,11 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
     el.volume = this.volume() / 100;
     this.resolution.set(this.detectResolution(el.videoHeight));
 
-    if (this.isPlaying() && navigator.userActivation.hasBeenActive) {
-      el.play().catch(console.error);
+    if (this.isPlaying()) {
+      el.play().catch(() => {
+        this.isPlaying.set(false);
+        this.autoplayBlocked = true;
+      });
     }
   }
 
@@ -97,6 +103,13 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
 
   private readonly onFullscreenChange = (): void => {
     this.isFullscreen.set(!!document.fullscreenElement);
+  };
+
+  private readonly onUserActivation = (): void => {
+    if (!this.autoplayBlocked) return;
+    this.autoplayBlocked = false;
+    const el: HTMLVideoElement = this.getMediaElement();
+    el.play().catch(console.error);
   };
 
   protected updateCurrentTime() {
@@ -122,6 +135,7 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
 
   protected play() {
     this.isPlaying.set(true);
+    this.autoplayBlocked = false;
   }
 
   protected pause() {
@@ -143,6 +157,7 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
 
   private setupListeners(): void {
     document.addEventListener('fullscreenchange', this.onFullscreenChange);
+    document.addEventListener('pointerdown', this.onUserActivation);
   }
 
   protected togglePlay(): void {
