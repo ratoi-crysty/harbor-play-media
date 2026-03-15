@@ -8,7 +8,7 @@ import { AUTH_CONFIG, AuthConfig } from '../auth.config';
 export class InvitationService {
   private readonly http: HttpClient = inject(HttpClient);
   private readonly config: AuthConfig = inject(AUTH_CONFIG);
-  private readonly apiUrl = `${this.config.apiUrl}/invitations`;
+  private readonly apiUrl = `${this.config.apiUrl}/invitation`;
 
   getInvitations(): Observable<InvitationListResponse> {
     return this.http.get<InvitationListResponse>(this.apiUrl);

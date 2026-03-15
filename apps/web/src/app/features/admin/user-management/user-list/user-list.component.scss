@@ -1,0 +1,53 @@
+.user-table {
+  width: 100%;
+  background: transparent;
+
+  th {
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    border-bottom-color: var(--color-border);
+  }
+
+  td {
+    color: var(--color-text);
+    border-bottom-color: var(--color-border);
+  }
+}
+
+.role-select {
+  min-width: 120px;
+}
+
+.role-chip {
+  font-size: 12px;
+  font-weight: 500;
+
+  &--user {
+    --mdc-chip-label-text-color: var(--color-text-secondary);
+  }
+
+  &--admin {
+    --mdc-chip-label-text-color: #22c55e;
+    --mdc-chip-elevated-container-color: rgba(34, 197, 94, 0.1);
+  }
+
+  &--superadmin {
+    --mdc-chip-label-text-color: #f59e0b;
+    --mdc-chip-elevated-container-color: rgba(245, 158, 11, 0.1);
+  }
+}
+
+.status-chip {
+  font-size: 12px;
+  font-weight: 500;
+
+  &--registered {
+    --mdc-chip-label-text-color: #22c55e;
+    --mdc-chip-elevated-container-color: rgba(34, 197, 94, 0.1);
+  }
+
+  &--awaitingConfirmation {
+    --mdc-chip-label-text-color: #f59e0b;
+    --mdc-chip-elevated-container-color: rgba(245, 158, 11, 0.1);
+  }
+}

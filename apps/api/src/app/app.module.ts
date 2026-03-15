@@ -4,8 +4,8 @@ import { RegistrationMode } from '@auth-lib/common';
 import { AuthModule, UserEntity, SessionEntity, InvitationEntity, UserManagementModule } from '@auth-lib/nest';
 
 function getRegistrationMode(): RegistrationMode {
-  const mode: string = process.env['REGISTRATION_MODE'] ?? 'open';
-  if (Object.values(RegistrationMode).includes(mode as RegistrationMode)) {
+  const mode: string | undefined = process.env['REGISTRATION_MODE'];
+  if (mode && Object.values(RegistrationMode).includes(mode as RegistrationMode)) {
     return mode as RegistrationMode;
   }
   return RegistrationMode.INVITE;

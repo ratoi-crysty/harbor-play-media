@@ -1,0 +1,29 @@
+<div class="user-management">
+  <div class="user-management__header">
+    <h1>User Management</h1>
+    <p>Manage user accounts and permissions</p>
+  </div>
+
+  @if (error()) {
+    <div class="user-management__error">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error() }}</span>
+    </div>
+  }
+
+  <mat-card class="user-management__card">
+    @if (loading()) {
+      <div class="user-management__loading">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    } @else if (currentUserId(); as currentUser) {
+      <app-user-list
+        [users]="users()"
+        [currentUserId]="currentUser"
+        [canChangeRoles]="isSuperadmin()"
+        (roleChange)="onRoleChange($event)"
+        (confirmUser)="onConfirmUser($event)"
+      />
+    }
+  </mat-card>
+</div>

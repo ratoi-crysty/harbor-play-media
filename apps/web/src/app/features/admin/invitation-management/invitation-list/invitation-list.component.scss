@@ -1,0 +1,60 @@
+.invitation-table {
+  width: 100%;
+  background: transparent;
+
+  th {
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    border-bottom-color: var(--color-border);
+  }
+
+  td {
+    color: var(--color-text);
+    border-bottom-color: var(--color-border);
+  }
+}
+
+.status-chip {
+  font-size: 12px;
+  font-weight: 500;
+
+  &--active {
+    --mdc-chip-label-text-color: #22c55e;
+    --mdc-chip-elevated-container-color: rgba(34, 197, 94, 0.1);
+  }
+
+  &--used {
+    --mdc-chip-label-text-color: var(--color-accent);
+    --mdc-chip-elevated-container-color: rgba(88, 166, 255, 0.1);
+  }
+
+  &--expired {
+    --mdc-chip-label-text-color: #f87171;
+    --mdc-chip-elevated-container-color: rgba(248, 113, 113, 0.1);
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px;
+  color: var(--color-text-secondary);
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+}

@@ -8,7 +8,7 @@ import { AUTH_CONFIG, AuthConfig } from '../auth.config';
 export class UserManagementService {
   private readonly http: HttpClient = inject(HttpClient);
   private readonly config: AuthConfig = inject(AUTH_CONFIG);
-  private readonly apiUrl = `${this.config.apiUrl}/users`;
+  private readonly apiUrl = `${this.config.apiUrl}/user`;
 
   getUsers(): Observable<UserListResponse> {
     return this.http.get<UserListResponse>(this.apiUrl);

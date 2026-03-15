@@ -5,7 +5,8 @@ import { PlayerPageComponent } from './features/player/player-page.component';
 import { AuthShellComponent } from './features/auth/auth-shell/auth-shell.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
-import { authGuard, nonAuthGuard } from '@auth-lib/angular';
+import { adminGuard, authGuard, nonAuthGuard } from '@auth-lib/angular';
+import { adminRoutes } from './features/admin/admin.routes';
 
 export const appRoutes: Route[] = [
   {
@@ -15,6 +16,7 @@ export const appRoutes: Route[] = [
     children: [
       { path: '', component: DashboardPageComponent },
       { path: 'player/:id', component: PlayerPageComponent },
+      { path: 'admin', children: adminRoutes, canActivate: [adminGuard] },
     ],
   },
   {

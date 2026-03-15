@@ -1,0 +1,57 @@
+<div class="invitation-management">
+  <div class="invitation-management__header">
+    <h1>Invitations</h1>
+    <p>Manage user invitations</p>
+  </div>
+
+  @if (error()) {
+    <div class="invitation-management__error">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error() }}</span>
+    </div>
+  }
+
+  <mat-card class="invitation-management__create-card">
+    <h2>Create New Invitation</h2>
+    <form class="create-form" (ngSubmit)="onCreateInvitation()">
+      <mat-form-field appearance="outline">
+        <mat-label>Email address</mat-label>
+        <input
+          matInput
+          type="email"
+          [ngModel]="newEmail()"
+          (ngModelChange)="newEmail.set($event)"
+          name="email"
+          required
+        />
+        <mat-icon matPrefix>mail_outline</mat-icon>
+      </mat-form-field>
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="creating() || !newEmail()"
+      >
+        @if (creating()) {
+          Creating...
+        } @else {
+          Create Invitation
+        }
+      </button>
+    </form>
+  </mat-card>
+
+  <mat-card class="invitation-management__list-card">
+    @if (invitations(); as invitations) {
+      <app-invitation-list
+        [invitations]="invitations"
+        (deleteInvitation)="onDeleteInvitation($event)"
+        (copyToken)="onCopyToken($event)"
+      />
+    } @else {
+      <div class="invitation-management__loading">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    }
+  </mat-card>
+</div>
