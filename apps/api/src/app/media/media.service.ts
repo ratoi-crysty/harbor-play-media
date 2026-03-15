@@ -1,5 +1,5 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import * as path from 'node:path';
+import { mkdir, rename, unlink } from 'node:fs/promises';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -22,8 +22,10 @@ export class MediaService {
     @InjectRepository(MediaEntity)
     private readonly repository: Repository<MediaEntity>,
     private readonly metadataService: MediaMetadataService,
-  ) {
-    fs.mkdirSync(environment.uploadsPath, { recursive: true });
+  ) {}
+
+  private async ensureUploadsDir(): Promise<void> {
+    await mkdir(environment.uploadsPath, { recursive: true });
   }
 
   async findAll(): Promise<MediaModel[]> {
@@ -49,13 +51,15 @@ export class MediaService {
   }
 
   async create(params: CreateMediaParams): Promise<MediaModel> {
+    await this.ensureUploadsDir();
+
     const { title, description, mediaFile, thumbnailFile } = params;
 
     // Rename uploaded file to uuid-based name
     const ext: string = path.extname(mediaFile.originalname);
     const newFileName = `${uuidv4()}${ext}`;
     const newFilePath: string = path.join(environment.uploadsPath, newFileName);
-    fs.renameSync(mediaFile.path, newFilePath);
+    await rename(mediaFile.path, newFilePath);
 
     // Handle thumbnail
     let thumbnailPath: string | null = null;
@@ -63,7 +67,7 @@ export class MediaService {
       const thumbExt: string = path.extname(thumbnailFile.originalname);
       const thumbFileName = `${uuidv4()}${thumbExt}`;
       const thumbFilePath: string = path.join(environment.uploadsPath, thumbFileName);
-      fs.renameSync(thumbnailFile.path, thumbFilePath);
+      await rename(thumbnailFile.path, thumbFilePath);
       thumbnailPath = thumbFilePath;
     }
 
@@ -102,9 +106,9 @@ export class MediaService {
     const entity: MediaEntity = await this.findByIdOrThrow(id);
     await this.repository.remove(entity);
 
-    fs.unlink(entity.filePath, () => undefined);
+    await unlink(entity.filePath).catch(() => undefined);
     if (entity.thumbnailPath) {
-      fs.unlink(entity.thumbnailPath, () => undefined);
+      await unlink(entity.thumbnailPath).catch(() => undefined);
     }
   }
 
