@@ -1,8 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 import { formatDuration } from '../../../core/mock-data';
 
 @Component({
@@ -14,6 +17,8 @@ import { formatDuration } from '../../../core/mock-data';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerControlsComponent {
+  private readonly breakpointObserver = inject(BreakpointObserver);
+
   readonly resolution = input<string | undefined>(undefined);
   readonly buffered = input.required<number>();
   readonly isPlaying = input.required<boolean>();
@@ -31,6 +36,12 @@ export class PlayerControlsComponent {
   readonly volumeChange = output<number>();
   readonly toggleFullscreen = output<void>();
 
+  protected readonly isMobile = toSignal(
+    this.breakpointObserver.observe('(max-width: 480px)').pipe(map((r) => r.matches)),
+    { initialValue: false },
+  );
+  protected readonly volumePopupOpen = signal<boolean>(false);
+
   protected readonly currentTimeLabel = computed<string>(() => formatDuration(Math.floor(this.currentTime())));
   protected readonly totalTimeLabel = computed<string>(() => formatDuration(Math.floor(this.duration())));
   protected readonly progress = computed<number>(() =>
@@ -42,6 +53,14 @@ export class PlayerControlsComponent {
     return 'volume_up';
   });
   protected readonly qualityLabel = computed<string>(() => this.resolution() ?? '');
+
+  protected onVolumeButtonClick(): void {
+    if (this.isMobile()) {
+      this.volumePopupOpen.update((v) => !v);
+    } else {
+      this.toggleMute.emit();
+    }
+  }
 
   protected onProgressChange(value: number | null): void {
     if (value !== null) {

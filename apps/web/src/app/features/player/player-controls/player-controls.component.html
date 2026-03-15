@@ -52,12 +52,41 @@
       </button>
 
       <div class="volume-group">
+        @if (volumePopupOpen()) {
+          <div
+            class="volume-popup-backdrop"
+            role="button"
+            tabindex="0"
+            aria-label="Close volume control"
+            (click)="volumePopupOpen.set(false)"
+            (keydown.enter)="volumePopupOpen.set(false)"
+          ></div>
+          <div class="volume-popup">
+            <input
+              type="range"
+              class="volume-slider-vertical"
+              min="0"
+              max="100"
+              step="1"
+              [value]="volume()"
+              (input)="onVolumeChange($event)"
+            />
+            <button
+              mat-icon-button
+              class="control-btn"
+              [attr.aria-label]="isMuted() ? 'Unmute' : 'Mute'"
+              (click)="toggleMute.emit()"
+            >
+              <mat-icon>{{ volumeIcon() }}</mat-icon>
+            </button>
+          </div>
+        }
         <button
           mat-icon-button
           class="control-btn volume-btn"
-          [matTooltip]="isMuted() ? 'Unmute' : 'Mute'"
-          [attr.aria-label]="isMuted() ? 'Unmute' : 'Mute'"
-          (click)="toggleMute.emit()"
+          [matTooltip]="isMobile() ? 'Volume' : (isMuted() ? 'Unmute' : 'Mute')"
+          [attr.aria-label]="isMobile() ? 'Volume' : (isMuted() ? 'Unmute' : 'Mute')"
+          (click)="onVolumeButtonClick()"
         >
           <mat-icon>{{ volumeIcon() }}</mat-icon>
         </button>
