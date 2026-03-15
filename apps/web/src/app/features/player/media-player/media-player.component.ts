@@ -23,7 +23,6 @@ import { PlayerControlsComponent } from '../player-controls/player-controls.comp
 })
 export class MediaPlayerComponent implements OnInit, OnDestroy {
   readonly url = input.required<string>();
-  readonly resolution = input<string | undefined>(undefined);
   readonly autoStart = input<boolean>(false);
 
   protected readonly videoEl: Signal<ElementRef<HTMLVideoElement> | undefined> =
@@ -35,6 +34,7 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
   protected readonly isMuted = signal<boolean>(false);
   protected readonly isFullscreen = signal<boolean>(false);
   protected readonly playPauseIcon = signal<'play_arrow' | 'pause' | null>(null);
+  protected readonly resolution = signal<string | undefined>(undefined);
 
   private iconTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
@@ -46,6 +46,7 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
       // this.isPlaying.set(this.autoStart());
       this.currentTime.set(0);
       this.duration.set(0);
+      this.resolution.set(undefined);
     });
   }
 
@@ -74,10 +75,22 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
     const el: HTMLVideoElement = this.getMediaElement();
 
     el.volume = this.volume() / 100;
+    this.resolution.set(this.detectResolution(el.videoHeight));
 
     if (this.isPlaying() && navigator.userActivation.hasBeenActive) {
       el.play().catch(console.error);
     }
+  }
+
+  private detectResolution(height: number): string | undefined {
+    if (height >= 2160) return '4K';
+    if (height >= 1440) return '1440p';
+    if (height >= 1080) return '1080p';
+    if (height >= 720) return '720p';
+    if (height >= 480) return '480p';
+    if (height >= 360) return '360p';
+    if (height > 0) return `${height}p`;
+    return undefined;
   }
 
   private readonly onFullscreenChange = (): void => {
