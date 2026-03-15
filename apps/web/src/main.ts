@@ -12,4 +12,9 @@ if (environment.bugsnagApiKey) {
   });
 }
 
-bootstrapApplication(AppComponent, appConfig).catch((err) => console.error(err));
+bootstrapApplication(AppComponent, appConfig).catch((err: unknown) => {
+  if (Bugsnag.isStarted()) {
+    Bugsnag.notify(err instanceof Error ? err : new Error(String(err)));
+  }
+  console.error(err);
+});

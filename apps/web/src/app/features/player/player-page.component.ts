@@ -9,6 +9,7 @@ import { PlayerInfoComponent } from './player-info/player-info.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, map, of } from 'rxjs';
 import { MediaApiService } from '../../core/services/media-api.service';
+import { ErrorReportingService } from '../../core/services/error-reporting.service';
 
 @Component({
   selector: 'app-player-page',
@@ -29,9 +30,15 @@ export class PlayerPageComponent {
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   private readonly router: Router = inject(Router);
   private readonly mediaApiService: MediaApiService = inject(MediaApiService);
+  private readonly errorReporting: ErrorReportingService = inject(ErrorReportingService);
 
   private readonly allMedia = toSignal(
-    this.mediaApiService.getAll().pipe(catchError(() => of([]))),
+    this.mediaApiService.getAll().pipe(
+      catchError((err: unknown) => {
+        this.errorReporting.notify(err, 'player-load');
+        return of([]);
+      }),
+    ),
     { initialValue: [] as MediaModel[] },
   );
 

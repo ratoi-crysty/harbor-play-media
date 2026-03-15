@@ -1,9 +1,10 @@
 import * as path from 'node:path';
 import { mkdir, rename, unlink } from 'node:fs/promises';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
+import Bugsnag from '@bugsnag/node';
 import { MediaModel } from '@harbor-play-media/shared-api';
 import { MediaEntity } from './media.entity';
 import { MediaMetadataService } from './media-metadata.service';
@@ -18,6 +19,8 @@ export interface CreateMediaParams {
 
 @Injectable()
 export class MediaService {
+  private readonly logger = new Logger(MediaService.name);
+
   constructor(
     @InjectRepository(MediaEntity)
     private readonly repository: Repository<MediaEntity>,
@@ -81,8 +84,9 @@ export class MediaService {
         const thumbFilePath: string = path.join(environment.uploadsPath, thumbFileName);
         await this.metadataService.generateThumbnail(newFilePath, thumbFilePath);
         thumbnailPath = thumbFilePath;
-      } catch {
-        // Thumbnail generation failed — leave as null
+      } catch (err: unknown) {
+        this.logger.warn('Thumbnail generation failed', err);
+        this.notifyBugsnag(err, 'thumbnail-generation');
       }
     }
 
@@ -106,10 +110,18 @@ export class MediaService {
     const entity: MediaEntity = await this.findByIdOrThrow(id);
     await this.repository.remove(entity);
 
-    await unlink(entity.filePath).catch(() => undefined);
+    await unlink(entity.filePath).catch((err: unknown) => this.notifyBugsnag(err, 'file-deletion'));
     if (entity.thumbnailPath) {
-      await unlink(entity.thumbnailPath).catch(() => undefined);
+      await unlink(entity.thumbnailPath).catch((err: unknown) => this.notifyBugsnag(err, 'thumbnail-deletion'));
     }
+  }
+
+  private notifyBugsnag(error: unknown, context: string): void {
+    if (!Bugsnag.isStarted()) return;
+    const err: Error = error instanceof Error ? error : new Error(String(error));
+    Bugsnag.notify(err, (event) => {
+      event.context = context;
+    });
   }
 
   private toResponse(entity: MediaEntity): MediaModel {

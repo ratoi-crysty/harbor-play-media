@@ -7,6 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MediaApiService } from '../../core/services/media-api.service';
+import { ErrorReportingService } from '../../core/services/error-reporting.service';
 
 interface UploadState {
   title: string;
@@ -36,6 +37,7 @@ interface UploadState {
 export class UploadPageComponent {
   private readonly mediaApiService: MediaApiService = inject(MediaApiService);
   private readonly router: Router = inject(Router);
+  private readonly errorReporting: ErrorReportingService = inject(ErrorReportingService);
 
   readonly state = signal<UploadState>({
     title: '',
@@ -79,7 +81,8 @@ export class UploadPageComponent {
         next: (): void => {
           this.state.update((st: UploadState) => ({ ...st, loading: false, success: true }));
         },
-        error: (): void => {
+        error: (err: unknown): void => {
+          this.errorReporting.notify(err, 'media-upload');
           this.state.update((st: UploadState) => ({
             ...st,
             loading: false,

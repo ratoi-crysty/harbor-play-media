@@ -6,8 +6,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MediaModel } from '@harbor-play-media/shared-api';
 import { MediaCardComponent } from '@harbor-play-media/ui';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { catchError, of } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { MediaApiService } from '../../core/services/media-api.service';
+import { ErrorReportingService } from '../../core/services/error-reporting.service';
 import { formatDuration } from '../../core/mock-data';
 
 @Component({
@@ -21,10 +22,16 @@ import { formatDuration } from '../../core/mock-data';
 export class DashboardPageComponent {
   private readonly router: Router = inject(Router);
   private readonly mediaApiService: MediaApiService = inject(MediaApiService);
+  private readonly errorReporting: ErrorReportingService = inject(ErrorReportingService);
 
   protected readonly allMedia = toSignal(
-    this.mediaApiService.getAll().pipe(catchError(() => of([]))),
-    { initialValue: [] as MediaModel[] },
+    this.mediaApiService.getAll().pipe(
+      catchError((err: unknown): Observable<MediaModel[]> => {
+        this.errorReporting.notify(err, 'dashboard-load');
+        return of([]);
+      }),
+    ),
+    { initialValue: [] },
   );
   protected readonly featured = computed<MediaModel | undefined>(() => this.allMedia()[0]);
   protected readonly recentlyAdded = computed<MediaModel[]>(() => this.allMedia().slice(0, 6));

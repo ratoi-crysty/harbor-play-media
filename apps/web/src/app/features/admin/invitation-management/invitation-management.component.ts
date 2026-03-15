@@ -15,6 +15,7 @@ import {
 } from './invitation-list/invitation-list.component';
 import { InvitationService } from '@auth-lib/angular';
 import { InvitationResponse } from '@auth-lib/common';
+import { ErrorReportingService } from '../../../core/services/error-reporting.service';
 
 @Component({
   selector: 'app-invitation-management',
@@ -36,6 +37,7 @@ import { InvitationResponse } from '@auth-lib/common';
 export class InvitationManagementComponent implements OnInit {
   private readonly invitationService = inject(InvitationService);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly errorReporting = inject(ErrorReportingService);
 
   readonly invitations = signal<InvitationResponse[] | undefined>(undefined);
   readonly creating = signal<boolean>(false);
@@ -53,8 +55,9 @@ export class InvitationManagementComponent implements OnInit {
       next: (response) => {
         this.invitations.set(response.invitations);
       },
-      error: (err) => {
-        this.error.set(err.error?.message || 'Failed to load invitations');
+      error: (err: unknown) => {
+        this.errorReporting.notify(err, 'load-invitations');
+        this.error.set((err as { error?: { message?: string } }).error?.message || 'Failed to load invitations');
       },
     });
   }
@@ -75,8 +78,9 @@ export class InvitationManagementComponent implements OnInit {
         this.creating.set(false);
         this.snackBar.open('Invitation created', 'Dismiss', { duration: 3000 });
       },
-      error: (err) => {
-        this.error.set(err.error?.message || 'Failed to create invitation');
+      error: (err: unknown) => {
+        this.errorReporting.notify(err, 'create-invitation');
+        this.error.set((err as { error?: { message?: string } }).error?.message || 'Failed to create invitation');
         this.creating.set(false);
       },
     });
@@ -90,8 +94,9 @@ export class InvitationManagementComponent implements OnInit {
         );
         this.snackBar.open('Invitation deleted', 'Dismiss', { duration: 3000 });
       },
-      error: (err) => {
-        this.error.set(err.error?.message || 'Failed to delete invitation');
+      error: (err: unknown) => {
+        this.errorReporting.notify(err, 'delete-invitation');
+        this.error.set((err as { error?: { message?: string } }).error?.message || 'Failed to delete invitation');
       },
     });
   }
