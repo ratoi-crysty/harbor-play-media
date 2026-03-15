@@ -35,6 +35,7 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
   protected readonly isFullscreen = signal<boolean>(false);
   protected readonly playPauseIcon = signal<'play_arrow' | 'pause' | null>(null);
   protected readonly resolution = signal<string | undefined>(undefined);
+  protected readonly buffered = signal<number>(0);
 
   private iconTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
@@ -47,6 +48,7 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
       this.currentTime.set(0);
       this.duration.set(0);
       this.resolution.set(undefined);
+      this.buffered.set(0);
     });
   }
 
@@ -100,6 +102,22 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
   protected updateCurrentTime() {
     const el: HTMLVideoElement = this.getMediaElement();
     this.currentTime.set(el.currentTime);
+  }
+
+  protected updateBuffered(): void {
+    const el: HTMLVideoElement = this.getMediaElement();
+    const duration: number = el.duration;
+    if (!duration || !el.buffered.length) {
+      this.buffered.set(0);
+      return;
+    }
+    for (let i = 0; i < el.buffered.length; i++) {
+      if (el.buffered.start(i) <= el.currentTime && el.buffered.end(i) >= el.currentTime) {
+        this.buffered.set((el.buffered.end(i) / duration) * 100);
+        return;
+      }
+    }
+    this.buffered.set(0);
   }
 
   protected play() {

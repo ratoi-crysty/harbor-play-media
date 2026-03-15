@@ -15,6 +15,7 @@ import { formatDuration } from '../../../core/mock-data';
 })
 export class PlayerControlsComponent {
   readonly resolution = input<string | undefined>(undefined);
+  readonly buffered = input.required<number>();
   readonly isPlaying = input.required<boolean>();
   readonly currentTime = input.required<number>();
   readonly duration = input.required<number>();
@@ -46,6 +47,11 @@ export class PlayerControlsComponent {
     if (value !== null) {
       this.progressChange.emit(value);
     }
+  }
+
+  protected onProgressInput(event: Event): void {
+    if (!(event.target instanceof HTMLInputElement)) return;
+    this.progressChange.emit(+event.target.value);
   }
 
   protected onVolumeChange(event: Event): void {

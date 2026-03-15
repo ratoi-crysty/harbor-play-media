@@ -13,6 +13,7 @@
       (ended)="pause()"
       (durationchange)="changeDuration()"
       (volumechange)="changeVolume()"
+      (progress)="updateBuffered()"
     ></video>
     @if (playPauseIcon()) {
       <div class="play-pause-overlay">
@@ -23,6 +24,7 @@
 
   <app-player-controls
     [resolution]="resolution()"
+    [buffered]="buffered()"
     [isPlaying]="isPlaying()"
     [currentTime]="currentTime()"
     [duration]="duration()"

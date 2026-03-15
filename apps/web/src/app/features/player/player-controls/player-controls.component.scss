@@ -30,8 +30,55 @@
   }
 }
 
-.progress-slider {
+.progress-wrapper {
   flex: 1;
+  position: relative;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover .progress-played {
+    background: var(--color-primary);
+  }
+}
+
+.progress-track-bg {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-buffered {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: width 0.4s ease;
+}
+
+.progress-played {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: var(--color-accent);
+  transition: width 0.1s linear;
+}
+
+.progress-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
 }
 
 .controls-row {
