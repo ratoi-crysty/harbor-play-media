@@ -1,9 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import type { FfprobeData, FfprobeStream } from 'fluent-ffmpeg';
-import ffmpeg from 'fluent-ffmpeg';
+import { execFile } from 'child_process';
 import ffprobeInstaller from '@ffprobe-installer/ffprobe';
 
-ffmpeg.setFfprobePath(ffprobeInstaller.path);
+const FFPROBE_PATH: string = ffprobeInstaller.path;
+
+interface FfprobeFormat {
+  format_name?: string;
+  duration?: string;
+  size?: string;
+}
+
+interface FfprobeStream {
+  codec_type?: string;
+  height?: number;
+}
+
+interface FfprobeOutput {
+  format: FfprobeFormat;
+  streams: FfprobeStream[];
+}
 
 export interface VideoMetadata {
   duration: number;
@@ -38,12 +53,21 @@ function getResolutionLabel(height: number): string {
 export class MediaMetadataService {
   extractMetadata(filePath: string): Promise<VideoMetadata> {
     return new Promise((resolve, reject) => {
-      ffmpeg.ffprobe(filePath, (err: Error | null, data: FfprobeData) => {
+      const args: string[] = [
+        '-v', 'quiet',
+        '-print_format', 'json',
+        '-show_format',
+        '-show_streams',
+        filePath,
+      ];
+
+      execFile(FFPROBE_PATH, args, (err: Error | null, stdout: string) => {
         if (err) {
           reject(err);
           return;
         }
 
+        const data: FfprobeOutput = JSON.parse(stdout) as FfprobeOutput;
         const videoStream: FfprobeStream | undefined = data.streams.find(
           (s: FfprobeStream) => s.codec_type === 'video',
         );
@@ -53,8 +77,8 @@ export class MediaMetadataService {
         const formatName: string = data.format.format_name ?? '';
 
         resolve({
-          duration: Math.round(data.format.duration ?? 0),
-          fileSize: data.format.size ?? 0,
+          duration: Math.round(parseFloat(data.format.duration ?? '0')),
+          fileSize: parseInt(data.format.size ?? '0', 10),
           mimeType: getMimeType(formatName),
           resolution,
         });
@@ -64,15 +88,21 @@ export class MediaMetadataService {
 
   generateThumbnail(videoPath: string, outputPath: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      ffmpeg(videoPath)
-        .screenshots({
-          timestamps: ['5%'],
-          filename: outputPath.split('/').pop() ?? 'thumbnail.jpg',
-          folder: outputPath.substring(0, outputPath.lastIndexOf('/')),
-          size: '640x?',
-        })
-        .on('end', () => resolve())
-        .on('error', (err: Error) => reject(err));
+      const args: string[] = [
+        '-i', videoPath,
+        '-vf', 'select=gte(n\\,1),scale=640:-1',
+        '-vframes', '1',
+        '-y',
+        outputPath,
+      ];
+
+      execFile('ffmpeg', args, (err: Error | null) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve();
+      });
     });
   }
 }
