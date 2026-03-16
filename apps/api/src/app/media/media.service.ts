@@ -30,8 +30,15 @@ export class MediaService {
     return this.repository.find({ order: { createdAt: 'DESC' } });
   }
 
-  async findByIdOrThrow(id: string): Promise<MediaEntity> {
+  async findById(id: string): Promise<MediaEntity | undefined> {
     const entity: MediaEntity | null = await this.repository.findOne({ where: { id } });
+
+    return entity ?? undefined;
+  }
+
+  async getById(id: string): Promise<MediaEntity> {
+    const entity: MediaEntity | undefined = await this.findById(id);
+
     if (!entity) {
       throw new NotFoundException(`Media with id ${id} not found`);
     }
@@ -95,7 +102,7 @@ export class MediaService {
   }
 
   async delete(id: string): Promise<void> {
-    const entity: MediaEntity = await this.findByIdOrThrow(id);
+    const entity: MediaEntity = await this.getById(id);
     await this.repository.remove(entity);
 
     await unlink(entity.filePath).catch((err: unknown) => this.notifyBugsnag(err, 'file-deletion'));

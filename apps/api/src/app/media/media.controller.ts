@@ -34,7 +34,7 @@ export class MediaController {
 
   @Get(':id')
   async getById(@Param('id') id: string): Promise<MediaModel> {
-    const entity: MediaEntity = await this.mediaService.findByIdOrThrow(id);
+    const entity: MediaEntity = await this.mediaService.getById(id);
     await this.mediaService.incrementViewCount(id);
     return this.toResponse(entity);
   }
@@ -71,7 +71,7 @@ export class MediaController {
 
   @Get(':id/stream')
   async stream(@Param('id') id: string, @Req() req: Request, @Res() res: Response): Promise<void> {
-    const entity: MediaEntity = await this.mediaService.findByIdOrThrow(id);
+    const entity: MediaEntity = await this.mediaService.getById(id);
     const filePath: string = entity.filePath;
 
     const stat: fs.Stats = fs.statSync(filePath);
@@ -105,7 +105,7 @@ export class MediaController {
 
   @Get(':id/thumbnail')
   async thumbnail(@Param('id') id: string, @Res() res: Response): Promise<void> {
-    const entity: MediaEntity = await this.mediaService.findByIdOrThrow(id);
+    const entity: MediaEntity = await this.mediaService.getById(id);
 
     if (!entity.thumbnailPath) {
       throw new NotFoundException('Thumbnail not available');
