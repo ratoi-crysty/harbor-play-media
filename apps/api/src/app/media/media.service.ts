@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import Bugsnag from '@bugsnag/node';
-import { MediaModel } from '@harbor-play-media/shared-api';
 import { MediaEntity } from './media.entity';
 import { MediaMetadataService } from './media-metadata.service';
 import { environment } from '../../environments/environment';
@@ -27,13 +26,8 @@ export class MediaService {
     private readonly metadataService: MediaMetadataService,
   ) {}
 
-  private async ensureUploadsDir(): Promise<void> {
-    await mkdir(environment.uploadsPath, { recursive: true });
-  }
-
-  async findAll(): Promise<MediaModel[]> {
-    const entities: MediaEntity[] = await this.repository.find({ order: { createdAt: 'DESC' } });
-    return entities.map((e: MediaEntity) => this.toResponse(e));
+  async findAll(): Promise<MediaEntity[]> {
+    return this.repository.find({ order: { createdAt: 'DESC' } });
   }
 
   async findByIdOrThrow(id: string): Promise<MediaEntity> {
@@ -44,16 +38,11 @@ export class MediaService {
     return entity;
   }
 
-  async getById(id: string): Promise<MediaModel> {
-    const entity: MediaEntity = await this.findByIdOrThrow(id);
-    return this.toResponse(entity);
-  }
-
   async incrementViewCount(id: string): Promise<void> {
     await this.repository.increment({ id }, 'viewCount', 1);
   }
 
-  async create(params: CreateMediaParams): Promise<MediaModel> {
+  async create(params: CreateMediaParams): Promise<MediaEntity> {
     await this.ensureUploadsDir();
 
     const { title, description, mediaFile, thumbnailFile } = params;
@@ -102,8 +91,7 @@ export class MediaService {
       viewCount: 0,
     });
 
-    const saved: MediaEntity = await this.repository.save(entity);
-    return this.toResponse(saved);
+    return this.repository.save(entity);
   }
 
   async delete(id: string): Promise<void> {
@@ -116,6 +104,14 @@ export class MediaService {
     }
   }
 
+  getStreamUrl(entity: MediaEntity): string {
+    return `/api/media/${entity.id}/stream`;
+  }
+
+  getThumbnailUrl(entity: MediaEntity): string {
+    return entity.thumbnailPath ? `/api/media/${entity.id}/thumbnail` : '';
+  }
+
   private notifyBugsnag(error: unknown, context: string): void {
     if (!Bugsnag.isStarted()) return;
     const err: Error = error instanceof Error ? error : new Error(String(error));
@@ -124,19 +120,7 @@ export class MediaService {
     });
   }
 
-  private toResponse(entity: MediaEntity): MediaModel {
-    return {
-      id: entity.id,
-      title: entity.title,
-      description: entity.description,
-      url: `/api/media/${entity.id}/stream`,
-      thumbnailUrl: entity.thumbnailPath ? `/api/media/${entity.id}/thumbnail` : '',
-      duration: entity.duration,
-      fileSize: entity.fileSize,
-      mimeType: entity.mimeType,
-      resolution: entity.resolution,
-      createdAt: entity.createdAt.toISOString(),
-      viewCount: entity.viewCount,
-    };
+  private async ensureUploadsDir(): Promise<void> {
+    await mkdir(environment.uploadsPath, { recursive: true });
   }
 }

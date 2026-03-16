@@ -28,14 +28,15 @@ export class MediaController {
 
   @Get()
   async findAll(): Promise<MediaModel[]> {
-    return this.mediaService.findAll();
+    const entities: MediaEntity[] = await this.mediaService.findAll();
+    return entities.map((e: MediaEntity) => this.toResponse(e));
   }
 
   @Get(':id')
   async getById(@Param('id') id: string): Promise<MediaModel> {
-    const media: MediaModel = await this.mediaService.getById(id);
+    const entity: MediaEntity = await this.mediaService.findByIdOrThrow(id);
     await this.mediaService.incrementViewCount(id);
-    return media;
+    return this.toResponse(entity);
   }
 
   @Post()
@@ -58,12 +59,14 @@ export class MediaController {
       throw new NotFoundException('No media file provided');
     }
 
-    return this.mediaService.create({
+    const entity: MediaEntity = await this.mediaService.create({
       title: dto.title,
       description: dto.description ?? '',
       mediaFile,
       thumbnailFile: files.thumbnailAsset?.[0],
     });
+
+    return this.toResponse(entity);
   }
 
   @Get(':id/stream')
@@ -119,5 +122,21 @@ export class MediaController {
   @HttpCode(204)
   async delete(@Param('id') id: string): Promise<void> {
     await this.mediaService.delete(id);
+  }
+
+  private toResponse(entity: MediaEntity): MediaModel {
+    return {
+      id: entity.id,
+      title: entity.title,
+      description: entity.description,
+      url: this.mediaService.getStreamUrl(entity),
+      thumbnailUrl: this.mediaService.getThumbnailUrl(entity),
+      duration: entity.duration,
+      fileSize: entity.fileSize,
+      mimeType: entity.mimeType,
+      resolution: entity.resolution,
+      createdAt: entity.createdAt.toISOString(),
+      viewCount: entity.viewCount,
+    };
   }
 }
