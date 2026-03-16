@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { UserListItem, UserListResponse, UserRole } from '@auth-lib/common';
 import { CurrentUser, Roles } from '../auth';
 import { UserEntity } from '../user';
@@ -20,8 +12,9 @@ export class UserManagementController {
   @Get()
   @Roles(UserRole.ADMIN)
   async findAllUsers(): Promise<UserListResponse> {
-    const users: UserListItem[] = await this.userManagementService.findAll();
-    return { users };
+    const users: UserEntity[] = await this.userManagementService.findAll();
+
+    return users.map((user: UserEntity) => this.toListItem(user));
   }
 
   @Patch(':id/role')
@@ -31,12 +24,25 @@ export class UserManagementController {
     @Body() dto: UpdateRoleDto,
     @CurrentUser() currentUser: UserEntity,
   ): Promise<UserListItem> {
-    return this.userManagementService.updateRole(id, dto.role, currentUser);
+    const user: UserEntity = await this.userManagementService.updateRole(id, dto.role, currentUser);
+    return this.toListItem(user);
   }
 
   @Post(':id/confirm')
   @Roles(UserRole.ADMIN)
   async confirmUser(@Param('id', ParseIntPipe) id: number): Promise<UserListItem> {
-    return this.userManagementService.confirmUser(id);
+    const user: UserEntity = await this.userManagementService.confirmUser(id);
+    return this.toListItem(user);
+  }
+
+  private toListItem(user: UserEntity): UserListItem {
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      status: user.status,
+      createdAt: user.createdAt,
+    };
   }
 }

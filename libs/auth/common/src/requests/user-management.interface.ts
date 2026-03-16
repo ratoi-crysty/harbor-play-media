@@ -1,11 +1,7 @@
-import { UserRole, UserStatus } from '../models/user.enum';
+import { UserRole } from '../models/user.enum';
+import { UserModel } from '../models/user.model';
 
-export interface UserListItem {
-  id: number;
-  email: string;
-  name: string;
-  role: UserRole;
-  status: UserStatus;
+export interface UserListItem extends UserModel {
   createdAt: Date;
 }
 
@@ -34,6 +30,4 @@ export interface InvitationListResponse {
   invitations: InvitationResponse[];
 }
 
-export interface UserListResponse {
-  users: UserListItem[];
-}
+export type UserListResponse = UserListItem[];

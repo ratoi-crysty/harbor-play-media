@@ -41,8 +41,8 @@ export class UserManagementComponent implements OnInit {
     this.error.set('');
 
     this.userManagementService.getUsers().subscribe({
-      next: (response) => {
-        this.users.set(response.users);
+      next: (users) => {
+        this.users.set(users);
         this.loading.set(false);
       },
       error: (err: unknown) => {

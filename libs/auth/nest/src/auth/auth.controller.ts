@@ -1,6 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthResponse, RegistrationConfigResponse, UserResponse } from '@auth-lib/common';
+import { UserEntity } from '../user';
 import { AuthService } from './auth.service';
 import { PublicApi } from './auth.guard';
 import { LoginDto } from './dto/login.dto';
@@ -20,23 +21,23 @@ export class AuthController {
   @PublicApi()
   @Post('register')
   async register(@Body() body: RegisterDto, @Req() req: Request): Promise<AuthResponse> {
-    const result: AuthResponse = await this.authService.register(
+    const result = await this.authService.register(
       body.email,
       body.password,
       body.name,
       body.inviteToken,
     );
     req.session.userId = result.user.id;
-    return result;
+    return { user: this.toResponse(result.user), message: result.message };
   }
 
   @PublicApi()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() body: LoginDto, @Req() req: Request): Promise<AuthResponse> {
-    const result: AuthResponse = await this.authService.login(body.email, body.password);
+    const result = await this.authService.login(body.email, body.password);
     req.session.userId = result.user.id;
-    return result;
+    return { user: this.toResponse(result.user), message: result.message };
   }
 
   @PublicApi()
@@ -60,6 +61,16 @@ export class AuthController {
       throw new UnauthorizedException();
     }
 
-    return req.user;
+    return this.toResponse(req.user);
+  }
+
+  private toResponse(user: UserEntity): UserResponse {
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      status: user.status,
+    };
   }
 }

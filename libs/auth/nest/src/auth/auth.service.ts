@@ -8,10 +8,8 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import {
-  AuthResponse,
   RegistrationConfigResponse,
   RegistrationMode,
-  UserResponse,
   UserRole,
   UserStatus,
 } from '@auth-lib/common';
@@ -30,7 +28,12 @@ export class AuthService {
     private readonly authConfig: AuthModuleConfig,
   ) {}
 
-  async register(email: string, password: string, name: string, inviteToken?: string): Promise<AuthResponse> {
+  async register(
+    email: string,
+    password: string,
+    name: string,
+    inviteToken?: string,
+  ): Promise<{ user: UserEntity; message: string }> {
     const existing: UserEntity | null = await this.userService.findByEmail(email);
 
     if (existing) {
@@ -85,7 +88,7 @@ export class AuthService {
     };
   }
 
-  async login(email: string, password: string): Promise<AuthResponse> {
+  async login(email: string, password: string): Promise<{ user: UserEntity; message: string }> {
     const user: UserEntity | null = await this.userService.findByEmail(email);
 
     if (!user) {
@@ -109,7 +112,7 @@ export class AuthService {
     };
   }
 
-  async getUser(userId: number): Promise<UserResponse> {
+  async getUser(userId: number): Promise<UserEntity> {
     const user: UserEntity | null = await this.userService.findById(userId);
 
     if (!user) {
