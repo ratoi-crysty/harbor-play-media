@@ -1,4 +1,5 @@
 import { MediaModel } from '@harbor-play-media/shared-api';
+import { Exclude } from 'class-transformer';
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('media')
@@ -12,9 +13,11 @@ export class MediaEntity implements Omit<MediaModel, 'url' | 'thumbnailUrl' | 'c
   @Column({ default: '' })
   description!: string;
 
+  @Exclude()
   @Column()
   filePath!: string;
 
+  @Exclude()
   @Column({ nullable: true, type: 'varchar' })
   thumbnailPath!: string | null;
 

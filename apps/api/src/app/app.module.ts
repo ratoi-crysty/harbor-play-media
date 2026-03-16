@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RegistrationMode } from '@auth-lib/common';
-import { AuthModule, UserEntity, SessionEntity, InvitationEntity, UserManagementModule } from '@auth-lib/nest';
-import { MediaEntity } from './media/media.entity';
+import { AuthModule, UserManagementModule } from '@auth-lib/nest';
 import { MediaModule } from './media/media.module';
 
 function getRegistrationMode(): RegistrationMode {
@@ -18,7 +17,7 @@ function getRegistrationMode(): RegistrationMode {
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
       database: 'data/database.sqlite',
-      entities: [UserEntity, SessionEntity, InvitationEntity, MediaEntity],
+      autoLoadEntities: true,
       synchronize: true,
     }),
     AuthModule.forRoot({

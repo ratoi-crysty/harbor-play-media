@@ -1,6 +1,6 @@
 import Bugsnag from '@bugsnag/node';
-import { Logger, ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { ClassSerializerInterceptor, Logger, ValidationPipe } from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
 import session from 'express-session';
 import { DataSource } from 'typeorm';
 import { ISession, TypeormStore } from 'connect-typeorm';
@@ -46,6 +46,7 @@ async function bootstrap(): Promise<void> {
     }),
   );
 
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.useGlobalFilters(new BugsnagExceptionFilter());
 
   const port: string | number = process.env['PORT'] || 3333;

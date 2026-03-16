@@ -1,4 +1,5 @@
-import { UserModel, UserResponse, UserRole, UserStatus } from '@auth-lib/common';
+import { UserModel, UserRole, UserStatus } from '@auth-lib/common';
+import { Exclude } from 'class-transformer';
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('users')
@@ -12,6 +13,7 @@ export class UserEntity implements UserModel {
   @Column()
   name!: string;
 
+  @Exclude()
   @Column()
   password!: string;
 
@@ -32,14 +34,4 @@ export class UserEntity implements UserModel {
 
   @UpdateDateColumn()
   updatedAt!: Date;
-
-  toJSON(): UserResponse {
-    return {
-      id: this.id,
-      email: this.email,
-      name: this.name,
-      role: this.role,
-      status: this.status,
-    };
-  }
 }
