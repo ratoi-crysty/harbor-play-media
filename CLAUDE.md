@@ -91,6 +91,7 @@ Common TypeScript interfaces and types shared between the Angular frontend and N
 - NestJS: Follow standard module/controller/service pattern
 - Naming convention: `.<file-type>` suffix (e.g., `media.model.ts`, `player.component.ts`, `streaming.service.ts`)
 - Always use the frontend-design skill for creating/updating frontend UI
+- Avoid using `null`, use `undefined` instead.
 
 ## Naming Conventions
 

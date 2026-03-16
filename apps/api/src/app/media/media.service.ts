@@ -55,19 +55,12 @@ export class MediaService {
     const { title, description, mediaFile, thumbnailFile } = params;
 
     // Rename uploaded file to uuid-based name
-    const ext: string = path.extname(mediaFile.originalname);
-    const newFileName = `${uuidv4()}${ext}`;
-    const newFilePath: string = path.join(environment.uploadsPath, newFileName);
-    await rename(mediaFile.path, newFilePath);
+    const newFilePath: string = await this.renameFile(mediaFile.originalname, mediaFile.path);
 
     // Handle thumbnail
-    let thumbnailPath: string | null = null;
+    let thumbnailPath: string | undefined;
     if (thumbnailFile) {
-      const thumbExt: string = path.extname(thumbnailFile.originalname);
-      const thumbFileName = `${uuidv4()}${thumbExt}`;
-      const thumbFilePath: string = path.join(environment.uploadsPath, thumbFileName);
-      await rename(thumbnailFile.path, thumbFilePath);
-      thumbnailPath = thumbFilePath;
+      thumbnailPath = await this.renameFile(mediaFile.originalname, thumbnailFile.path);
     }
 
     // Extract metadata
@@ -117,6 +110,15 @@ export class MediaService {
 
   getThumbnailUrl(entity: MediaEntity): string {
     return entity.thumbnailPath ? `/api/media/${entity.id}/thumbnail` : '';
+  }
+
+  private async renameFile(fileName: string, filePath: string): Promise<string> {
+    const ext: string = path.extname(fileName);
+    const newFileName = `${uuidv4()}${ext}`;
+    const newFilePath: string = path.join(environment.uploadsPath, newFileName);
+    await rename(filePath, newFilePath);
+
+    return newFilePath;
   }
 
   private notifyBugsnag(error: unknown, context: string): void {
