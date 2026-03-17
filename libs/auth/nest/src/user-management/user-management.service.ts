@@ -1,17 +1,16 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { UserListItem, UserRole, UserStatus } from '@auth-lib/common';
+import { UserRole, UserStatus } from '@auth-lib/common';
 import { UserService, UserEntity } from '../user';
 
 @Injectable()
 export class UserManagementService {
   constructor(private readonly userService: UserService) {}
 
-  async findAll(): Promise<UserListItem[]> {
-    const users: UserEntity[] = await this.userService.findAll();
-    return users.map((user) => this.toListItem(user));
+  async findAll(): Promise<UserEntity[]> {
+    return this.userService.findAll();
   }
 
-  async updateRole(userId: number, newRole: UserRole, currentUser: UserEntity): Promise<UserListItem> {
+  async updateRole(userId: number, newRole: UserRole, currentUser: UserEntity): Promise<UserEntity> {
     if (userId === currentUser.id) {
       throw new ForbiddenException('Cannot change your own role');
     }
@@ -35,10 +34,10 @@ export class UserManagementService {
       throw new NotFoundException('User not found');
     }
 
-    return this.toListItem(updatedUser);
+    return updatedUser;
   }
 
-  async confirmUser(userId: number): Promise<UserListItem> {
+  async confirmUser(userId: number): Promise<UserEntity> {
     const user: UserEntity | null = await this.userService.findById(userId);
 
     if (!user) {
@@ -55,17 +54,6 @@ export class UserManagementService {
       throw new NotFoundException('User not found');
     }
 
-    return this.toListItem(updatedUser);
-  }
-
-  private toListItem(user: UserEntity): UserListItem {
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-      status: user.status,
-      createdAt: user.createdAt,
-    };
+    return updatedUser;
   }
 }

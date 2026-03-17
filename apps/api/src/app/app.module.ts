@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RegistrationMode } from '@auth-lib/common';
-import { AuthModule, UserEntity, SessionEntity, InvitationEntity, UserManagementModule } from '@auth-lib/nest';
+import { AuthModule, UserManagementModule } from '@auth-lib/nest';
+import { MediaModule } from './media/media.module';
 
 function getRegistrationMode(): RegistrationMode {
   const mode: string | undefined = process.env['REGISTRATION_MODE'];
@@ -16,7 +17,7 @@ function getRegistrationMode(): RegistrationMode {
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
       database: 'data/database.sqlite',
-      entities: [UserEntity, SessionEntity, InvitationEntity],
+      autoLoadEntities: true,
       synchronize: true,
     }),
     AuthModule.forRoot({
@@ -25,6 +26,7 @@ function getRegistrationMode(): RegistrationMode {
     UserManagementModule.forRoot({
       inviteTokenExpiryDays: Number(process.env['INVITE_TOKEN_EXPIRY_DAYS'] ?? '7'),
     }),
+    MediaModule,
   ],
 })
 export class AppModule {}

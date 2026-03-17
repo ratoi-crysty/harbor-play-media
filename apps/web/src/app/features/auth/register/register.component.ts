@@ -9,6 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '@auth-lib/angular';
 import { RegisterRequest, RegistrationConfigResponse, RegistrationMode } from '@auth-lib/common';
+import { ErrorReportingService } from '../../../core/services/error-reporting.service';
 
 @Component({
   selector: 'app-register',
@@ -22,6 +23,7 @@ export class RegisterComponent {
   private readonly authService: AuthService = inject(AuthService);
   private readonly router: Router = inject(Router);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
+  private readonly errorReporting: ErrorReportingService = inject(ErrorReportingService);
 
   readonly formData = signal<RegisterRequest>({
     name: '',
@@ -39,7 +41,8 @@ export class RegisterComponent {
   readonly registrationMode: Signal<RegistrationMode | null> = toSignal(
     this.authService.getRegistrationConfig().pipe(
       map((config: RegistrationConfigResponse): RegistrationMode => config.mode),
-      catchError((): Observable<null> => {
+      catchError((err: unknown): Observable<null> => {
+        this.errorReporting.notify(err, 'load-registration-config');
         this.error.set('Could not load registration settings. Please try again later.');
         return of(null);
       }),

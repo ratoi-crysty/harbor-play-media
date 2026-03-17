@@ -7,6 +7,8 @@ import { AUTH_CONFIG, AuthModuleConfig } from './auth.config';
 import { UserModule } from '../user';
 import { InvitationModule } from '../invitation';
 import { AuthGuard } from './auth.guard';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { SessionEntity } from './session.entity';
 
 @Module({})
 export class AuthModule {
@@ -17,7 +19,7 @@ export class AuthModule {
 
     return {
       module: AuthModule,
-      imports: [UserModule, InvitationModule],
+      imports: [UserModule, InvitationModule, TypeOrmModule.forFeature([SessionEntity])],
       controllers: [AuthController],
       providers: [
         {

@@ -1,14 +1,15 @@
-import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@angular/core';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MediaModel } from '@harbor-play-media/shared-api';
 import { MediaCardComponent } from '@harbor-play-media/ui';
-import { MOCK_MEDIA, getMockMediaById } from '../../core/mock-data';
 import { MediaPlayerComponent } from './media-player/media-player.component';
 import { PlayerInfoComponent } from './player-info/player-info.component';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
+import { catchError, map, of } from 'rxjs';
+import { MediaApiService } from '../../core/services/media-api.service';
+import { ErrorReportingService } from '../../core/services/error-reporting.service';
 
 @Component({
   selector: 'app-player-page',
@@ -28,12 +29,30 @@ import { map } from 'rxjs';
 export class PlayerPageComponent {
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   private readonly router: Router = inject(Router);
+  private readonly mediaApiService: MediaApiService = inject(MediaApiService);
+  private readonly errorReporting: ErrorReportingService = inject(ErrorReportingService);
 
-  protected readonly currentMedia = toSignal(
-    this.route.params.pipe(map(({ id }: Params): MediaModel => getMockMediaById(id))),
+  private readonly allMedia: Signal<MediaModel[]> = toSignal(
+    this.mediaApiService.getAll().pipe(
+      catchError((err: unknown) => {
+        this.errorReporting.notify(err, 'player-load');
+        return of([]);
+      }),
+    ),
+    { initialValue: [] },
   );
+
+  protected readonly mediaId = toSignal(
+    this.route.params.pipe(map((p: Params) => p['id'] as string)),
+    { initialValue: '' },
+  );
+
+  protected readonly currentMedia = computed<MediaModel | undefined>(() =>
+    this.allMedia().find((m: MediaModel) => m.id === this.mediaId()),
+  );
+
   protected readonly upNext = computed<MediaModel[]>(() =>
-    MOCK_MEDIA.filter((m: MediaModel) => m.id !== this.currentMedia()?.id).slice(0, 6),
+    this.allMedia().filter((m: MediaModel) => m.id !== this.mediaId()).slice(0, 6),
   );
 
   protected goBack(): void {

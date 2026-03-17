@@ -6,6 +6,7 @@ import { ConfirmUserEvent, RoleChangeEvent, UserListComponent } from './user-lis
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthService, UserManagementService } from '@auth-lib/angular';
 import { UserListItem, UserResponse } from '@auth-lib/common';
+import { ErrorReportingService } from '../../../core/services/error-reporting.service';
 
 @Component({
   selector: 'app-user-management',
@@ -17,6 +18,7 @@ import { UserListItem, UserResponse } from '@auth-lib/common';
 export class UserManagementComponent implements OnInit {
   private readonly userManagementService = inject(UserManagementService);
   private readonly authService = inject(AuthService);
+  private readonly errorReporting = inject(ErrorReportingService);
 
   protected readonly users = signal<UserListItem[]>([]);
   protected readonly loading = signal<boolean>(true);
@@ -39,12 +41,13 @@ export class UserManagementComponent implements OnInit {
     this.error.set('');
 
     this.userManagementService.getUsers().subscribe({
-      next: (response) => {
-        this.users.set(response.users);
+      next: (users) => {
+        this.users.set(users);
         this.loading.set(false);
       },
-      error: (err) => {
-        this.error.set(err.error?.message || 'Failed to load users');
+      error: (err: unknown) => {
+        this.errorReporting.notify(err, 'load-users');
+        this.error.set((err as { error?: { message?: string } }).error?.message || 'Failed to load users');
         this.loading.set(false);
       },
     });
@@ -57,8 +60,9 @@ export class UserManagementComponent implements OnInit {
           users.map((u: UserListItem) => (u.id === updatedUser.id ? updatedUser : u)),
         );
       },
-      error: (err) => {
-        this.error.set(err.error?.message || 'Failed to update role');
+      error: (err: unknown) => {
+        this.errorReporting.notify(err, 'update-user-role');
+        this.error.set((err as { error?: { message?: string } }).error?.message || 'Failed to update role');
       },
     });
   }
@@ -70,8 +74,9 @@ export class UserManagementComponent implements OnInit {
           users.map((u: UserListItem) => (u.id === updatedUser.id ? updatedUser : u)),
         );
       },
-      error: (err) => {
-        this.error.set(err.error?.message || 'Failed to confirm user');
+      error: (err: unknown) => {
+        this.errorReporting.notify(err, 'confirm-user');
+        this.error.set((err as { error?: { message?: string } }).error?.message || 'Failed to confirm user');
       },
     });
   }
