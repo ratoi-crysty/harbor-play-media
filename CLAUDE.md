@@ -6,23 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Harbor Play Media is a self-hosted media streaming service. It allows users to browse, stream, upload, and download media files. It also supports automatic downloading (caching) of media by URL using [youtube-dl](https://github.com/ytdl-org/youtube-dl).
 
-### Core Features
-
-- **Media Streaming**: Stream audio and video files directly in the browser
-- **Upload**: Upload media files to the server
-- **Download**: Download media files from the server
-- **Auto-Download (Cache by URL)**: Automatically fetch and cache media from a URL using youtube-dl
-- **Media Library**: Browse and manage stored media
-
-## Tech Stack
-
-- **Frontend**: Angular (standalone components), TypeScript, RxJS, Angular Material
-- **Backend**: NestJS
-- **Monorepo**: Nx workspace
-- **Build**: Nx CLI, Yarn
-- **Styling**: SCSS with Angular Material theming
-- **Media Fetching**: youtube-dl (server-side)
-
 ## Project Structure
 
 ```
@@ -37,19 +20,6 @@ harbor-play-media/
 │   └── ui/               # Shared UI component library (reusable Angular components)
 ├── nx.json               # Nx configuration
 └── package.json
-```
-
-## Common Commands
-
-```bash
-yarn install              # Install dependencies
-nx serve web              # Dev server for Angular app
-nx build web              # Production build for Angular app
-nx serve api              # Dev server for NestJS API
-nx build api              # Production build for NestJS API
-nx lint web               # Lint the web app
-nx run-many -t build      # Build all projects
-nx run-many -t lint       # Lint all projects
 ```
 
 ## Architecture
