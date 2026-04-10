@@ -3,6 +3,7 @@ import { ShellComponent } from './shell/shell.component';
 import { DashboardPageComponent } from './features/dashboard/dashboard-page.component';
 import { PlayerPageComponent } from './features/player/player-page.component';
 import { UploadPageComponent } from './features/upload/upload-page.component';
+import { CollectionPageComponent } from './features/collections/collection-page.component';
 import { AuthShellComponent } from './features/auth/auth-shell/auth-shell.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
@@ -18,6 +19,8 @@ export const appRoutes: Route[] = [
       { path: '', component: DashboardPageComponent },
       { path: 'player/:id', component: PlayerPageComponent },
       { path: 'upload', component: UploadPageComponent },
+      { path: 'collections', component: CollectionPageComponent },
+      { path: 'collections/:id', component: CollectionPageComponent },
       { path: 'admin', children: adminRoutes, canActivate: [adminGuard] },
     ],
   },

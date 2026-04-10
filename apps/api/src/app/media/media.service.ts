@@ -14,6 +14,15 @@ export interface CreateMediaParams {
   description: string;
   mediaFile: Express.Multer.File;
   thumbnailFile?: Express.Multer.File;
+  uploadedByUserId?: number;
+  collectionId?: string;
+  tags?: string[];
+}
+
+export interface UpdateMediaParams {
+  title?: string;
+  description?: string;
+  tags?: string[];
 }
 
 @Injectable()
@@ -27,11 +36,22 @@ export class MediaService {
   ) {}
 
   async findAll(): Promise<MediaEntity[]> {
-    return this.repository.find({ order: { createdAt: 'DESC' } });
+    return this.repository.find({ order: { createdAt: 'DESC' }, relations: ['uploadedBy'] });
+  }
+
+  async findForUser(userId: number): Promise<MediaEntity[]> {
+    return this.repository.find({
+      where: [{ uploadedByUserId: userId }, { uploadedByUserId: undefined as unknown as number }],
+      order: { createdAt: 'DESC' },
+      relations: ['uploadedBy'],
+    });
   }
 
   async findById(id: string): Promise<MediaEntity | undefined> {
-    const entity: MediaEntity | null = await this.repository.findOne({ where: { id } });
+    const entity: MediaEntity | null = await this.repository.findOne({
+      where: { id },
+      relations: ['uploadedBy'],
+    });
 
     return entity ?? undefined;
   }
@@ -52,7 +72,7 @@ export class MediaService {
   async create(params: CreateMediaParams): Promise<MediaEntity> {
     await this.ensureUploadsDir();
 
-    const { title, description, mediaFile, thumbnailFile } = params;
+    const { title, description, mediaFile, thumbnailFile, uploadedByUserId, collectionId, tags } = params;
 
     // Rename uploaded file to uuid-based name
     const newFilePath: string = await this.renameFile(mediaFile.originalname, mediaFile.path);
@@ -89,9 +109,45 @@ export class MediaService {
       mimeType: metadata.mimeType,
       resolution: metadata.resolution,
       viewCount: 0,
+      uploadedByUserId,
+      collectionId,
+      tagsRaw: tags?.join(',') ?? '',
     });
 
-    return this.repository.save(entity);
+    const saved: MediaEntity = await this.repository.save(entity);
+    return this.findById(saved.id) as Promise<MediaEntity>;
+  }
+
+  async update(id: string, params: UpdateMediaParams): Promise<MediaEntity> {
+    const entity: MediaEntity = await this.getById(id);
+
+    if (params.title !== undefined) {
+      entity.title = params.title;
+    }
+    if (params.description !== undefined) {
+      entity.description = params.description;
+    }
+    if (params.tags !== undefined) {
+      entity.tagsRaw = params.tags.join(',');
+    }
+
+    await this.repository.save(entity);
+    return this.getById(id);
+  }
+
+  async incrementViewCountIfNew(id: string, viewedMediaIds: string[]): Promise<string[]> {
+    if (!viewedMediaIds.includes(id)) {
+      await this.repository.increment({ id }, 'viewCount', 1);
+      return [...viewedMediaIds, id];
+    }
+    return viewedMediaIds;
+  }
+
+  async moveToCollection(id: string, collectionId: string | undefined): Promise<MediaEntity> {
+    const entity: MediaEntity = await this.getById(id);
+    entity.collectionId = collectionId;
+    await this.repository.save(entity);
+    return this.getById(id);
   }
 
   async delete(id: string): Promise<void> {
@@ -110,6 +166,10 @@ export class MediaService {
 
   getThumbnailUrl(entity: MediaEntity): string {
     return entity.thumbnailPath ? `/api/media/${entity.id}/thumbnail` : '';
+  }
+
+  parseTags(entity: MediaEntity): string[] {
+    return entity.tagsRaw ? entity.tagsRaw.split(',').map((t: string) => t.trim()).filter(Boolean) : [];
   }
 
   private async renameFile(fileName: string, filePath: string): Promise<string> {

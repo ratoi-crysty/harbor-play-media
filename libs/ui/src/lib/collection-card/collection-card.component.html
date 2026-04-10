@@ -1,0 +1,16 @@
+<a class="collection-link" [routerLink]="['/collections', collection().id]">
+  <article class="collection-card" tabindex="0" role="button" [attr.aria-label]="collection().name">
+    <div class="thumbnail-wrap">
+      @if (hasThumbnail()) {
+        <img [src]="collection().thumbnailUrl" [alt]="collection().name" class="thumbnail" loading="lazy" />
+      }
+      <div class="folder-overlay">
+        <mat-icon class="folder-icon">folder</mat-icon>
+      </div>
+      <span class="item-badge">{{ itemLabel() }}</span>
+    </div>
+    <div class="card-body">
+      <p class="card-title">{{ collection().name }}</p>
+    </div>
+  </article>
+</a>

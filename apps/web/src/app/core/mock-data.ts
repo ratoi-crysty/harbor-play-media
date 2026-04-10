@@ -16,6 +16,7 @@ export const MOCK_MEDIA: MediaModel[] = [
     resolution: '1080p',
     createdAt: '2024-01-15T10:00:00Z',
     viewCount: 15230,
+    tags: [],
   },
   {
     id: '2',
@@ -30,6 +31,7 @@ export const MOCK_MEDIA: MediaModel[] = [
     resolution: '4K',
     createdAt: '2024-01-20T14:30:00Z',
     viewCount: 42100,
+    tags: [],
   },
   {
     id: '3',
@@ -44,6 +46,7 @@ export const MOCK_MEDIA: MediaModel[] = [
     resolution: '1080p',
     createdAt: '2024-02-01T08:00:00Z',
     viewCount: 8890,
+    tags: [],
   },
   {
     id: '4',
@@ -58,6 +61,7 @@ export const MOCK_MEDIA: MediaModel[] = [
     resolution: '4K',
     createdAt: '2024-02-05T16:00:00Z',
     viewCount: 33400,
+    tags: [],
   },
   {
     id: '5',
@@ -72,6 +76,7 @@ export const MOCK_MEDIA: MediaModel[] = [
     resolution: '1080p',
     createdAt: '2024-02-10T12:00:00Z',
     viewCount: 19750,
+    tags: [],
   },
   {
     id: '6',
@@ -85,6 +90,7 @@ export const MOCK_MEDIA: MediaModel[] = [
     mimeType: 'video/mp4',
     createdAt: '2024-02-14T09:00:00Z',
     viewCount: 6230,
+    tags: [],
   },
   {
     id: '7',
@@ -99,6 +105,7 @@ export const MOCK_MEDIA: MediaModel[] = [
     resolution: '4K',
     createdAt: '2024-02-18T20:00:00Z',
     viewCount: 27800,
+    tags: [],
   },
   {
     id: '8',
@@ -113,6 +120,7 @@ export const MOCK_MEDIA: MediaModel[] = [
     resolution: '4K',
     createdAt: '2024-02-22T07:00:00Z',
     viewCount: 51200,
+    tags: [],
   },
   {
     id: '9',
@@ -127,6 +135,7 @@ export const MOCK_MEDIA: MediaModel[] = [
     resolution: '1080p',
     createdAt: '2024-03-01T11:00:00Z',
     viewCount: 11400,
+    tags: [],
   },
   {
     id: '10',
@@ -141,6 +150,7 @@ export const MOCK_MEDIA: MediaModel[] = [
     resolution: '1080p',
     createdAt: '2024-03-05T15:00:00Z',
     viewCount: 38600,
+    tags: [],
   },
   {
     id: '11',
@@ -155,6 +165,7 @@ export const MOCK_MEDIA: MediaModel[] = [
     resolution: '720p',
     createdAt: '2024-03-10T13:00:00Z',
     viewCount: 9800,
+    tags: [],
   },
   {
     id: '12',
@@ -169,6 +180,7 @@ export const MOCK_MEDIA: MediaModel[] = [
     resolution: '720p',
     createdAt: '2024-03-15T18:00:00Z',
     viewCount: 22300,
+    tags: [],
   },
 ];
 

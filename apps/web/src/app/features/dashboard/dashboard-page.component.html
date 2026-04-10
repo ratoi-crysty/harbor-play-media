@@ -30,24 +30,48 @@
   </section>
 }
 
-<!-- Recently Added -->
-@if (recentlyAdded().length > 0) {
-  <section class="media-section">
-    <h2 class="section-title">Recently Added</h2>
+<!-- My Uploads -->
+<section class="media-section">
+  <div class="section-header">
+    <h2 class="section-title">My Uploads</h2>
+    <a class="view-all-link" routerLink="/collections">
+      View All
+      <mat-icon class="view-all-icon">arrow_forward</mat-icon>
+    </a>
+  </div>
+  @if (myUploads().length > 0) {
     <div class="media-grid">
-      @for (item of recentlyAdded(); track item.id) {
+      @for (item of myUploads(); track item.id) {
         <lib-media-card [media]="item" />
       }
     </div>
-  </section>
-}
+  } @else {
+    <div class="section-empty">
+      <mat-icon>cloud_upload</mat-icon>
+      <span>No uploads yet. Start by uploading media.</span>
+    </div>
+  }
+</section>
 
-<!-- Most Popular -->
-@if (mostPopular().length > 0) {
+<!-- Shared With Me -->
+<section class="media-section">
+  <div class="section-header">
+    <h2 class="section-title">Shared With Me</h2>
+  </div>
+  <div class="section-empty">
+    <mat-icon>people</mat-icon>
+    <span>Shared media will appear here when others share content with you.</span>
+  </div>
+</section>
+
+<!-- Recent -->
+@if (recent().length > 0) {
   <section class="media-section">
-    <h2 class="section-title">Most Popular</h2>
+    <div class="section-header">
+      <h2 class="section-title">Recent</h2>
+    </div>
     <div class="media-grid">
-      @for (item of mostPopular(); track item.id) {
+      @for (item of recent(); track item.id) {
         <lib-media-card [media]="item" />
       }
     </div>

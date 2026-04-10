@@ -1,0 +1,152 @@
+.dialog-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.title-icon {
+  font-size: 1.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-primary);
+}
+
+.dialog-content {
+  min-width: 360px;
+}
+
+.share-input-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.email-field {
+  flex: 1;
+}
+
+.share-btn {
+  margin-top: 4px;
+  min-width: 48px;
+  height: 48px;
+}
+
+.error-msg {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8rem;
+  color: #f44336;
+  margin-bottom: 0.75rem;
+
+  mat-icon {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+  }
+}
+
+.shares-section {
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.loading-row {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.empty-msg {
+  margin: 0;
+  padding: 0.75rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.share-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.share-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.03);
+
+    .revoke-btn {
+      opacity: 1;
+    }
+  }
+}
+
+.share-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(56, 139, 253, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-accent);
+  }
+}
+
+.share-details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.share-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.share-email {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.revoke-btn {
+  flex-shrink: 0;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+  color: var(--color-text-secondary);
+
+  &:hover {
+    color: #f44336;
+    opacity: 1;
+  }
+}

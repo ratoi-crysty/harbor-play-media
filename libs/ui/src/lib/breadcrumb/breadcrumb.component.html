@@ -1,0 +1,13 @@
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a class="crumb" routerLink="/collections">
+    <mat-icon class="home-icon">folder</mat-icon>
+    Collections
+  </a>
+
+  @for (segment of segments(); track segment.id) {
+    <mat-icon class="separator">chevron_right</mat-icon>
+    <a class="crumb" [routerLink]="['/collections', segment.id]">
+      {{ segment.name }}
+    </a>
+  }
+</nav>

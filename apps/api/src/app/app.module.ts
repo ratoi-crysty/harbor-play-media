@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RegistrationMode } from '@auth-lib/common';
 import { AuthModule, UserManagementModule } from '@auth-lib/nest';
 import { MediaModule } from './media/media.module';
+import { CollectionModule } from './collection/collection.module';
+import { ShareModule } from './share/share.module';
 
 function getRegistrationMode(): RegistrationMode {
   const mode: string | undefined = process.env['REGISTRATION_MODE'];
@@ -27,6 +29,8 @@ function getRegistrationMode(): RegistrationMode {
       inviteTokenExpiryDays: Number(process.env['INVITE_TOKEN_EXPIRY_DAYS'] ?? '7'),
     }),
     MediaModule,
+    CollectionModule,
+    ShareModule,
   ],
 })
 export class AppModule {}

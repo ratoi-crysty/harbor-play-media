@@ -1,11 +1,27 @@
-<a class="media-link" [routerLink]="['/player', media().id]">
-  <article class="media-card" tabindex="0" role="button" [attr.aria-label]="media().title">
+<a class="media-link" [routerLink]="selectable() ? null : ['/player', media().id]">
+  <article
+    class="media-card"
+    [class.selectable]="selectable()"
+    [class.selected]="selected()"
+    tabindex="0"
+    role="button"
+    [attr.aria-label]="media().title"
+  >
     <div class="thumbnail-wrap">
       <img [src]="media().thumbnailUrl" [alt]="media().title" class="thumbnail" loading="lazy" />
       <span class="duration-badge">{{ duration() }}</span>
-      <div class="play-overlay">
-        <mat-icon>play_circle_outline</mat-icon>
-      </div>
+      @if (selectable()) {
+        <div class="select-overlay" (click)="onCheckboxClick($event)">
+          <mat-checkbox
+            [checked]="selected()"
+            color="primary"
+          />
+        </div>
+      } @else {
+        <div class="play-overlay">
+          <mat-icon>play_circle_outline</mat-icon>
+        </div>
+      }
     </div>
     <div class="card-body">
       <p class="card-title">{{ media().title }}</p>
@@ -14,5 +30,4 @@
       }
     </div>
   </article>
-
 </a>

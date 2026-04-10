@@ -1,0 +1,77 @@
+<h2 mat-dialog-title class="dialog-title">
+  <mat-icon class="title-icon">share</mat-icon>
+  Share
+</h2>
+
+<mat-dialog-content class="dialog-content">
+  <div class="share-input-row">
+    <mat-form-field appearance="outline" class="email-field">
+      <mat-label>Email address</mat-label>
+      <input
+        matInput
+        type="email"
+        placeholder="user&#64;example.com"
+        [value]="email()"
+        (input)="onEmailInput($event)"
+        (keydown)="onKeydown($event)"
+      />
+      <mat-icon matPrefix>mail</mat-icon>
+    </mat-form-field>
+    <button
+      mat-flat-button
+      color="primary"
+      class="share-btn"
+      [disabled]="!email().trim() || sharing()"
+      (click)="onShare()"
+    >
+      @if (sharing()) {
+        <mat-spinner diameter="18" />
+      } @else {
+        <mat-icon>person_add</mat-icon>
+      }
+    </button>
+  </div>
+
+  @if (error()) {
+    <div class="error-msg" role="alert">
+      <mat-icon>error_outline</mat-icon>
+      {{ error() }}
+    </div>
+  }
+
+  <div class="shares-section">
+    @if (loading()) {
+      <div class="loading-row">
+        <mat-spinner diameter="20" />
+      </div>
+    } @else if (shares().length === 0) {
+      <p class="empty-msg">Not shared with anyone yet.</p>
+    } @else {
+      <ul class="share-list">
+        @for (share of shares(); track share.id) {
+          <li class="share-item">
+            <div class="share-avatar">
+              <mat-icon>person</mat-icon>
+            </div>
+            <div class="share-details">
+              <span class="share-name">{{ share.sharedWithUserName }}</span>
+              <span class="share-email">{{ share.sharedWithUserEmail }}</span>
+            </div>
+            <button
+              mat-icon-button
+              class="revoke-btn"
+              matTooltip="Revoke access"
+              (click)="onRevoke(share.id)"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Done</button>
+</mat-dialog-actions>

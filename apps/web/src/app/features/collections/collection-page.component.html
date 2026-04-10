@@ -1,0 +1,97 @@
+<div class="collection-page">
+  <lib-breadcrumb [segments]="state().breadcrumbs" />
+
+  <div class="toolbar">
+    <h1 class="page-title">
+      {{ state().currentCollection?.name ?? 'My Collections' }}
+    </h1>
+    <div class="toolbar-actions">
+      <button
+        mat-stroked-button
+        [class.active]="selectMode()"
+        (click)="toggleSelectMode()"
+      >
+        <mat-icon>{{ selectMode() ? 'close' : 'checklist' }}</mat-icon>
+        {{ selectMode() ? 'Cancel' : 'Select' }}
+      </button>
+      @if (!selectMode()) {
+        <button mat-stroked-button (click)="onNewCollection()">
+          <mat-icon>create_new_folder</mat-icon>
+          New Collection
+        </button>
+        <button mat-flat-button color="primary" (click)="onUploadHere()">
+          <mat-icon>upload</mat-icon>
+          Upload Here
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Batch Action Bar -->
+  @if (selectMode() && selectedCount() > 0) {
+    <div class="batch-bar">
+      <span class="batch-count">{{ selectedCount() }} selected</span>
+      <div class="batch-actions">
+        <button
+          mat-stroked-button
+          matTooltip="Move selected to another collection"
+          disabled
+          (click)="onMoveSelected()"
+        >
+          <mat-icon>drive_file_move</mat-icon>
+          Move
+        </button>
+        <button
+          mat-stroked-button
+          class="delete-btn"
+          [disabled]="batchLoading()"
+          (click)="onDeleteSelected()"
+        >
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+      </div>
+    </div>
+  }
+
+  @if (state().loading) {
+    <div class="loading">
+      <mat-spinner diameter="32" />
+    </div>
+  } @else {
+    @if (state().collections.length > 0) {
+      <section class="section">
+        <h3 class="section-label">Collections</h3>
+        <div class="grid">
+          @for (collection of state().collections; track collection.id) {
+            <lib-collection-card [collection]="collection" />
+          }
+        </div>
+      </section>
+    }
+
+    @if (state().media.length > 0) {
+      <section class="section">
+        <h3 class="section-label">Media</h3>
+        <div class="grid">
+          @for (item of state().media; track item.id) {
+            <lib-media-card
+              [media]="item"
+              [selectable]="selectMode()"
+              [selected]="isSelected(item.id)"
+              (selectionChanged)="onSelectionChanged(item.id, $event)"
+            />
+          }
+        </div>
+      </section>
+    }
+
+    @if (state().collections.length === 0 && state().media.length === 0) {
+      <div class="empty-state">
+        <mat-icon class="empty-icon">folder_open</mat-icon>
+        <p class="empty-text">This collection is empty</p>
+        <p class="empty-hint">Upload media or create a sub-collection to get started.</p>
+      </div>
+    }
+  }
+</div>

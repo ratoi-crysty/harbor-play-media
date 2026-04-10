@@ -29,6 +29,7 @@ export class ShellComponent implements OnInit {
 
   protected readonly navItems: NavItem[] = [
     { label: 'Library', icon: 'video_library', route: '/' },
+    { label: 'Collections', icon: 'folder', route: '/collections' },
     { label: 'Browse', icon: 'explore', route: '/browse' },
     { label: 'Upload', icon: 'upload', route: '/upload' },
     { label: 'Settings', icon: 'settings', route: '/settings' },

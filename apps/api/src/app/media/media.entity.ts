@@ -1,9 +1,13 @@
 import { MediaModel } from '@harbor-play-media/shared-api';
+import { UserEntity } from '@auth-lib/nest';
 import { Exclude } from 'class-transformer';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('media')
-export class MediaEntity implements Omit<MediaModel, 'url' | 'thumbnailUrl' | 'createdAt'> {
+export class MediaEntity
+  implements
+    Omit<MediaModel, 'url' | 'thumbnailUrl' | 'createdAt' | 'uploadedByUserId' | 'uploadedByUserName' | 'collectionId' | 'tags'>
+{
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -38,4 +42,19 @@ export class MediaEntity implements Omit<MediaModel, 'url' | 'thumbnailUrl' | 'c
 
   @Column({ default: 0 })
   viewCount!: number;
+
+  @Column({ nullable: true, type: 'int' })
+  uploadedByUserId!: number | undefined;
+
+  @ManyToOne(() => UserEntity, { nullable: true, onDelete: 'SET NULL' })
+  uploadedBy!: UserEntity | undefined;
+
+  @Column({ nullable: true, type: 'varchar' })
+  collectionId!: string | undefined;
+
+  @ManyToOne('CollectionEntity', 'media', { nullable: true, onDelete: 'SET NULL' })
+  collection!: unknown;
+
+  @Column({ default: '' })
+  tagsRaw!: string;
 }

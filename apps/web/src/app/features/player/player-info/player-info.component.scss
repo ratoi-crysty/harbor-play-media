@@ -52,6 +52,12 @@
   gap: 8px;
 }
 
+.tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 .media-description {
   margin: 0;
   font-size: 14px;

@@ -5,113 +5,168 @@
       <h1 class="page-title">Upload Media</h1>
     </div>
 
-    @if (state().success) {
+    @if (allDone()) {
       <div class="success-card">
         <mat-icon class="success-icon">check_circle</mat-icon>
-        <h2>Upload successful!</h2>
-        <p>Your media has been uploaded and is ready to stream.</p>
+        <h2>All uploads complete!</h2>
+        <p>{{ files().length }} file(s) uploaded successfully.</p>
         <button mat-flat-button color="primary" (click)="goToLibrary()">
           <mat-icon>video_library</mat-icon>
           Go to Library
         </button>
       </div>
     } @else {
-      @if (state().error) {
-        <div class="error-banner" role="alert">
-          <mat-icon>error_outline</mat-icon>
-          <span>{{ state().error }}</span>
+      <!-- Drop Zone -->
+      <div
+        class="drop-zone"
+        [class.drag-over]="dragOver()"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+        (click)="triggerFileInput('batchFileInput')"
+      >
+        <input
+          id="batchFileInput"
+          type="file"
+          accept="video/*,audio/*"
+          multiple
+          class="hidden-input"
+          (change)="onFileInputChange($event)"
+        />
+        <div class="drop-zone-content">
+          <mat-icon class="drop-icon">{{ dragOver() ? 'downloading' : 'backup' }}</mat-icon>
+          <span class="drop-label">
+            @if (dragOver()) {
+              Drop files here
+            } @else {
+              Drag & drop media files or click to browse
+            }
+          </span>
+          <span class="drop-hint">Accepts video and audio files</span>
         </div>
+      </div>
+
+      <!-- Collection & Tags -->
+      @if (files().length > 0) {
+        <mat-card class="options-card">
+          <mat-card-content>
+            <div class="options-row">
+              <div class="option-group">
+                <label class="option-label">
+                  <mat-icon>folder</mat-icon>
+                  Collection
+                </label>
+                <button
+                  mat-stroked-button
+                  class="collection-btn"
+                  matTooltip="Collection picker coming soon"
+                  disabled
+                >
+                  {{ collectionName() }}
+                </button>
+              </div>
+
+              <div class="option-group tags-group">
+                <label class="option-label">
+                  <mat-icon>label</mat-icon>
+                  Tags
+                </label>
+                <mat-form-field appearance="outline" class="tags-field">
+                  <mat-chip-grid #chipGrid>
+                    @for (tag of tags(); track tag; let i = $index) {
+                      <mat-chip-row (removed)="removeTag(i)">
+                        {{ tag }}
+                        <button matChipRemove>
+                          <mat-icon>cancel</mat-icon>
+                        </button>
+                      </mat-chip-row>
+                    }
+                    <input
+                      placeholder="Add tag..."
+                      [matChipInputFor]="chipGrid"
+                      [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+                      [matChipInputAddOnBlur]="true"
+                      (matChipInputTokenEnd)="addTag($event)"
+                    />
+                  </mat-chip-grid>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
       }
 
-      <mat-card class="upload-card">
-        <mat-card-content>
-          <div class="fields">
-            <mat-form-field appearance="outline" class="field">
-              <mat-label>Title</mat-label>
-              <input
-                matInput
-                type="text"
-                placeholder="Enter media title"
-                [value]="state().title"
-                (input)="updateField('title', $event)"
-              />
-              <mat-icon matPrefix>title</mat-icon>
-            </mat-form-field>
+      <!-- File Queue -->
+      @if (files().length > 0) {
+        <div class="file-queue">
+          @for (entry of files(); track entry.id) {
+            <mat-card class="file-card" [class.file-complete]="entry.status === 'complete'" [class.file-error]="entry.status === 'error'">
+              <mat-card-content class="file-card-content">
+                <div class="file-row">
+                  <mat-icon class="status-icon" [class]="'status-' + entry.status">
+                    {{ getStatusIcon(entry.status) }}
+                  </mat-icon>
 
-            <mat-form-field appearance="outline" class="field">
-              <mat-label>Description</mat-label>
-              <textarea
-                matInput
-                rows="3"
-                placeholder="Optional description"
-                [value]="state().description"
-                (input)="updateField('description', $event)"
-              ></textarea>
-              <mat-icon matPrefix>description</mat-icon>
-            </mat-form-field>
+                  <div class="file-info">
+                    <mat-form-field appearance="outline" class="title-field">
+                      <input
+                        matInput
+                        placeholder="Title"
+                        [value]="entry.title"
+                        [disabled]="entry.status !== 'pending'"
+                        (input)="updateFileTitle(entry.id, $event)"
+                      />
+                    </mat-form-field>
+                    <span class="file-meta">
+                      {{ entry.file.name }} · {{ formatFileSize(entry.file.size) }}
+                    </span>
+                  </div>
 
-            <!-- Media File -->
-            <div class="file-field">
-              <label class="file-label" for="mediaFileInput">Media File <span class="required">*</span></label>
-              <input
-                id="mediaFileInput"
-                type="file"
-                accept="video/*,audio/*"
-                class="hidden-input"
-                (change)="onMediaFileChange($event)"
-              />
-              <button
-                mat-stroked-button
-                type="button"
-                class="file-btn"
-                (click)="triggerFileInput('mediaFileInput')"
-              >
-                <mat-icon>attach_file</mat-icon>
-                {{ state().mediaFile ? state().mediaFile!.name : 'Choose video or audio file' }}
-              </button>
-            </div>
+                  @if (entry.status === 'pending') {
+                    <button
+                      mat-icon-button
+                      class="remove-btn"
+                      matTooltip="Remove"
+                      (click)="removeFile(entry.id)"
+                    >
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  }
+                </div>
 
-            <!-- Thumbnail File -->
-            <div class="file-field">
-              <label class="file-label" for="thumbnailFileInput">Thumbnail <span
-                class="optional">(optional)</span></label>
-              <input
-                id="thumbnailFileInput"
-                type="file"
-                accept="image/*"
-                class="hidden-input"
-                (change)="onThumbnailFileChange($event)"
-              />
-              <button
-                mat-stroked-button
-                type="button"
-                class="file-btn"
-                (click)="triggerFileInput('thumbnailFileInput')"
-              >
-                <mat-icon>image</mat-icon>
-                {{ state().thumbnailFile ? state().thumbnailFile!.name : 'Choose thumbnail image' }}
-              </button>
-              <p class="file-hint">If not provided, a thumbnail will be auto-generated from the video.</p>
-            </div>
-          </div>
+                @if (entry.status === 'uploading') {
+                  <mat-progress-bar
+                    mode="determinate"
+                    [value]="entry.progress"
+                    class="upload-progress"
+                  />
+                }
 
-          <button
-            mat-flat-button
-            color="primary"
-            class="submit-btn"
-            [disabled]="state().loading || !state().title.trim() || !state().mediaFile"
-            (click)="submit()"
-          >
-            @if (state().loading) {
-              <mat-spinner diameter="18" />
-            }
-            <span>{{ state().loading ? 'Uploading…' : 'Upload' }}</span>
-            @if (!state().loading) {
+                @if (entry.status === 'error') {
+                  <span class="error-text">{{ entry.error }}</span>
+                }
+              </mat-card-content>
+            </mat-card>
+          }
+        </div>
+
+        <button
+          mat-flat-button
+          color="primary"
+          class="submit-btn"
+          [disabled]="uploading() || files().length === 0"
+          (click)="startUpload()"
+        >
+          @if (uploading()) {
+            <span>Uploading…</span>
+          } @else {
+            <ng-container>
               <mat-icon>upload</mat-icon>
-            }
-          </button>
-        </mat-card-content>
-      </mat-card>
+              <span>Upload {{ files().length }} file(s)</span>
+            </ng-container>
+          }
+        </button>
+      }
     }
   </div>
 </div>

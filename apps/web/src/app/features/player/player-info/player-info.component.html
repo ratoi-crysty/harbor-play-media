@@ -2,11 +2,11 @@
   <div class="info-header">
     <h2 class="media-title">{{ media().title }}</h2>
     <div class="action-buttons">
-      <button mat-stroked-button class="action-btn">
+      <button mat-stroked-button class="action-btn" (click)="onDownload()">
         <mat-icon>download</mat-icon>
         Download
       </button>
-      <button mat-stroked-button class="action-btn">
+      <button mat-stroked-button class="action-btn" (click)="onShare()">
         <mat-icon>share</mat-icon>
         Share
       </button>
@@ -20,7 +20,24 @@
     }
     <mat-chip>{{ formatFileSize(media().fileSize) }}</mat-chip>
     <mat-chip>{{ media().viewCount.toLocaleString() }} views</mat-chip>
+    @if (uploaderName()) {
+      <mat-chip>
+        <mat-icon matChipAvatar>person</mat-icon>
+        Uploaded by {{ uploaderName() }}
+      </mat-chip>
+    }
   </mat-chip-set>
+
+  @if (tags().length > 0) {
+    <mat-chip-set class="tag-chips" aria-label="Tags">
+      @for (tag of tags(); track tag) {
+        <mat-chip class="tag-chip">
+          <mat-icon matChipAvatar>label</mat-icon>
+          {{ tag }}
+        </mat-chip>
+      }
+    </mat-chip-set>
+  }
 
   <p class="media-description">{{ media().description }}</p>
 </div>
