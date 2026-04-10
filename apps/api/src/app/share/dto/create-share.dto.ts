@@ -1,7 +1,7 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { ShareResourceType } from '@harbor-play-media/shared-api';
+import { CreateShareRequest, ShareResourceType } from '@harbor-play-media/shared-api';
 
-export class CreateShareDto {
+export class CreateShareDto implements CreateShareRequest {
   @IsEnum(ShareResourceType)
   resourceType!: ShareResourceType;
 

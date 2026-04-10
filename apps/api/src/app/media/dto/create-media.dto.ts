@@ -1,7 +1,8 @@
 import { IsArray, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { CreateMediaRequest } from '@harbor-play-media/shared-api';
 
-export class CreateMediaDto {
+export class CreateMediaDto implements CreateMediaRequest {
   @IsString()
   @IsNotEmpty()
   title!: string;

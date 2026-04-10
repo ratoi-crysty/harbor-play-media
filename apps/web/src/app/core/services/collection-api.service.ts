@@ -1,18 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CollectionModel } from '@harbor-play-media/shared-api';
-
-export interface CreateCollectionRequest {
-  name: string;
-  description?: string;
-  parentId?: string;
-}
-
-export interface UpdateCollectionRequest {
-  name?: string;
-  description?: string;
-}
+import { CollectionModel, CreateCollectionRequest, MoveCollectionRequest, UpdateCollectionRequest } from '@harbor-play-media/shared-api';
 
 @Injectable({ providedIn: 'root' })
 export class CollectionApiService {
@@ -41,6 +30,7 @@ export class CollectionApiService {
   }
 
   moveCollection(id: string, newParentId: string | undefined): Observable<CollectionModel> {
-    return this.http.post<CollectionModel>(`${this.apiUrl}/${id}/move`, { parentId: newParentId });
+    const body: MoveCollectionRequest = { parentId: newParentId };
+    return this.http.post<CollectionModel>(`${this.apiUrl}/${id}/move`, body);
   }
 }

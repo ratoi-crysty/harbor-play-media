@@ -1,6 +1,7 @@
 import { IsArray, IsOptional, IsString } from 'class-validator';
+import { UpdateMediaRequest } from '@harbor-play-media/shared-api';
 
-export class UpdateMediaDto {
+export class UpdateMediaDto implements UpdateMediaRequest {
   @IsString()
   @IsOptional()
   title?: string;

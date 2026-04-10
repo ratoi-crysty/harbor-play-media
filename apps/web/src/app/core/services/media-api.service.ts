@@ -2,13 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MediaModel } from '@harbor-play-media/shared-api';
-
-export interface UpdateMediaRequest {
-  title?: string;
-  description?: string;
-  tags?: string[];
-}
+import { MediaModel, UpdateMediaRequest } from '@harbor-play-media/shared-api';
 
 export interface UploadParams {
   title: string;
