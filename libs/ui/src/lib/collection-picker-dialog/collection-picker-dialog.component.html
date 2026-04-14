@@ -1,0 +1,67 @@
+<h2 mat-dialog-title class="dialog-title">
+  <mat-icon class="title-icon">folder_open</mat-icon>
+  {{ data.title }}
+</h2>
+
+<mat-dialog-content class="dialog-content">
+  @if (loading()) {
+    <div class="loading-row">
+      <mat-spinner diameter="24" />
+    </div>
+  } @else {
+    <ul class="collection-list">
+      @if (showRoot) {
+        <li
+          class="collection-item"
+          [class.selected]="isSelected(undefined)"
+          tabindex="0"
+          role="option"
+          [attr.aria-selected]="isSelected(undefined)"
+          (click)="onSelect(undefined)"
+          (keydown.enter)="onSelect(undefined)"
+          (keydown.space)="onSelect(undefined)"
+        >
+          <mat-icon class="item-icon root-icon">home</mat-icon>
+          <span class="item-name">Root (no collection)</span>
+          @if (isSelected(undefined)) {
+            <mat-icon class="check-icon">check</mat-icon>
+          }
+        </li>
+      }
+      @for (collection of collections(); track collection.id) {
+        <li
+          class="collection-item"
+          [class.selected]="isSelected(collection.id)"
+          tabindex="0"
+          role="option"
+          [attr.aria-selected]="isSelected(collection.id)"
+          (click)="onSelect(collection.id)"
+          (keydown.enter)="onSelect(collection.id)"
+          (keydown.space)="onSelect(collection.id)"
+        >
+          <mat-icon class="item-icon">folder</mat-icon>
+          <span class="item-name">{{ collection.name }}</span>
+          @if (isSelected(collection.id)) {
+            <mat-icon class="check-icon">check</mat-icon>
+          }
+        </li>
+      }
+    </ul>
+
+    @if (collections().length === 0 && !showRoot) {
+      <p class="empty-msg">No collections available.</p>
+    }
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="!canConfirm"
+    (click)="onConfirm()"
+  >
+    Move Here
+  </button>
+</mat-dialog-actions>

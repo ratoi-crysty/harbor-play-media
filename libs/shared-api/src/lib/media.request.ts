@@ -10,3 +10,7 @@ export interface UpdateMediaRequest {
   description?: string;
   tags?: string[];
 }
+
+export interface MoveMediaRequest {
+  collectionId: string | undefined;
+}

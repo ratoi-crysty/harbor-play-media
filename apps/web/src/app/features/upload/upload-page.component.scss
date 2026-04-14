@@ -137,6 +137,14 @@
 .collection-btn {
   color: var(--color-text-secondary) !important;
   border-color: var(--color-border) !important;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+
+  &.has-collection {
+    color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+  }
 }
 
 .tags-field {

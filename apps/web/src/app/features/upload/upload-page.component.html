@@ -20,10 +20,15 @@
       <div
         class="drop-zone"
         [class.drag-over]="dragOver()"
+        tabindex="0"
+        role="button"
+        aria-label="Drop media files or click to browse"
         (dragover)="onDragOver($event)"
         (dragleave)="onDragLeave($event)"
         (drop)="onDrop($event)"
         (click)="triggerFileInput('batchFileInput')"
+        (keydown.enter)="triggerFileInput('batchFileInput')"
+        (keydown.space)="triggerFileInput('batchFileInput')"
       >
         <input
           id="batchFileInput"
@@ -52,25 +57,26 @@
           <mat-card-content>
             <div class="options-row">
               <div class="option-group">
-                <label class="option-label">
+                <span class="option-label">
                   <mat-icon>folder</mat-icon>
                   Collection
-                </label>
+                </span>
                 <button
                   mat-stroked-button
                   class="collection-btn"
-                  matTooltip="Collection picker coming soon"
-                  disabled
+                  [class.has-collection]="collectionId()"
+                  (click)="onPickCollection()"
                 >
+                  <mat-icon>{{ collectionId() ? 'folder' : 'folder_open' }}</mat-icon>
                   {{ collectionName() }}
                 </button>
               </div>
 
               <div class="option-group tags-group">
-                <label class="option-label">
+                <span class="option-label">
                   <mat-icon>label</mat-icon>
                   Tags
-                </label>
+                </span>
                 <mat-form-field appearance="outline" class="tags-field">
                   <mat-chip-grid #chipGrid>
                     @for (tag of tags(); track tag; let i = $index) {

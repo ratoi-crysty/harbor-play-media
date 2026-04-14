@@ -11,7 +11,7 @@
       <img [src]="media().thumbnailUrl" [alt]="media().title" class="thumbnail" loading="lazy" />
       <span class="duration-badge">{{ duration() }}</span>
       @if (selectable()) {
-        <div class="select-overlay" (click)="onCheckboxClick($event)">
+        <div class="select-overlay" tabindex="0" role="checkbox" [attr.aria-checked]="selected()" (click)="onCheckboxClick($event)" (keydown.enter)="onCheckboxClick($event)" (keydown.space)="onCheckboxClick($event)">
           <mat-checkbox
             [checked]="selected()"
             color="primary"

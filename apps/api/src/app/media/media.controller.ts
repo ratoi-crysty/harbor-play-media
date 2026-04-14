@@ -19,7 +19,7 @@ import {
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { MediaModel } from '@harbor-play-media/shared-api';
-import { CurrentUser, Roles } from '@auth-lib/nest';
+import { CurrentUser } from '@auth-lib/nest';
 import { UserEntity } from '@auth-lib/nest';
 import { UserRole } from '@auth-lib/common';
 import { ShareResourceType } from '@harbor-play-media/shared-api';
@@ -149,7 +149,7 @@ export class MediaController {
     const entity: MediaEntity = await this.mediaService.getById(id);
     const filePath: string = entity.filePath;
     const ext: string = path.extname(filePath);
-    const fileName: string = `${entity.title}${ext}`;
+    const fileName = `${entity.title}${ext}`;
 
     res.set({
       'Content-Disposition': `attachment; filename="${fileName}"`,

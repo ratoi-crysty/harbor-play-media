@@ -1,0 +1,21 @@
+<h2 mat-dialog-title class="dialog-title">
+  <mat-icon class="title-icon" [class.warn-icon]="isWarn">{{ icon }}</mat-icon>
+  {{ data.title }}
+</h2>
+
+<mat-dialog-content class="dialog-content">
+  <p class="dialog-message">{{ data.message }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button
+    mat-flat-button
+    [color]="isWarn ? 'warn' : 'primary'"
+    class="confirm-btn"
+    [class.warn-btn]="isWarn"
+    (click)="onConfirm()"
+  >
+    {{ confirmLabel }}
+  </button>
+</mat-dialog-actions>

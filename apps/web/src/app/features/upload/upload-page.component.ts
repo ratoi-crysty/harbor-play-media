@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpEventType, HttpResponse, HttpUploadProgressEvent } from '@angular/common/http';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,7 +10,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MediaModel } from '@harbor-play-media/shared-api';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { CollectionModel, MediaModel } from '@harbor-play-media/shared-api';
+import {
+  CollectionPickerDialogComponent,
+  CollectionPickerDialogData,
+  CollectionPickerResult,
+} from '@harbor-play-media/ui';
+import { CollectionApiService } from '../../core/services/collection-api.service';
 import { MediaApiService } from '../../core/services/media-api.service';
 import { ErrorReportingService } from '../../core/services/error-reporting.service';
 
@@ -37,26 +44,43 @@ interface FileEntry {
     MatCardModule,
     MatChipsModule,
     MatTooltipModule,
+    MatDialogModule,
   ],
   templateUrl: './upload-page.component.html',
   styleUrl: './upload-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UploadPageComponent {
-  private readonly mediaApiService: MediaApiService = inject(MediaApiService);
+export class UploadPageComponent implements OnInit {
+  private readonly route: ActivatedRoute = inject(ActivatedRoute);
   private readonly router: Router = inject(Router);
+  private readonly dialog: MatDialog = inject(MatDialog);
+  private readonly mediaApiService: MediaApiService = inject(MediaApiService);
+  private readonly collectionApi: CollectionApiService = inject(CollectionApiService);
   private readonly errorReporting: ErrorReportingService = inject(ErrorReportingService);
 
   private nextId = 0;
 
   readonly files = signal<FileEntry[]>([]);
   readonly tags = signal<string[]>([]);
-  readonly collectionName = signal<string>('My Media');
+  readonly collectionId = signal<string | undefined>(undefined);
+  readonly collectionName = signal<string>('No collection');
   readonly dragOver = signal<boolean>(false);
   readonly uploading = signal<boolean>(false);
   readonly allDone = signal<boolean>(false);
 
   readonly separatorKeyCodes: number[] = [ENTER, COMMA];
+
+  ngOnInit(): void {
+    const id: string | undefined = this.route.snapshot.queryParamMap.get('collectionId') ?? undefined;
+    if (id) {
+      this.collectionId.set(id);
+      this.collectionApi.getCollection(id).subscribe({
+        next: (collection: CollectionModel): void => {
+          this.collectionName.set(collection.name);
+        },
+      });
+    }
+  }
 
   onDragOver(event: DragEvent): void {
     event.preventDefault();
@@ -111,6 +135,33 @@ export class UploadPageComponent {
       this.tags.update((t: string[]) => [...t, value]);
     }
     event.chipInput.clear();
+  }
+
+  onPickCollection(): void {
+    const data: CollectionPickerDialogData = {
+      title: 'Choose Collection',
+      loadCollections: () => this.collectionApi.getAllCollections(),
+      allowRoot: true,
+      currentCollectionId: this.collectionId(),
+    };
+    const ref = this.dialog.open<CollectionPickerDialogComponent, CollectionPickerDialogData, CollectionPickerResult>(
+      CollectionPickerDialogComponent,
+      { data, width: '440px' },
+    );
+
+    ref.afterClosed().subscribe((result: CollectionPickerResult | undefined) => {
+      if (!result) return;
+      this.collectionId.set(result.collectionId);
+      if (result.collectionId) {
+        this.collectionApi.getCollection(result.collectionId).subscribe({
+          next: (collection: CollectionModel): void => {
+            this.collectionName.set(collection.name);
+          },
+        });
+      } else {
+        this.collectionName.set('No collection');
+      }
+    });
   }
 
   removeTag(index: number): void {
@@ -180,6 +231,7 @@ export class UploadPageComponent {
         description: '',
         mediaFile: entry.file,
         tags: this.tags(),
+        collectionId: this.collectionId(),
       })
       .subscribe({
         next: (event: unknown): void => {

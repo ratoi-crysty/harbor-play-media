@@ -46,6 +46,14 @@ export class CollectionService {
     });
   }
 
+  async findAllForUser(userId: number): Promise<CollectionEntity[]> {
+    return this.repository.find({
+      where: { ownerId: userId },
+      order: { name: 'ASC' },
+      relations: ['media'],
+    });
+  }
+
   async findById(id: string): Promise<CollectionEntity | undefined> {
     const entity: CollectionEntity | null = await this.repository.findOne({
       where: { id },

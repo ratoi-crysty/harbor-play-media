@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MediaModel, UpdateMediaRequest } from '@harbor-play-media/shared-api';
+import { MediaModel, MoveMediaRequest, UpdateMediaRequest } from '@harbor-play-media/shared-api';
 
 export interface UploadParams {
   title: string;
@@ -58,6 +58,11 @@ export class MediaApiService {
     link.href = `${this.apiUrl}/${id}/download`;
     link.download = '';
     link.click();
+  }
+
+  move(id: string, collectionId: string | undefined): Observable<MediaModel> {
+    const body: MoveMediaRequest = { collectionId };
+    return this.http.post<MediaModel>(`${this.apiUrl}/${id}/move`, body);
   }
 
   delete(id: string): Observable<void> {

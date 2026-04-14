@@ -1,0 +1,29 @@
+<h2 mat-dialog-title class="dialog-title">
+  <mat-icon class="title-icon">edit</mat-icon>
+  {{ data.title }}
+</h2>
+
+<mat-dialog-content class="dialog-content">
+  <mat-form-field appearance="outline" class="name-field">
+    <mat-label>Name</mat-label>
+    <input
+      matInput
+      cdkFocusInitial
+      [value]="name()"
+      (input)="onNameInput($event)"
+      (keydown)="onKeydown($event)"
+    />
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="!canSave"
+    (click)="onSave()"
+  >
+    {{ saveLabel }}
+  </button>
+</mat-dialog-actions>

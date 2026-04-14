@@ -35,7 +35,7 @@
         <button
           mat-stroked-button
           matTooltip="Move selected to another collection"
-          disabled
+          [disabled]="batchLoading()"
           (click)="onMoveSelected()"
         >
           <mat-icon>drive_file_move</mat-icon>
@@ -64,7 +64,12 @@
         <h3 class="section-label">Collections</h3>
         <div class="grid">
           @for (collection of state().collections; track collection.id) {
-            <lib-collection-card [collection]="collection" />
+            <lib-collection-card
+              [collection]="collection"
+              (renamed)="onRenameCollection(collection)"
+              (deleted)="onDeleteCollection(collection)"
+              (moved)="onMoveCollection(collection)"
+            />
           }
         </div>
       </section>

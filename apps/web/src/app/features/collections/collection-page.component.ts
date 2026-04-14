@@ -5,8 +5,21 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CollectionModel, MediaModel } from '@harbor-play-media/shared-api';
-import { BreadcrumbComponent, BreadcrumbSegment, CollectionCardComponent, MediaCardComponent } from '@harbor-play-media/ui';
+import {
+  BreadcrumbComponent,
+  BreadcrumbSegment,
+  CollectionCardComponent,
+  CollectionPickerDialogComponent,
+  CollectionPickerDialogData,
+  CollectionPickerResult,
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+  MediaCardComponent,
+  RenameDialogComponent,
+  RenameDialogData,
+} from '@harbor-play-media/ui';
 import { CollectionApiService } from '../../core/services/collection-api.service';
 import { MediaApiService } from '../../core/services/media-api.service';
 
@@ -26,6 +39,7 @@ interface CollectionPageState {
     MatIconModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
+    MatDialogModule,
     BreadcrumbComponent,
     CollectionCardComponent,
     MediaCardComponent,
@@ -37,6 +51,7 @@ interface CollectionPageState {
 export class CollectionPageComponent implements OnInit {
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   private readonly router: Router = inject(Router);
+  private readonly dialog: MatDialog = inject(MatDialog);
   private readonly collectionApi: CollectionApiService = inject(CollectionApiService);
   private readonly mediaApi: MediaApiService = inject(MediaApiService);
 
@@ -61,18 +76,83 @@ export class CollectionPageComponent implements OnInit {
   }
 
   onNewCollection(): void {
-    const parentId: string | undefined = this.state().currentCollection?.id;
-    this.collectionApi
-      .createCollection({ name: 'New Collection', parentId })
-      .subscribe({
-        next: (): void => {
-          this.loadCollection(parentId);
-        },
+    const data: RenameDialogData = { title: 'New Collection', currentName: '', saveLabel: 'Create' };
+    const ref = this.dialog.open<RenameDialogComponent, RenameDialogData, string>(
+      RenameDialogComponent,
+      { data, width: '440px' },
+    );
+
+    ref.afterClosed().subscribe((name: string | undefined) => {
+      if (!name) return;
+      const parentId: string | undefined = this.state().currentCollection?.id;
+      this.collectionApi.createCollection({ name, parentId }).subscribe({
+        next: (): void => this.loadCollection(parentId),
       });
+    });
+  }
+
+  onRenameCollection(collection: CollectionModel): void {
+    const data: RenameDialogData = { title: 'Rename Collection', currentName: collection.name };
+    const ref = this.dialog.open<RenameDialogComponent, RenameDialogData, string>(
+      RenameDialogComponent,
+      { data, width: '440px' },
+    );
+
+    ref.afterClosed().subscribe((name: string | undefined) => {
+      if (!name) return;
+      this.collectionApi.updateCollection(collection.id, { name }).subscribe({
+        next: (): void => this.loadCollection(this.state().currentCollection?.id),
+      });
+    });
+  }
+
+  onDeleteCollection(collection: CollectionModel): void {
+    const data: ConfirmDialogData = {
+      title: 'Delete Collection',
+      message: `Are you sure you want to delete "${collection.name}"? This will permanently delete the collection and all media inside it.`,
+      confirmLabel: 'Delete',
+      confirmColor: 'warn',
+      icon: 'delete',
+    };
+    const ref = this.dialog.open<ConfirmDialogComponent, ConfirmDialogData, boolean>(
+      ConfirmDialogComponent,
+      { data, width: '440px' },
+    );
+
+    ref.afterClosed().subscribe((confirmed: boolean | undefined) => {
+      if (!confirmed) return;
+      this.collectionApi.deleteCollection(collection.id).subscribe({
+        next: (): void => this.loadCollection(this.state().currentCollection?.id),
+      });
+    });
+  }
+
+  onMoveCollection(collection: CollectionModel): void {
+    const data: CollectionPickerDialogData = {
+      title: 'Move Collection',
+      loadCollections: () => this.collectionApi.getAllCollections(),
+      excludeIds: [collection.id],
+      allowRoot: true,
+      currentCollectionId: collection.parentId,
+    };
+    const ref = this.dialog.open<CollectionPickerDialogComponent, CollectionPickerDialogData, CollectionPickerResult>(
+      CollectionPickerDialogComponent,
+      { data, width: '440px' },
+    );
+
+    ref.afterClosed().subscribe((result: CollectionPickerResult | undefined) => {
+      if (!result) return;
+      this.collectionApi.moveCollection(collection.id, result.collectionId).subscribe({
+        next: (): void => this.loadCollection(this.state().currentCollection?.id),
+      });
+    });
   }
 
   onUploadHere(): void {
-    void this.router.navigate(['/upload']);
+    const collectionId: string | undefined = this.state().currentCollection?.id;
+    void this.router.navigate(['/upload'], {
+      queryParams: collectionId ? { collectionId } : {},
+    });
   }
 
   toggleSelectMode(): void {
@@ -120,8 +200,39 @@ export class CollectionPageComponent implements OnInit {
   }
 
   onMoveSelected(): void {
-    // Move dialog will be implemented with CollectionPickerDialog
-    // For now, this is a placeholder
+    const ids: string[] = Array.from(this.selectedIds());
+    if (ids.length === 0) return;
+
+    const data: CollectionPickerDialogData = {
+      title: 'Move Selected Media',
+      loadCollections: () => this.collectionApi.getAllCollections(),
+      allowRoot: true,
+      currentCollectionId: this.state().currentCollection?.id,
+    };
+    const ref = this.dialog.open<CollectionPickerDialogComponent, CollectionPickerDialogData, CollectionPickerResult>(
+      CollectionPickerDialogComponent,
+      { data, width: '440px' },
+    );
+
+    ref.afterClosed().subscribe((result: CollectionPickerResult | undefined) => {
+      if (!result) return;
+      this.batchLoading.set(true);
+      const moves: Observable<MediaModel>[] = ids.map((id: string) =>
+        this.mediaApi.move(id, result.collectionId),
+      );
+
+      forkJoin(moves).subscribe({
+        next: (): void => {
+          this.selectedIds.set(new Set());
+          this.selectMode.set(false);
+          this.batchLoading.set(false);
+          this.loadCollection(this.state().currentCollection?.id);
+        },
+        error: (): void => {
+          this.batchLoading.set(false);
+        },
+      });
+    });
   }
 
   private loadCollection(id: string | undefined): void {

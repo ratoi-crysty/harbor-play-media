@@ -40,8 +40,11 @@ export class CollectionController {
   async findAll(
     @CurrentUser() user: UserEntity,
     @Query('parentId') parentId?: string,
+    @Query('all') all?: string,
   ): Promise<CollectionModel[]> {
-    const entities: CollectionEntity[] = await this.collectionService.findForUser(user.id, parentId);
+    const entities: CollectionEntity[] = all === 'true'
+      ? await this.collectionService.findAllForUser(user.id)
+      : await this.collectionService.findForUser(user.id, parentId);
     return entities.map((e: CollectionEntity) => this.toResponse(e));
   }
 

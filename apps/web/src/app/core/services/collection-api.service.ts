@@ -13,6 +13,10 @@ export class CollectionApiService {
     return this.http.get<CollectionModel[]>(this.apiUrl, { params });
   }
 
+  getAllCollections(): Observable<CollectionModel[]> {
+    return this.http.get<CollectionModel[]>(this.apiUrl, { params: { all: 'true' } });
+  }
+
   getCollection(id: string): Observable<CollectionModel> {
     return this.http.get<CollectionModel>(`${this.apiUrl}/${id}`);
   }
