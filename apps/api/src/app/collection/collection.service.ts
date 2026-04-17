@@ -1,10 +1,11 @@
-import { unlink } from 'node:fs/promises';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import Bugsnag from '@bugsnag/node';
 import { CollectionEntity } from './collection.entity';
-import { MediaEntity } from '../media/media.entity';
+import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
+import { ShareService } from '../share/share.service';
+import { ShareResourceType } from '@harbor-play-media/shared-api';
 
 export interface CreateCollectionParams {
   name: string;
@@ -27,12 +28,12 @@ export class CollectionService {
   constructor(
     @InjectRepository(CollectionEntity)
     private readonly repository: Repository<CollectionEntity>,
-    @InjectRepository(MediaEntity)
-    private readonly mediaRepository: Repository<MediaEntity>,
+    private readonly shareService: ShareService,
   ) {}
 
   async findForUser(userId: number, parentId?: string): Promise<CollectionEntity[]> {
-    const where: Record<string, unknown> = { ownerId: userId };
+    const where: FindOptionsWhere<CollectionEntity> = { ownerId: userId };
+
     if (parentId) {
       where['parentId'] = parentId;
     } else {
@@ -102,17 +103,17 @@ export class CollectionService {
   async update(id: string, params: UpdateCollectionParams): Promise<CollectionEntity> {
     const entity: CollectionEntity = await this.getById(id);
 
-    if (params.name !== undefined) entity.name = params.name;
-    if (params.description !== undefined) entity.description = params.description;
-    if (params.thumbnailPath !== undefined) entity.thumbnailPath = params.thumbnailPath;
+    Object.assign(entity, params);
 
     await this.repository.save(entity);
+
     return this.getById(id);
   }
 
   async delete(id: string): Promise<void> {
     const entity: CollectionEntity = await this.getById(id);
-    await this.deleteRecursive(entity);
+
+    await this.repository.remove(entity);
   }
 
   async move(id: string, newParentId: string | undefined): Promise<CollectionEntity> {
@@ -126,36 +127,8 @@ export class CollectionService {
     if (entity.thumbnailPath) {
       return `/api/collections/${entity.id}/thumbnail`;
     }
+
     return '';
-  }
-
-  private async deleteRecursive(entity: CollectionEntity): Promise<void> {
-    // Load children if not loaded
-    const full: CollectionEntity = await this.repository.findOne({
-      where: { id: entity.id },
-      relations: ['children', 'media'],
-    }) as CollectionEntity;
-
-    // Recursively delete children
-    for (const child of full.children ?? []) {
-      await this.deleteRecursive(child);
-    }
-
-    // Delete media files
-    for (const media of full.media ?? []) {
-      await unlink(media.filePath).catch((err: unknown) => this.notifyBugsnag(err, 'file-deletion'));
-      if (media.thumbnailPath) {
-        await unlink(media.thumbnailPath).catch((err: unknown) => this.notifyBugsnag(err, 'thumbnail-deletion'));
-      }
-      await this.mediaRepository.remove(media);
-    }
-
-    // Delete collection thumbnail
-    if (full.thumbnailPath) {
-      await unlink(full.thumbnailPath).catch((err: unknown) => this.notifyBugsnag(err, 'collection-thumbnail-deletion'));
-    }
-
-    await this.repository.remove(full);
   }
 
   private notifyBugsnag(error: unknown, context: string): void {
@@ -164,5 +137,21 @@ export class CollectionService {
     Bugsnag.notify(err, (event) => {
       event.context = context;
     });
+  }
+
+  async canAccess(userId: number, id: string): Promise<boolean> {
+    const entity = await this.getById(id);
+
+    const hasAccess = await this.shareService.canAccess(userId, ShareResourceType.COLLECTION, id);
+
+    if (hasAccess) {
+      return true;
+    }
+
+    if (!entity.parentId) {
+      return false;
+    }
+
+    return this.canAccess(userId, entity.parentId);
   }
 }

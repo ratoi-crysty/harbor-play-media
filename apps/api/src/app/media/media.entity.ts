@@ -2,6 +2,7 @@ import { MediaModel } from '@harbor-play-media/shared-api';
 import { UserEntity } from '@auth-lib/nest';
 import { Exclude } from 'class-transformer';
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { CollectionEntity } from '../collection/collection.entity';
 
 @Entity('media')
 export class MediaEntity
@@ -52,8 +53,8 @@ export class MediaEntity
   @Column({ nullable: true, type: 'varchar' })
   collectionId!: string | undefined;
 
-  @ManyToOne('CollectionEntity', 'media', { nullable: true, onDelete: 'SET NULL' })
-  collection!: unknown;
+  @ManyToOne(() => CollectionEntity, 'media', { nullable: true, onDelete: 'SET NULL' })
+  collection!: CollectionEntity;
 
   @Column({ default: '' })
   tagsRaw!: string;

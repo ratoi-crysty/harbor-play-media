@@ -22,19 +22,18 @@ import { MediaModel } from '@harbor-play-media/shared-api';
 import { CurrentUser } from '@auth-lib/nest';
 import { UserEntity } from '@auth-lib/nest';
 import { UserRole } from '@auth-lib/common';
-import { ShareResourceType } from '@harbor-play-media/shared-api';
 import { MediaEntity } from './media.entity';
 import { MediaService } from './media.service';
-import { ShareService } from '../share/share.service';
 import { CreateMediaDto } from './dto/create-media.dto';
 import { UpdateMediaDto } from './dto/update-media.dto';
 import { environment } from '../../environments/environment';
+import { CollectionService } from '../collection/collection.service';
 
 @Controller('media')
 export class MediaController {
   constructor(
     private readonly mediaService: MediaService,
-    private readonly shareService: ShareService,
+    private readonly collectionsService: CollectionService,
   ) {}
 
   @Get()
@@ -44,12 +43,9 @@ export class MediaController {
   }
 
   @Get(':id')
-  async getById(
-    @Param('id') id: string,
-    @Req() req: Request,
-    @CurrentUser() user: UserEntity,
-  ): Promise<MediaModel> {
+  async getById(@Param('id') id: string, @Req() req: Request, @CurrentUser() user: UserEntity): Promise<MediaModel> {
     const entity: MediaEntity = await this.mediaService.getById(id);
+
     await this.assertAccess(entity, user);
 
     const viewedIds: string[] = req.session.viewedMediaIds ?? [];
@@ -202,18 +198,18 @@ export class MediaController {
     // Admin/superadmin can access
     if (user.role === UserRole.ADMIN || user.role === UserRole.SUPERADMIN) return;
     // Check direct share on media
-    const hasDirectShare: boolean = await this.shareService.canAccess(
-      user.id,
-      ShareResourceType.MEDIA,
-      entity.id,
-    );
+    const hasDirectShare: boolean = await this.mediaService.canAccess(user.id, entity.id);
+
     if (hasDirectShare) return;
     // Check share via collection hierarchy
-    const hasCollectionShare: boolean = await this.shareService.canAccessMedia(
-      user.id,
-      entity.collectionId,
-    );
+    let hasCollectionShare = false;
+
+    if (entity.collectionId) {
+      hasCollectionShare = await this.collectionsService.canAccess(user.id, entity.collectionId);
+    }
+
     if (hasCollectionShare) return;
+
     throw new ForbiddenException('You do not have access to this media');
   }
 

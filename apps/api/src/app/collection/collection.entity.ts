@@ -1,14 +1,7 @@
 import { CollectionModel } from '@harbor-play-media/shared-api';
 import { UserEntity } from '@auth-lib/nest';
 import { Exclude } from 'class-transformer';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { MediaEntity } from '../media/media.entity';
 
 @Entity('collections')

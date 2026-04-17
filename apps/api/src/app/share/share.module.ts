@@ -2,13 +2,12 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from '@auth-lib/nest';
 import { ShareEntity } from './share.entity';
-import { CollectionEntity } from '../collection/collection.entity';
 import { ShareController } from './share.controller';
 import { ShareService } from './share.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ShareEntity, CollectionEntity]),
+    TypeOrmModule.forFeature([ShareEntity]),
     UserModule,
   ],
   controllers: [ShareController],

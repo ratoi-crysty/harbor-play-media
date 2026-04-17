@@ -8,6 +8,8 @@ import Bugsnag from '@bugsnag/node';
 import { MediaEntity } from './media.entity';
 import { MediaMetadataService } from './media-metadata.service';
 import { environment } from '../../environments/environment';
+import { ShareService } from '../share/share.service';
+import { ShareResourceType } from '@harbor-play-media/shared-api';
 
 export interface CreateMediaParams {
   title: string;
@@ -33,6 +35,7 @@ export class MediaService {
     @InjectRepository(MediaEntity)
     private readonly repository: Repository<MediaEntity>,
     private readonly metadataService: MediaMetadataService,
+    private readonly shareService: ShareService,
   ) {}
 
   async findAll(): Promise<MediaEntity[]> {
@@ -169,7 +172,16 @@ export class MediaService {
   }
 
   parseTags(entity: MediaEntity): string[] {
-    return entity.tagsRaw ? entity.tagsRaw.split(',').map((t: string) => t.trim()).filter(Boolean) : [];
+    return entity.tagsRaw
+      ? entity.tagsRaw
+          .split(',')
+          .map((t: string) => t.trim())
+          .filter(Boolean)
+      : [];
+  }
+
+  async canAccess(userId: number, id: string): Promise<boolean> {
+    return this.shareService.canAccess(userId, ShareResourceType.MEDIA, id);
   }
 
   private async renameFile(fileName: string, filePath: string): Promise<string> {
