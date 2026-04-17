@@ -1,7 +1,6 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
-import Bugsnag from '@bugsnag/node';
 import { CollectionEntity } from './collection.entity';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 import { ShareService } from '../share/share.service';
@@ -23,8 +22,6 @@ export interface UpdateCollectionParams {
 
 @Injectable()
 export class CollectionService {
-  private readonly logger: Logger = new Logger(CollectionService.name);
-
   constructor(
     @InjectRepository(CollectionEntity)
     private readonly repository: Repository<CollectionEntity>,
@@ -129,14 +126,6 @@ export class CollectionService {
     }
 
     return '';
-  }
-
-  private notifyBugsnag(error: unknown, context: string): void {
-    if (!Bugsnag.isStarted()) return;
-    const err: Error = error instanceof Error ? error : new Error(String(error));
-    Bugsnag.notify(err, (event) => {
-      event.context = context;
-    });
   }
 
   async canAccess(userId: number, id: string): Promise<boolean> {
