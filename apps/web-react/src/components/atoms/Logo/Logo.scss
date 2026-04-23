@@ -1,0 +1,22 @@
+.da-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  &__mark {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    background: var(--da-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0a0a0b;
+  }
+
+  &__text {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+  }
+}

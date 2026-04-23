@@ -1,0 +1,1 @@
+export { DirAAlbumPage } from './DirAAlbumPage';

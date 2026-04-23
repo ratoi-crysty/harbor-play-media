@@ -1,0 +1,31 @@
+.da-art {
+  position: relative;
+  overflow: hidden;
+
+  &--square {
+    aspect-ratio: 1;
+  }
+  &--video {
+    aspect-ratio: 16 / 9;
+  }
+  &--round {
+    aspect-ratio: 1;
+    border-radius: 50%;
+  }
+
+  &--radius-sm {
+    border-radius: 3px;
+  }
+  &--radius-md {
+    border-radius: 6px;
+  }
+  &--radius-lg {
+    border-radius: 10px;
+  }
+
+  &--round.da-art--radius-sm,
+  &--round.da-art--radius-md,
+  &--round.da-art--radius-lg {
+    border-radius: 50%;
+  }
+}

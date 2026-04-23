@@ -1,0 +1,1 @@
+export { AlbumHero } from './AlbumHero';

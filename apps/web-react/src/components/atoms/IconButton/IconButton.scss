@@ -1,0 +1,32 @@
+.da-icon-btn {
+  border: none;
+  background: transparent;
+  color: var(--da-fg-2);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  border-radius: 6px;
+
+  &--ghost {
+    width: 32px;
+    height: 32px;
+  }
+
+  &--solid {
+    background: var(--da-fg);
+    color: #0a0a0b;
+    border-radius: 50%;
+    padding: 0;
+  }
+
+  &--overlay {
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--da-fg);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
+}

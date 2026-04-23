@@ -1,0 +1,100 @@
+.da-track-row {
+  display: grid;
+  grid-template-columns: 24px 1fr 1fr 60px;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  align-items: center;
+  color: var(--da-fg);
+  transition: background 0.12s;
+
+  &:hover:not(&--header) {
+    background: var(--da-surface);
+  }
+
+  &--header {
+    padding: 0 10px 8px;
+    border-bottom: 1px solid var(--da-border);
+    border-radius: 0;
+    cursor: default;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--da-fg-3);
+    font-weight: 600;
+  }
+
+  &--header:hover {
+    background: transparent;
+  }
+
+  &__index {
+    color: var(--da-fg-3);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &--active &__index {
+    color: var(--da-accent);
+  }
+
+  &__title-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  &__art {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__mono {
+    font-size: 9px;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  &__title-wrap {
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &--active &__title {
+    color: var(--da-accent);
+  }
+
+  &__artist {
+    font-size: 11px;
+    color: var(--da-fg-2);
+  }
+
+  &__album {
+    font-size: 12px;
+    color: var(--da-fg-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__duration {
+    font-size: 12px;
+    color: var(--da-fg-2);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+}

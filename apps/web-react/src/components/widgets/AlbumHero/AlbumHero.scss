@@ -1,0 +1,74 @@
+.da-album-hero {
+  padding: 28px;
+  display: flex;
+  gap: 24px;
+  align-items: flex-end;
+  color: var(--da-fg);
+
+  &__cover {
+    width: 180px;
+    height: 180px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: flex-end;
+    padding: 14px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  &__cover-text {
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+  }
+
+  &__eyebrow {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--da-fg-2);
+    font-weight: 600;
+  }
+
+  &__title {
+    margin: 6px 0 12px;
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+
+  &__meta {
+    font-size: 13px;
+    color: var(--da-fg-2);
+  }
+
+  &__actions {
+    margin-top: 16px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  &__like {
+    background: transparent;
+    color: var(--da-fg-2);
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+  }
+
+  &__spacer {
+    flex: 1;
+  }
+
+  &__close {
+    border: none;
+    background: transparent;
+    color: var(--da-fg-2);
+    cursor: pointer;
+    align-self: flex-start;
+    padding: 0;
+    display: flex;
+  }
+}

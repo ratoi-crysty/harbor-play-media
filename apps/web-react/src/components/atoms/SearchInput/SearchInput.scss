@@ -1,0 +1,31 @@
+.da-search {
+  position: relative;
+  flex: 1;
+  max-width: 480px;
+
+  &__icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--da-fg-3);
+    display: flex;
+  }
+
+  &__input {
+    width: 100%;
+    height: 34px;
+    background: var(--da-surface);
+    border: 1px solid var(--da-border);
+    border-radius: 8px;
+    padding: 0 12px 0 34px;
+    color: var(--da-fg);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+
+    &::placeholder {
+      color: var(--da-fg-3);
+    }
+  }
+}

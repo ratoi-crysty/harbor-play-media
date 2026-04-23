@@ -1,0 +1,68 @@
+.da-featured {
+  position: relative;
+  height: 320px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  margin-bottom: 40px;
+  color: var(--da-fg);
+
+  &__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.7));
+  }
+
+  &__eyebrow {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+
+  &__info {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.6px;
+    max-width: 600px;
+  }
+
+  &__meta {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--da-fg-2);
+  }
+
+  &__channel {
+    color: var(--da-fg);
+  }
+
+  &__play {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--da-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0a0a0b;
+
+    svg {
+      margin-left: 2px;
+    }
+  }
+}
+

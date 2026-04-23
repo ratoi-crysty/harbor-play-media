@@ -1,0 +1,36 @@
+.da-pill {
+  border: none;
+  background: var(--da-surface);
+  color: var(--da-fg);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+
+  &--outline {
+    background: transparent;
+    border: 1px solid var(--da-border);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+  }
+
+  &--accent {
+    background: var(--da-accent);
+    color: #0a0a0b;
+    border-radius: 20px;
+    padding: 8px 22px;
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  &--active {
+    background: var(--da-accent);
+    color: #0a0a0b;
+  }
+}

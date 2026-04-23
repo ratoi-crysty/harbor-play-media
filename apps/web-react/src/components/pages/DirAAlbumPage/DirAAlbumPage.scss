@@ -1,0 +1,8 @@
+.da-album {
+  flex: 1;
+  overflow: auto;
+
+  &__list {
+    padding: 20px 28px 100px;
+  }
+}

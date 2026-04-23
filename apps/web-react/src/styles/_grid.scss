@@ -1,0 +1,16 @@
+.da-grid {
+  display: grid;
+  gap: 20px;
+
+  &--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  &--4 {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  &--6 {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+  }
+}

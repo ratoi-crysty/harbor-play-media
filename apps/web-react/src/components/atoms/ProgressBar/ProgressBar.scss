@@ -1,0 +1,51 @@
+.da-progress {
+  position: relative;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 2px;
+  width: 100%;
+
+  &--thick {
+    height: 4px;
+  }
+  &--thin {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.15);
+  }
+  &--mini {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  &--interactive {
+    cursor: pointer;
+  }
+
+  &__fill {
+    position: absolute;
+    inset: 0;
+    border-radius: 2px;
+  }
+
+  &--accent &__fill {
+    background: var(--da-accent);
+  }
+  &--fg &__fill {
+    background: var(--da-fg);
+  }
+
+  &__thumb {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  &--accent &__thumb {
+    background: var(--da-accent);
+  }
+  &--fg &__thumb {
+    background: var(--da-fg);
+  }
+}

@@ -1,0 +1,1 @@
+export { ArtThumb } from './ArtThumb';

@@ -1,0 +1,109 @@
+.da-queue-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: grab;
+  background: transparent;
+  transition: background 0.12s;
+
+  &--dragging {
+    opacity: 0.3;
+  }
+
+  &--dark {
+    color: #fff;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+
+  &--light {
+    color: #1a1a1a;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  &__grip {
+    display: flex;
+    align-items: center;
+  }
+
+  &--dark &__grip {
+    color: rgba(255, 255, 255, 0.55);
+  }
+  &--light &__grip {
+    color: rgba(0, 0, 0, 0.55);
+  }
+
+  &__art {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  &__mono {
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+  }
+
+  &__title {
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__artist {
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &--dark &__artist {
+    color: rgba(255, 255, 255, 0.55);
+  }
+  &--light &__artist {
+    color: rgba(0, 0, 0, 0.55);
+  }
+
+  &__duration {
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &--dark &__duration {
+    color: rgba(255, 255, 255, 0.55);
+  }
+  &--light &__duration {
+    color: rgba(0, 0, 0, 0.55);
+  }
+
+  &__remove {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    color: inherit;
+    opacity: 0.6;
+  }
+}
