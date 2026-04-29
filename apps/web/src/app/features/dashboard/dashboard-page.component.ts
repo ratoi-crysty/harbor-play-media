@@ -38,7 +38,7 @@ export class DashboardPageComponent {
 
   protected readonly myUploads = computed<MediaModel[]>(() =>
     this.allMedia()
-      .filter((m: MediaModel) => m.uploadedByUserId !== undefined)
+      .filter((m: MediaModel) => m.ownerId !== undefined)
       .slice(0, 6),
   );
 

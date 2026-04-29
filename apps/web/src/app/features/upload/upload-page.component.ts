@@ -140,7 +140,7 @@ export class UploadPageComponent implements OnInit {
   onPickCollection(): void {
     const data: CollectionPickerDialogData = {
       title: 'Choose Collection',
-      loadCollections: () => this.collectionApi.getAllCollections(),
+      loadCollections: () => this.collectionApi.getCollections(),
       allowRoot: true,
       currentCollectionId: this.collectionId(),
     };

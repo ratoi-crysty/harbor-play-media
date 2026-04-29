@@ -10,8 +10,8 @@ export interface MediaModel {
   resolution?: string;
   createdAt: string;
   viewCount: number;
-  uploadedByUserId?: number;
-  uploadedByUserName?: string;
+  ownerId?: number;
+  ownerName?: string;
   collectionId?: string;
   tags: string[];
 }

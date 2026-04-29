@@ -37,31 +37,22 @@ export class CollectionController {
   ) {}
 
   @Get()
-  async findAll(
-    @CurrentUser() user: UserEntity,
-    @Query('parentId') parentId?: string,
-    @Query('all') all?: string,
-  ): Promise<CollectionModel[]> {
-    const entities: CollectionEntity[] = all === 'true'
-      ? await this.collectionService.findAllForUser(user.id)
-      : await this.collectionService.findForUser(user.id, parentId);
+  async findAll(@CurrentUser() user: UserEntity, @Query('parentId') parentId?: string): Promise<CollectionModel[]> {
+    const entities: CollectionEntity[] = parentId
+      ? await this.collectionService.findForUser(user.id, parentId)
+      : await this.collectionService.findAllForUser(user.id);
     return entities.map((e: CollectionEntity) => this.toResponse(e));
   }
 
   @Get(':id')
-  async getById(
-    @Param('id') id: string,
-    @CurrentUser() user: UserEntity,
-  ): Promise<CollectionModel> {
+  async getById(@Param('id') id: string, @CurrentUser() user: UserEntity): Promise<CollectionModel> {
     const entity: CollectionEntity = await this.collectionService.getById(id);
     await this.assertAccess(entity, user);
     return this.toResponse(entity);
   }
 
   @Post()
-  @UseInterceptors(
-    FileInterceptor('thumbnailAsset', { dest: environment.uploadsPath }),
-  )
+  @UseInterceptors(FileInterceptor('thumbnailAsset', { dest: environment.uploadsPath }))
   async create(
     @Body() dto: CreateCollectionDto,
     @CurrentUser() user: UserEntity,
@@ -79,9 +70,7 @@ export class CollectionController {
   }
 
   @Patch(':id')
-  @UseInterceptors(
-    FileInterceptor('thumbnailAsset', { dest: environment.uploadsPath }),
-  )
+  @UseInterceptors(FileInterceptor('thumbnailAsset', { dest: environment.uploadsPath }))
   async update(
     @Param('id') id: string,
     @Body() dto: UpdateCollectionDto,
@@ -102,10 +91,7 @@ export class CollectionController {
 
   @Delete(':id')
   @HttpCode(204)
-  async delete(
-    @Param('id') id: string,
-    @CurrentUser() user: UserEntity,
-  ): Promise<void> {
+  async delete(@Param('id') id: string, @CurrentUser() user: UserEntity): Promise<void> {
     const entity: CollectionEntity = await this.collectionService.getById(id);
     this.assertOwnerOrAdmin(entity, user);
     await this.collectionService.delete(id);
@@ -124,8 +110,10 @@ export class CollectionController {
   }
 
   @Get(':id/thumbnail')
-  async thumbnail(@Param('id') id: string, @Res() res: Response): Promise<void> {
+  async thumbnail(@Param('id') id: string, @CurrentUser() user: UserEntity, @Res() res: Response): Promise<void> {
     const entity: CollectionEntity = await this.collectionService.getById(id);
+
+    await this.assertAccess(entity, user);
 
     if (!entity.thumbnailPath) {
       throw new NotFoundException('Thumbnail not available');
@@ -141,11 +129,7 @@ export class CollectionController {
   private async assertAccess(entity: CollectionEntity, user: UserEntity): Promise<void> {
     if (entity.ownerId === user.id) return;
     if (user.role === UserRole.ADMIN || user.role === UserRole.SUPERADMIN) return;
-    const hasShare: boolean = await this.shareService.canAccess(
-      user.id,
-      ShareResourceType.COLLECTION,
-      entity.id,
-    );
+    const hasShare: boolean = await this.shareService.canAccess(user.id, ShareResourceType.COLLECTION, entity.id);
     if (hasShare) return;
     throw new ForbiddenException('You do not have access to this collection');
   }

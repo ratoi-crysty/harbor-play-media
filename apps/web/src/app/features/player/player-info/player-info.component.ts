@@ -26,7 +26,7 @@ export class PlayerInfoComponent {
   readonly media = input.required<MediaModel>();
 
   protected readonly tags = computed<string[]>(() => this.media().tags ?? []);
-  protected readonly uploaderName = computed<string | undefined>(() => this.media().uploadedByUserName);
+  protected readonly uploaderName = computed<string | undefined>(() => this.media().ownerName);
 
   protected formatFileSize(bytes: number): string {
     return formatFileSize(bytes);

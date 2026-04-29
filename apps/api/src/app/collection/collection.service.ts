@@ -55,7 +55,7 @@ export class CollectionService {
   async findById(id: string): Promise<CollectionEntity | undefined> {
     const entity: CollectionEntity | null = await this.repository.findOne({
       where: { id },
-      relations: ['children', 'media', 'media.uploadedBy'],
+      relations: ['children', 'media', 'media.owner'],
     });
     return entity ?? undefined;
   }

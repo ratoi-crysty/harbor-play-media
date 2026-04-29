@@ -80,9 +80,9 @@ export class MediaController {
       description: dto.description ?? '',
       mediaFile,
       thumbnailFile: files.thumbnailAsset?.[0],
-      uploadedByUserId: user.id,
+      ownerId: user.id,
       collectionId: dto.collectionId,
-      tags: dto.tags,
+      tags: dto.tags || [],
     });
 
     return this.toResponse(entity);
@@ -192,9 +192,9 @@ export class MediaController {
 
   private async assertAccess(entity: MediaEntity, user: UserEntity): Promise<void> {
     // Ownerless media (legacy) is visible to all
-    if (entity.uploadedByUserId === undefined) return;
+    if (entity.ownerId === undefined) return;
     // Owner can access
-    if (entity.uploadedByUserId === user.id) return;
+    if (entity.ownerId === user.id) return;
     // Admin/superadmin can access
     if (user.role === UserRole.ADMIN || user.role === UserRole.SUPERADMIN) return;
     // Check direct share on media
@@ -214,7 +214,7 @@ export class MediaController {
   }
 
   private assertOwnerOrAdmin(entity: MediaEntity, user: UserEntity): void {
-    if (entity.uploadedByUserId === user.id) return;
+    if (entity.ownerId === user.id) return;
     if (user.role === UserRole.ADMIN || user.role === UserRole.SUPERADMIN) return;
     throw new ForbiddenException('Only the owner or an admin can modify this media');
   }
@@ -232,8 +232,8 @@ export class MediaController {
       resolution: entity.resolution,
       createdAt: entity.createdAt.toISOString(),
       viewCount: entity.viewCount,
-      uploadedByUserId: entity.uploadedByUserId,
-      uploadedByUserName: entity.uploadedBy?.name,
+      ownerId: entity.ownerId,
+      ownerName: entity.owner?.name,
       collectionId: entity.collectionId,
       tags: this.mediaService.parseTags(entity),
     };

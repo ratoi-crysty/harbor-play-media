@@ -9,17 +9,12 @@ import { MediaEntity } from './media.entity';
 import { MediaMetadataService } from './media-metadata.service';
 import { environment } from '../../environments/environment';
 import { ShareService } from '../share/share.service';
-import { ShareResourceType } from '@harbor-play-media/shared-api';
+import { MediaModel, ShareResourceType } from '@harbor-play-media/shared-api';
 
-export interface CreateMediaParams {
-  title: string;
-  description: string;
+export type CreateMediaParams = Pick<MediaModel, 'title' | 'description' | 'ownerId' | 'collectionId' | 'tags'> & {
   mediaFile: Express.Multer.File;
   thumbnailFile?: Express.Multer.File;
-  uploadedByUserId?: number;
-  collectionId?: string;
-  tags?: string[];
-}
+};
 
 export interface UpdateMediaParams {
   title?: string;
@@ -39,21 +34,21 @@ export class MediaService {
   ) {}
 
   async findAll(): Promise<MediaEntity[]> {
-    return this.repository.find({ order: { createdAt: 'DESC' }, relations: ['uploadedBy'] });
+    return this.repository.find({ order: { createdAt: 'DESC' }, relations: ['owner'] });
   }
 
   async findForUser(userId: number): Promise<MediaEntity[]> {
     return this.repository.find({
-      where: [{ uploadedByUserId: userId }, { uploadedByUserId: undefined as unknown as number }],
+      where: [{ ownerId: userId }, { ownerId: undefined as unknown as number }],
       order: { createdAt: 'DESC' },
-      relations: ['uploadedBy'],
+      relations: ['owner'],
     });
   }
 
   async findById(id: string): Promise<MediaEntity | undefined> {
     const entity: MediaEntity | null = await this.repository.findOne({
       where: { id },
-      relations: ['uploadedBy'],
+      relations: ['owner'],
     });
 
     return entity ?? undefined;
@@ -75,7 +70,7 @@ export class MediaService {
   async create(params: CreateMediaParams): Promise<MediaEntity> {
     await this.ensureUploadsDir();
 
-    const { title, description, mediaFile, thumbnailFile, uploadedByUserId, collectionId, tags } = params;
+    const { title, description, mediaFile, thumbnailFile, ownerId, collectionId, tags } = params;
 
     // Rename uploaded file to uuid-based name
     const newFilePath: string = await this.renameFile(mediaFile.originalname, mediaFile.path);
@@ -112,7 +107,7 @@ export class MediaService {
       mimeType: metadata.mimeType,
       resolution: metadata.resolution,
       viewCount: 0,
-      uploadedByUserId,
+      ownerId,
       collectionId,
       tagsRaw: tags?.join(',') ?? '',
     });

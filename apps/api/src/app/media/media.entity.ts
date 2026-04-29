@@ -7,7 +7,7 @@ import { CollectionEntity } from '../collection/collection.entity';
 @Entity('media')
 export class MediaEntity
   implements
-    Omit<MediaModel, 'url' | 'thumbnailUrl' | 'createdAt' | 'uploadedByUserId' | 'uploadedByUserName' | 'collectionId' | 'tags'>
+    Omit<MediaModel, 'url' | 'thumbnailUrl' | 'createdAt' | 'ownerId' | 'ownerName' | 'collectionId' | 'tags'>
 {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
@@ -45,10 +45,10 @@ export class MediaEntity
   viewCount!: number;
 
   @Column({ nullable: true, type: 'int' })
-  uploadedByUserId!: number | undefined;
+  ownerId!: number | undefined;
 
   @ManyToOne(() => UserEntity, { nullable: true, onDelete: 'SET NULL' })
-  uploadedBy!: UserEntity | undefined;
+  owner!: UserEntity | undefined;
 
   @Column({ nullable: true, type: 'varchar' })
   collectionId!: string | undefined;

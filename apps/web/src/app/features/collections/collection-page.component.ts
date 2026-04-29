@@ -130,7 +130,7 @@ export class CollectionPageComponent implements OnInit {
   onMoveCollection(collection: CollectionModel): void {
     const data: CollectionPickerDialogData = {
       title: 'Move Collection',
-      loadCollections: () => this.collectionApi.getAllCollections(),
+      loadCollections: () => this.collectionApi.getCollections(),
       excludeIds: [collection.id],
       allowRoot: true,
       currentCollectionId: collection.parentId,
@@ -205,7 +205,7 @@ export class CollectionPageComponent implements OnInit {
 
     const data: CollectionPickerDialogData = {
       title: 'Move Selected Media',
-      loadCollections: () => this.collectionApi.getAllCollections(),
+      loadCollections: () => this.collectionApi.getCollections(),
       allowRoot: true,
       currentCollectionId: this.state().currentCollection?.id,
     };
