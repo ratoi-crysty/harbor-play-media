@@ -197,3 +197,17 @@ export class VideoEntity implements VideoModel {
 - The theme should be a blueish
 - The design should be consistent across all pages
 - Reuse components from `libs/ui` to keep the design consistent and maintainable
+
+## Agent skills
+
+### Issue tracker
+
+GitHub Issues on `ratoi-crysty/harbor-play-media` via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Canonical defaults (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` + `docs/adr/` at repo root. See `docs/agents/domain.md`.
