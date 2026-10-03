@@ -2,7 +2,7 @@ import Bugsnag from '@bugsnag/node';
 import { ClassSerializerInterceptor, Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import session from 'express-session';
-import { DataSource } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { ISession, TypeormStore } from 'connect-typeorm';
 import { SessionEntity } from '@auth-lib/nest';
 import { AppModule } from './app/app.module';
@@ -29,7 +29,7 @@ async function bootstrap(): Promise<void> {
   );
 
   const dataSource: DataSource = app.get(DataSource);
-  const sessionRepository = dataSource.getRepository<ISession>(SessionEntity);
+  const sessionRepository: Repository<ISession> = dataSource.getRepository<ISession>(SessionEntity);
 
   app.use(
     session({

@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node:*)",
+      "Bash(yarn add:*)",
+      "Bash(npx nx:*)",
+      "WebFetch(domain:zile-libere.ticaasd.workers.dev)",
+      "Bash(test:*)",
+      "Bash(nx build:*)",
+      "Bash(nx lint:*)",
+      "Bash(nx run:*)",
+      "Bash(yarn rebuild:*)",
+      "Bash(npx node-pre-gyp:*)",
+      "Bash(npx node-gyp:*)",
+      "Bash(yarn install:*)"
+    ]
+  }
+}

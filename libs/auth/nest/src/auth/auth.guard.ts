@@ -11,17 +11,15 @@ import { AuthRequest } from './auth.types';
 import { UserRole } from '@auth-lib/common';
 import { Reflector } from '@nestjs/core';
 
-enum MetadataKey {
-  Roles = 'AuthGuard.Roles',
-  Public = 'AuthGuard.Public',
-}
+const ROLES_META_KEY = Symbol('AuthGuard.Roles');
+const PUBLIC_META_KEY = Symbol('AuthGuard.Public');
 
 export function Roles(...roles: UserRole[]): MethodDecorator & ClassDecorator {
-  return SetMetadata(MetadataKey.Roles, roles);
+  return SetMetadata(ROLES_META_KEY, roles);
 }
 
 export function PublicApi(): MethodDecorator & ClassDecorator {
-  return SetMetadata(MetadataKey.Public, true);
+  return SetMetadata(PUBLIC_META_KEY, true);
 }
 
 @Injectable()
@@ -31,7 +29,7 @@ export class AuthGuard implements CanActivate {
     private readonly userService: UserService,
   ) {}
 
-  protected getMetadata<T>(context: ExecutionContext, key: MetadataKey): T | undefined {
+  protected getMetadata<T>(context: ExecutionContext, key: symbol): T | undefined {
     return this.reflector.getAllAndOverride<T>(key, [context.getHandler(), context.getClass()]);
   }
 
@@ -54,7 +52,7 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // Disabled
-    if (this.getMetadata<boolean>(context, MetadataKey.Public)) {
+    if (this.getMetadata<boolean>(context, PUBLIC_META_KEY)) {
       return true;
     }
 
@@ -71,7 +69,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('User not found');
     }
 
-    if (!this.isAllowed(user, this.getMetadata<UserRole[]>(context, MetadataKey.Roles) ?? [UserRole.USER])) {
+    if (!this.isAllowed(user, this.getMetadata<UserRole[]>(context, ROLES_META_KEY) ?? [UserRole.USER])) {
       throw new ForbiddenException('Not allowed!');
     }
 
